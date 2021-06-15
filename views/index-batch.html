@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nmax - 行情推送</title>
+    <meta charset="utf-8"/>
+    <style>
+        input {
+            height: 30px;
+            magrin: 10px;
+            padding: 5px;
+        }
+
+        div {
+            border: 1px solid cornflowerblue;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        #output {
+        }
+
+        #count span {
+            border: 1px solid #c2c8d4;
+            padding: 5px;
+            margin: 5px;
+            width: 120px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    // var wsUri = "ws://127.0.0.1:8064/future-data/ws";
+    var wsUri = (location.protocol === 'http:' ? 'ws:' : 'wss') + location.host + '/dockerMgrApi/ws/test?userid=1234222222' // ws地址
+    var chs = [
+        //"future.btcusdt.kline.1m", "future.btcusdt.depth", "future.btcusdt.ticker", "future.btcusdt.trade",
+        "future.btcusdt.markprice"
+    ]
+
+    var output;
+    var indexE;
+    var connect_num = 0;
+    var error_num = 0;
+
+    function MarketWebSock(i, num) {
+        var websocket = new WebSocket(wsUri);
+        websocket.count = 0;
+        websocket.num = num;
+        websocket.num.innerHTML = i + " " + "Init"
+        websocket.onopen = function (evt) {
+            connect_num++
+            indexE.innerHTML = "行情推送 》计划：" + index + "， 成功连接：" + connect_num + "， 异常：" + error_num
+            websocket.num.innerHTML = i + " " + "CONNECTED"
+            writeToScreen(i + " " + "CONNECTED");
+            subAll(websocket)
+        };
+        websocket.onclose = function (evt) {
+            writeToScreen(i + " " + "DISCONNECTED");
+            websocket.num.innerHTML = i + " " + "DISCONNECTED"
+        };
+        websocket.onmessage = function (evt) {
+            websocket.count += 1
+            websocket.num.innerHTML = i + " " + "已经接收：<br>" + websocket.count
+        };
+        websocket.onerror = function (evt) {
+            error_num++
+
+            websocket.num.innerHTML = i + " " +  '<span style="color: red;">ERROR:</span> ' + evt.data
+            indexE.innerHTML = "行情推送 》计划：" + index + "， 成功连接：" + connect_num + "， 异常：" + error_num
+            writeToScreen(i + " " + '<span style="color: red;">ERROR:</span> ' + evt.data);
+        };
+        return websocket
+    }
+
+
+    function writeToScreen(message) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = message;
+        if (output) {
+            output.appendChild(pre);
+        }
+    }
+
+    function subAll(s) {
+        for (i = 0; i < chs.length; i++) {
+            sub(s, chs[i])
+        }
+    }
+
+    function sub(s, ch) {
+        msg = {
+            ch: "base.sub",
+            ts: 12345,
+            d: ch
+        }
+        doSend(s, JSON.stringify(msg));
+    }
+
+    function doSend(s, message) {
+        writeToScreen("SENT: " + message);
+        s.send(message);
+    }
+
+    // window.addEventListener("load", init, false);
+
+    var index = 0
+    function init(n) {
+        output = document.getElementById("output");
+        count = document.getElementById("count");
+        indexE = document.getElementById("index");
+
+        for (var i = 0; i < n; i++) {
+            index++
+            var pre = document.createElement("span");
+            pre.className = "num"
+            count.appendChild(pre);
+            MarketWebSock(index, pre);
+        }
+        indexE.innerHTML = "行情推送 》计划：" + index + "， 成功连接：" + connect_num + "， 异常：" + error_num
+    }
+    ///////////////////////////////////////////////////
+
+    function SubBtnClick() {
+        var n = document.getElementById("n").value;
+        if (n > 100){
+            alert("你要想清楚，你的电脑受的了不？")
+        }
+        init(n)
+    }
+
+</script>
+<h2 id="index">行情推送</h2>
+
+<div style="padding:15px;line-height:30px">
+    <input id="n" value="10">
+    <button onclick="SubBtnClick()">开始</button>
+</div>
+
+<div id="count">
+
+</div>
+
+<div id="output"></div>
+
+</body>
+</html>
