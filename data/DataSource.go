@@ -1,9 +1,16 @@
 package data
 
-import "docker-manager/model"
+import (
+	"docker-manager/model"
+)
 
 var (
 	dbPath = "./db"
+)
+
+// config
+var (
+	Config = model.NewLevelDB(dbPath + "/config") // 客户端配置
 )
 
 // docker
@@ -34,6 +41,7 @@ var (
 )
 
 func Close() {
+	Config.Close()
 	Servers.Close()
 	Containers.Close()
 	ContainerServerMap.Close()
@@ -48,6 +56,10 @@ func Close() {
 }
 
 func init() {
+	Config.Store("agentConfig", map[string]interface{}{
+		"TaskFrequency": 5 * 60,
+	})
+
 	SampleUser.StoreStr("xiaojun", "b24543877bae1cc3")
 	SampleUser.StoreStr("admin", "72d60f075a2341ab")
 	SampleToken.StoreStr("agentToken", "a8ceec2ef7294f46f6fd4fea32c0aa4d6d76dd27c86b4f7c470ee5b568382057")

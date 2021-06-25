@@ -2,20 +2,34 @@ package ws
 
 import (
 	"docker-manager/data"
+	"docker-manager/web/ws/baseWs"
+	"github.com/gin-gonic/gin"
 	"log"
 	"time"
 )
 
-func WsMsgHandler(msg *WsMsg, conn *Connection) error {
+var AgentWsConnectGroup = baseWs.NewWsConnectionGroup()
+
+func WSAgentHandler(c *gin.Context) {
+	serverName := c.GetHeader("ServerName")
+	log.Println("WSAgentHandler.coming", ",ServerName:", serverName)
+	baseWs.WsHandler(c.Writer, c.Request, serverName, &AgentWsConnectGroup, agentMsgHandler)
+}
+
+func AgentConnected(id string) bool {
+	return AgentWsConnectGroup.IsConnected(id)
+}
+
+func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	tmp := msg.Data
 	d, ok := tmp.(map[string]interface{})
 	if !ok {
 	}
 	switch msg.Channel {
-	case CH_PING:
+	case baseWs.CH_PING:
 		return conn.Pong()
-	case CH_PONG:
-		conn.lastPongTime = time.Now().UnixNano() / 1e6
+	case baseWs.CH_PONG:
+		conn.LastPongTime = time.Now().UnixNano() / 1e6
 		break
 	case "docker.task.ack":
 		// {"code":code, "msg": err, "taskId":taskId, "resp": resp }
@@ -37,7 +51,7 @@ func WsMsgHandler(msg *WsMsg, conn *Connection) error {
 			"ts":   d["ts"],
 			"line": d["line"],
 		}
-		err := Push(containerId, "docker.container.stats", res)
+		err := ManagerWsConnectGroup.Push(containerId, "docker.container.stats", res)
 		if err != nil {
 
 		}
@@ -49,7 +63,7 @@ func WsMsgHandler(msg *WsMsg, conn *Connection) error {
 			"ts":   d["ts"],
 			"line": d["line"],
 		}
-		err := Push(containerId, "docker.container.log.line", res)
+		err := ManagerWsConnectGroup.Push(containerId, "docker.container.log.line", res)
 		if err != nil {
 			//param := map[string]interface{}{
 			//	"taskId":      uuid.New(),
@@ -66,21 +80,4 @@ func WsMsgHandler(msg *WsMsg, conn *Connection) error {
 		break
 	}
 	return nil
-}
-
-func SaveAndSendTask(serverName, ch string, param map[string]interface{}) error {
-	err := Push(serverName, ch, param)
-	if err != nil {
-		return err
-	}
-	taskMap := map[string]interface{}{
-		"taskId":     param["taskId"],
-		"ch":         ch,
-		"serverName": serverName,
-		"ts":         time.Now().Unix(),
-		"param":      param,
-		"code":       "000000",
-	}
-	data.Task.Store(param["taskId"].(string), taskMap)
-	return err
 }

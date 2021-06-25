@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
@@ -40,4 +41,10 @@ func GetStats(c *gin.Context) {
 	})
 
 	resp.Resp(c, "100200", "成功", res)
+}
+
+func UpdateStats(c *gin.Context) {
+	ch := "docker.container.stats"
+	service.SendToAllServer(ch, map[string]interface{}{})
+	resp.Resp(c, "100200", "成功", "")
 }

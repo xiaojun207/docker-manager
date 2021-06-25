@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"docker-manager/web/ws"
@@ -17,7 +18,7 @@ func GetServers(c *gin.Context) {
 	data.Servers.ForEachMap(func(_ string, value map[string]interface{}) {
 		server := value
 		serverName := server["Name"].(string)
-		if ws.IsConnected(serverName) {
+		if ws.AgentConnected(serverName) {
 			server["State"] = "connected"
 		} else {
 			server["State"] = "disconnect"
@@ -30,6 +31,12 @@ func GetServers(c *gin.Context) {
 func GetServerNames(c *gin.Context) {
 	res := data.Servers.Keys()
 	resp.Resp(c, "100200", "成功", res)
+}
+
+func UpdateContainerList(c *gin.Context) {
+	ch := "docker.container.list"
+	service.SendToAllServer(ch, map[string]interface{}{})
+	resp.Resp(c, "100200", "成功", "")
 }
 
 func GetContainers(c *gin.Context) {
@@ -115,7 +122,7 @@ func ContainerCmd(c *gin.Context) {
 		"args": args,
 	}
 	serverName := "docker-desktop"
-	err := ws.Push(serverName, "base.cmd", param)
+	err := ws.AgentWsConnectGroup.Push(serverName, "base.cmd", param)
 	if err != nil {
 		log.Println(err)
 		resp.Resp(c, "100100", "成功", err)

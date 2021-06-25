@@ -41,7 +41,7 @@ func LogFollowStart(c *gin.Context) {
 		log.Println(containerId + " server is not exists")
 	}
 	ch := "docker.container.log.follow"
-	if !ws.IsConnected(serverName) {
+	if !ws.AgentConnected(serverName) {
 		resp.Resp(c, "100100", "服务器已离线", "")
 		return
 	}

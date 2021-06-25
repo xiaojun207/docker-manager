@@ -1,4 +1,4 @@
-package ws
+package baseWs
 
 import (
 	"errors"
@@ -14,11 +14,11 @@ type Connection struct {
 	closeChan    chan byte
 	channels     map[string]string
 	mutex        sync.Mutex // 对closeChan关闭上锁
-	isClosed     bool       // 防止closeChan被关闭多次
-	lastPongTime int64      // 毫秒级
+	Closed       bool       // 防止closeChan被关闭多次
+	LastPongTime int64      // 毫秒级
 }
 
-func InitConnection(id string, wsConn *websocket.Conn) (conn *Connection, err error) {
+func NewConnection(id string, wsConn *websocket.Conn) (conn *Connection, err error) {
 	conn = &Connection{
 		wsConnect: wsConn,
 		inChan:    make(chan []byte, 1000),
@@ -28,21 +28,11 @@ func InitConnection(id string, wsConn *websocket.Conn) (conn *Connection, err er
 		id:        id,
 	}
 
-	addConn(conn)
-
 	// 启动读协程
 	go conn.readLoop()
 	// 启动写协程
 	go conn.writeLoop()
 	return
-}
-
-func (conn *Connection) Subscribe(ch string) {
-	conn.channels[ch] = ch
-}
-
-func (conn *Connection) CancelSubscribe(ch string) {
-	delete(conn.channels, ch)
 }
 
 func (conn *Connection) ReadMessage() (data []byte, err error) {
@@ -84,9 +74,9 @@ func (conn *Connection) Close() {
 	conn.wsConnect.Close()
 	// 利用标记，让closeChan只关闭一次
 	conn.mutex.Lock()
-	if !conn.isClosed {
+	if !conn.Closed {
 		close(conn.closeChan)
-		conn.isClosed = true
+		conn.Closed = true
 	}
 	conn.mutex.Unlock()
 }

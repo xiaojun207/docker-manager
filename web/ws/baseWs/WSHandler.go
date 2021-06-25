@@ -1,6 +1,7 @@
-package ws
+package baseWs
 
 import (
+	"github.com/go-basic/uuid"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -15,7 +16,7 @@ var (
 	}
 )
 
-func WsHandler(w http.ResponseWriter, r *http.Request) {
+func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConnectionGroup, wsMsgHandler func(msg *WsMsg, conn *Connection) error) {
 	//log.Println("coming:", getCount())
 	//	w.Write([]byte("hello"))
 	var (
@@ -31,20 +32,16 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//AppId := r.Header.Get("AppId")
-	//Token := r.Header.Get("authorization")
-	//ServerId := r.Header.Get("ServerId")
-	containerId := r.URL.Query().Get("containerId")
-	serverName := r.Header.Get("ServerName")
-	if serverName == "" {
-		serverName = containerId
+	if id == "" {
+		id = uuid.New()
 	}
-	log.Println("WsHandler.coming", ",ServerName:", serverName)
 
-	if conn, err = InitConnection(serverName, wsConn); err != nil {
+	if conn, err = NewConnection(id, wsConn); err != nil {
 		log.Println("WsHandler.InitConnection.error", err)
 		goto ERR
 	}
+
+	group.AddConn(id, conn)
 
 	for {
 		if data, err = conn.ReadMessage(); err != nil {
@@ -53,7 +50,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		msg := ToWsMsg(data)
 
-		if err = WsMsgHandler(msg, conn); err != nil {
+		if err = wsMsgHandler(msg, conn); err != nil {
 			log.Println("WsHandler.WsMsgHandler.error", err)
 			goto ERR
 		}

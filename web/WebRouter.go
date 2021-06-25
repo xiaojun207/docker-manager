@@ -21,11 +21,14 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.POST("/container/stats", AgentTokenInterceptor, agent.ContainerStatsHandler)
 	router.POST("/images", AgentTokenInterceptor, agent.ImagesHandler)
 	router.POST("/image/", AgentTokenInterceptor, agent.ImagesHandler)
+	router.GET("/config", AgentTokenInterceptor, agent.GetConfig)
 
 	router.GET("/mgr/servers", AuthInterceptor, mgr.GetServers)
 	router.GET("/mgr/serverNames", AuthInterceptor, mgr.GetServerNames)
 	router.GET("/mgr/containers", AuthInterceptor, mgr.GetContainers)
+	router.POST("/mgr/containers/update", AuthInterceptor, mgr.UpdateContainerList)
 	router.GET("/mgr/stats", AuthInterceptor, mgr.GetStats)
+	router.POST("/mgr/stats/update", AuthInterceptor, mgr.UpdateStats)
 	router.GET("/mgr/containerInfos", AuthInterceptor, mgr.GetContainerInfos)
 	router.POST("/mgr/container/:operator", AuthInterceptor, mgr.ContainerOperatorHandler)
 
@@ -49,6 +52,9 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/mgr/tasks", AuthInterceptor, mgr.GetTasks)
 	router.GET("/mgr/cmd", AuthInterceptor, mgr.ContainerCmd)
 
+	router.GET("/mgr/config", AuthInterceptor, mgr.GetConfig)
+	router.POST("/mgr/config/update", AuthInterceptor, mgr.UpdateConfig)
+
 	router.POST("/user/login", user.LoginHandler)
 	router.POST("/user/logout", user.LogoutHandler)
 	router.GET("/user/info", AuthInterceptor, user.UserInfoHandler)
@@ -58,11 +64,7 @@ var BaseRouter = func(router *gin.RouterGroup) {
 
 // 路由，把URL和执行方法连接起来
 var WsRouter = func(router *gin.RouterGroup) {
-	wsHandler := func(c *gin.Context) {
-		ws.WsHandler(c.Writer, c.Request)
-	}
-	router.GET("/ws", AgentTokenInterceptor, wsHandler)
-
-	router.GET("/ws/log", AuthInterceptor, wsHandler)
+	router.GET("/ws", AgentTokenInterceptor, ws.WSAgentHandler)
+	router.GET("/ws/log", AuthInterceptor, ws.WSManagerHandler)
 	//router.GET("/ws/:token", TokenInterceptor, wsHandler)
 }

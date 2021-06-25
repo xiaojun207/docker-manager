@@ -1,4 +1,4 @@
-package ws
+package baseWs
 
 import (
 	"encoding/json"
@@ -7,15 +7,8 @@ import (
 )
 
 const (
-	CH_PING          = "base.ht.ping"
-	CH_PONG          = "base.ht.pong"
-	CH_USER_LOGIN    = "user.login"
-	CH_SUB_PREFIX    = "base.sub"
-	CH_SUB_OK        = "base.sub.ok"
-	CH_CANCEL_PREFIX = "base.cancel"
-	CH_CANCEL_OK     = "base.cancel.ok"
-
-	CH_SUB_FAIL = "base.sub.fail"
+	CH_PING = "base.ht.ping"
+	CH_PONG = "base.ht.pong"
 )
 
 type WsMsg struct {
