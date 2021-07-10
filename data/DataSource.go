@@ -6,36 +6,22 @@ import (
 
 var (
 	dbPath = "./db"
-)
 
-// config
-var (
+	// config
 	Config = model.NewLevelDB(dbPath + "/config") // 客户端配置
-)
-
-// docker
-var (
+	// docker
 	Servers            = model.NewLevelDB(dbPath + "/servers")         // {serverName: {DockerInfo}}
 	Containers         = model.NewLevelDB(dbPath + "/containers")      // {serverName: [{ContainerInfo}]}
 	ContainerServerMap = model.NewLevelDB(dbPath + "/containerServer") // {ContainerId: serverName}
 	Stats              = model.NewLevelDB(dbPath + "/stats")           // {ContainerId: {ContainerStatsInfo}}
 	Images             = model.NewLevelDB(dbPath + "/images")          // {serverName: [{ImageInfo}]}
-)
-
-// user
-var (
+	// user
 	SampleUser  = model.NewLevelDB(dbPath + "/users") // {user:password}
 	SampleToken = model.NewLevelDB(dbPath + "/token") // {user:password}
-)
-
-// task
-var (
+	// task
 	Task = model.NewLevelDB(dbPath + "/task") // {"id":{"id":"223456622", }, }
 	Log  = model.NewLevelDB(dbPath + "/log")  // {containerId, stats}
-)
-
-// App
-var (
+	// App
 	AppGroup = model.NewLevelDB(dbPath + "/appGroup") // {appname: [serverName]}
 	AppInfos = model.NewLevelDB(dbPath + "/appInfos") // {appname: {Image: "", "ContainerName":"", Ports: [], Volumes: [], Mounts: [], env: []}}
 )
@@ -56,14 +42,25 @@ func Close() {
 }
 
 func init() {
-	Config.Store("agentConfig", map[string]interface{}{
-		"TaskFrequency": 5 * 60,
-	})
+	//Init("sqlite3", "./db/data.db")
+	//InitDB("mysql", "root:Abc123@(127.0.0.1:3306)/docker-manager?charset=utf8")
+	//DBEngine.Sync2(new(table.User), new(table.UserApi), new(table.Servers), new(table.Services))
 
-	SampleUser.StoreStr("xiaojun", "b24543877bae1cc3")
-	SampleUser.StoreStr("admin", "72d60f075a2341ab")
-	SampleToken.StoreStr("agentToken", "a8ceec2ef7294f46f6fd4fea32c0aa4d6d76dd27c86b4f7c470ee5b568382057")
-	SampleToken.StoreStr("apiToken", "41033229b540ca1b790b6ebb2bf9e889b3e96a6f2f28018da8857a275f89e60f")
+	if Config.Size() == 0 {
+		Config.Store("agentConfig", map[string]interface{}{
+			"TaskFrequency": 5 * 60,
+		})
+	}
+
+	if SampleUser.Size() == 0 {
+		SampleUser.StoreStr("xiaojun", "b24543877bae1cc3")
+		SampleUser.StoreStr("admin", "72d60f075a2341ab")
+	}
+
+	if SampleToken.Size() == 0 {
+		SampleToken.StoreStr("agentToken", "a8ceec2ef7294f46f6fd4fea32c0aa4d6d76dd27c86b4f7c470ee5b568382057")
+		SampleToken.StoreStr("apiToken", "41033229b540ca1b790b6ebb2bf9e889b3e96a6f2f28018da8857a275f89e60f")
+	}
 
 	//AppInfos.Store("docker-agent", map[string]interface{}{"Name": "docker-agent", "memory": 128*1024*1024, "Image": "xiaojun207/docker-agent:latest", "Ports": []string{}, "Volumes": []string{}, "Mounts": []string{}, "env": []string{}})
 	// 所有机器上都要安装

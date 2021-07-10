@@ -25,7 +25,7 @@ func managerWsMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	case baseWs.CH_PING:
 		return conn.Pong()
 	case baseWs.CH_PONG:
-		conn.LastPongTime = time.Now().UnixMilli()
+		conn.LastPongTime = time.Now().UnixNano() / 1e6
 		break
 	default:
 		break
