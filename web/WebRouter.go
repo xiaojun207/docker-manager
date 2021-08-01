@@ -32,9 +32,9 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/mgr/containerInfos", AuthInterceptor, mgr.GetContainerInfos)
 	router.POST("/mgr/container/:operator", AuthInterceptor, mgr.ContainerOperatorHandler)
 
-	router.GET("/mgr/app/list", AuthInterceptor, mgr.AppList)
-	router.POST("/mgr/app/del", AuthInterceptor, mgr.DelApp)
-	router.POST("/mgr/app/update", AuthInterceptor, mgr.UpdateApp)
+	router.GET("/mgr/app/list", AuthInterceptor, mgr.ServiceList)
+	router.POST("/mgr/app/del", AuthInterceptor, mgr.DeleteService)
+	router.POST("/mgr/app/update", AuthInterceptor, mgr.UpdateService)
 	router.GET("/mgr/app/group", AuthInterceptor, mgr.AppGroupList)
 
 	router.GET("/mgr/dashboardSize", AuthInterceptor, mgr.GetDashboardSize)

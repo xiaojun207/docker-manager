@@ -39,17 +39,17 @@ func ContainerOperatorHandler(c *gin.Context) {
 func RePublishHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
-	ContainerName := json["ContainerName"].(string)
-	appInfo := data.AppInfos.LoadMap(ContainerName)
-	log.Println(appInfo)
+	ServiceName := json["ServiceName"].(string)
+	appInfo, err := data.GetService(ServiceName)
+	log.Println(appInfo, err)
 }
 
 func PublishHandler(c *gin.Context) {
-	appInfo := dto.AppInfo{} //注意该结构接受的内容
-	c.BindJSON(&appInfo)
-	log.Println("appInfo:", appInfo)
+	serviceInfo := dto.ServiceInfo{} //注意该结构接受的内容
+	c.BindJSON(&serviceInfo)
+	log.Println("serviceInfo:", serviceInfo)
 
-	err := service.PublishAppTask(appInfo)
+	err := service.PublishAppTask(serviceInfo)
 	if err != nil {
 		log.Println(err)
 		resp.Resp(c, "100100", err.Error(), "")
@@ -59,9 +59,6 @@ func PublishHandler(c *gin.Context) {
 }
 
 func GetTasks(c *gin.Context) {
-	tmps := data.Task.ValuesMap()
-	utils.SortArrMap(tmps, func(a, b map[string]interface{}) bool {
-		return a["ts"].(float64) > b["ts"].(float64)
-	})
+	tmps, _ := data.GetTasks()
 	resp.Resp(c, "100200", "成功", tmps)
 }

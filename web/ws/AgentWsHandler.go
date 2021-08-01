@@ -37,13 +37,7 @@ func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 		//d := utils.MapInterfaceToString(d)
 		taskId := d["taskId"].(string)
 		code := d["code"].(string)
-		task := data.Task.LoadMap(taskId)
-		if task != nil {
-			task["code"] = code
-			task["msg"] = d["msg"]
-			task["resp"] = d["resp"]
-			data.Task.Store(taskId, task)
-		}
+		data.UpdateTask(taskId, code, d["msg"].(string), d["resp"].(string))
 		break
 	case "docker.container.stats":
 		containerId := d["cId"].(string)

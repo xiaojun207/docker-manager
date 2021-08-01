@@ -8,7 +8,7 @@ import (
 )
 
 func GetConfig(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.Config.ToStrMap())
+	resp.Resp(c, "100200", "成功", data.GetConfigList())
 }
 
 func UpdateConfig(c *gin.Context) {
@@ -16,9 +16,7 @@ func UpdateConfig(c *gin.Context) {
 	c.BindJSON(&json)
 	TaskFrequency := json["TaskFrequency"]
 
-	data.Config.Store("agentConfig", map[string]interface{}{
-		"TaskFrequency": TaskFrequency,
-	})
+	data.UpdateConfig("agent.TaskFrequency", TaskFrequency.(string), "任务数据上报频率")
 
 	ch := "base.config.update"
 	service.SendToAllServer(ch, map[string]interface{}{})

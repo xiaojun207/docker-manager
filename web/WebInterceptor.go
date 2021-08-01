@@ -1,7 +1,7 @@
 package web
 
 import (
-	"docker-manager/data"
+	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
@@ -9,10 +9,9 @@ import (
 )
 
 func AgentTokenInterceptor(c *gin.Context) {
-	Token := data.SampleToken.GetStr("agentToken")
-	token := c.Request.Header.Get("authorization")
-	if token == "" || token != Token {
-		log.Println("URI:", c.Request.RequestURI+", AgentTokenInterceptor:", token)
+	token := c.GetHeader("authorization")
+	if token == "" || !service.LoginAgent(token) {
+		log.Println("URI:", c.Request.RequestURI+", AgentTokenInterceptor err:", token)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
@@ -20,10 +19,10 @@ func AgentTokenInterceptor(c *gin.Context) {
 }
 
 func ApiTokenInterceptor(c *gin.Context) {
-	Token := data.SampleToken.GetStr("apiToken")
-	token := c.Request.Header.Get("authorization")
-	if token == "" || token != Token {
-		log.Println("URI:", c.Request.RequestURI+", ApiTokenInterceptor:", token)
+	apiKey := c.GetHeader("authorization")
+	apiSecret := c.GetHeader("authorization")
+	if apiKey == "" || !service.LoginApi(apiKey, apiSecret) {
+		log.Println("URI:", c.Request.RequestURI+", ApiTokenInterceptor:", apiKey, apiSecret)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
@@ -31,7 +30,7 @@ func ApiTokenInterceptor(c *gin.Context) {
 }
 
 func AuthInterceptor(c *gin.Context) {
-	token := c.Request.Header.Get("authorization")
+	token := c.GetHeader("authorization")
 	if token == "" {
 		xxx_token, err := c.Request.Cookie("xxx_token")
 		if err != nil {

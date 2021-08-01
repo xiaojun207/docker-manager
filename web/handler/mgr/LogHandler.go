@@ -12,19 +12,17 @@ import (
 
 func GetFollowLogList(c *gin.Context) {
 	tmps := []map[string]interface{}{}
-	data.Stats.ForEachArr(func(serverName string, arr []interface{}) {
-		for _, value := range arr {
-			m := value.(map[string]interface{})
-			if m["Follow"].(bool) {
-				c := map[string]interface{}{
-					"ID":         m["ID"],
-					"Name":       m["Name"],
-					"ServerName": serverName,
-				}
-				tmps = append(tmps, c)
+	statss, _ := data.GetContainerStats()
+	for _, stats := range statss {
+		if stats.Follow {
+			c := map[string]interface{}{
+				"ID":         stats.ContainerId,
+				"Name":       stats.Name,
+				"ServerName": stats.ServerName,
 			}
+			tmps = append(tmps, c)
 		}
-	})
+	}
 	resp.Resp(c, "100200", "成功", tmps)
 }
 

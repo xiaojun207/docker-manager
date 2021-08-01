@@ -7,7 +7,7 @@ type ContainerPort struct {
 	PublicPort  string `json:"PublicPort"`
 }
 
-type AppInfo struct {
+type ServiceInfo struct {
 	ServerNames []string          `json:"ServerNames"`
 	Image       string            `json:"Image"`
 	Name        string            `json:"Name"`
@@ -17,4 +17,6 @@ type AppInfo struct {
 	Memory      int64             `json:"Memory"`
 	LogConfig   map[string]string `json:"LogConfig"`
 	LogType     string            `json:"LogType"`
+	Running     int               `json:"Running"`
+	Replicas    int               `json:"Replicas"`
 }

@@ -2,8 +2,10 @@ package agent
 
 import (
 	"docker-manager/data"
+	"docker-manager/data/table"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	utils2 "github.com/xiaojun207/go-base-utils/utils"
 )
 
 func ImagesHandler(c *gin.Context) {
@@ -15,12 +17,13 @@ func ImagesHandler(c *gin.Context) {
 	id := json["ID"].(string)
 	Name := json["Name"].(string)
 
-	for _, v := range json["Images"].([]interface{}) {
+	for _, v := range json["Image"].([]interface{}) {
 		v.(map[string]interface{})["AppId"] = AppId
 		v.(map[string]interface{})["ServerName"] = Name
+		var i table.Image
+		utils2.MapToStruct(v.(map[string]interface{}), &i)
+		data.AddImage(i)
 	}
-
-	data.Images.Store(Name, json["Images"])
 
 	resp.Resp(c, "100200", "成功", gin.H{
 		"id": id,

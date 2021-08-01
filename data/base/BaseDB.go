@@ -1,4 +1,4 @@
-package data
+package base
 
 import (
 	"database/sql"
@@ -49,7 +49,21 @@ func InitDB(driverName, dataSourceUrl string) *xorm.Engine {
 	log.Println(driverName + " 数据库配置成功")
 
 	DBConfig(DBEngine)
+	GetDBVersion()
 	return DBEngine
+}
+
+func GetDBVersion() {
+	result, err := DBEngine.QueryInterface("select version();")
+	if err != nil {
+		log.Println(err)
+		panic(err)
+	}
+	if len(result) != 1 {
+		panic("GetDBVersion, QueryOne Expectation 1, reality " + strconv.Itoa(len(result)))
+	}
+
+	log.Println("DB Version:", string(result[0]["version()"].([]byte)))
 }
 
 func CloseDBEngine() {

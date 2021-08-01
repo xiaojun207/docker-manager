@@ -7,5 +7,5 @@ import (
 )
 
 func GetConfig(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.Config.ToStrMap())
+	resp.Resp(c, "100200", "成功", data.GetAgentConfig())
 }

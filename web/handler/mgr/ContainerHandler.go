@@ -13,23 +13,19 @@ import (
 )
 
 func GetServers(c *gin.Context) {
-	res := []interface{}{}
-
-	data.Servers.ForEachMap(func(_ string, value map[string]interface{}) {
-		server := value
-		serverName := server["Name"].(string)
-		if ws.AgentConnected(serverName) {
-			server["State"] = "connected"
+	servers, _ := data.GetServers()
+	for _, server := range servers {
+		if ws.AgentConnected(server.Name) {
+			server.State = "connected"
 		} else {
-			server["State"] = "disconnect"
+			server.State = "disconnect"
 		}
-		res = append(res, value)
-	})
-	resp.Resp(c, "100200", "成功", res)
+	}
+	resp.Resp(c, "100200", "成功", servers)
 }
 
 func GetServerNames(c *gin.Context) {
-	res := data.Servers.Keys()
+	res, _ := data.GetServersName()
 	resp.Resp(c, "100200", "成功", res)
 }
 
@@ -40,75 +36,69 @@ func UpdateContainerList(c *gin.Context) {
 }
 
 func GetContainers(c *gin.Context) {
-	serverNames := c.QueryArray("serverNames[]")
+	serverNames := strings.Join(c.QueryArray("serverNames[]"), ",")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	state := c.Query("state")
 	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
 	res := []interface{}{}
 
-	data.Containers.ForEachArrMap(func(_ string, arr []map[string]interface{}) {
-		for _, v := range arr {
-			container := v
+	containers, err := data.GetContainers()
+	log.Println("GetContainers.err:", err)
 
-			c_state := container["State"].(string)
-			c_serverName := container["ServerName"].(string)
-			c_name := container["Name"].(string)
-
-			if state != "" && c_state != state {
-				continue
-			}
-
-			if len(serverNames) > 0 && !utils.StrInArr(serverNames, c_serverName) {
-				continue
-			}
-			if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, c_name) {
-				continue
-			}
-			res = append(res, v)
+	for _, container := range containers {
+		if state != "" && container.State != state {
+			continue
 		}
-	})
-
+		if len(serverNames) > 0 && !strings.Contains(serverNames, container.ServerName) {
+			continue
+		}
+		if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, container.Name) {
+			continue
+		}
+		res = append(res, container)
+	}
 	resp.Resp(c, "100200", "成功", res)
 }
 
+// info,服务和容器基本信息
 func GetContainerInfos(c *gin.Context) {
 	serverNames := strings.Join(c.QueryArray("serverNames[]"), ",")
 	state := c.Query("state")
 	log.Println("serverName:", serverNames, ",state:", state)
+
 	res := []interface{}{}
+	containers, err := data.GetContainers()
+	log.Println("GetContainerInfos.err:", err)
 
-	data.Containers.ForEachArrMap(func(key string, arr []map[string]interface{}) {
-		serverName := key
-
-		containers := []map[string]string{}
-		for _, v := range arr {
-			container := v
-
-			c_state := container["State"].(string)
-			c_serverName := container["ServerName"].(string)
-
-			if state != "" && c_state != state {
-				continue
-			}
-
-			if len(serverNames) > 0 && !strings.Contains(serverNames, c_serverName) {
-				continue
-			}
-
-			c := map[string]string{}
-			c["ServerName"] = container["ServerName"].(string)
-			c["Id"] = container["Id"].(string)
-
-			c["Names"] = container["Name"].(string)
-			c["State"] = container["State"].(string)
-			containers = append(containers, c)
+	serverMap := map[string]map[string]interface{}{}
+	for _, container := range containers {
+		if state != "" && container.State != state {
+			continue
+		}
+		if len(serverNames) > 0 && !strings.Contains(serverNames, container.ServerName) {
+			continue
 		}
 
-		server := map[string]interface{}{}
-		server["serverName"] = serverName
-		server["containers"] = containers
-		res = append(res, server)
-	})
+		server, ok := serverMap[container.ServerName]
+		var containers []map[string]string
+		if ok {
+			containers = server["containers"].([]map[string]string)
+		} else {
+			server = map[string]interface{}{}
+			containers = []map[string]string{}
+			server["serverName"] = container.ServerName
+			server["containers"] = containers
+			serverMap[container.ServerName] = server
+			res = append(res, server)
+		}
+
+		c := map[string]string{}
+		c["ServerName"] = container.ServerName
+		c["Id"] = container.ContainerId
+		c["Names"] = container.Name
+		c["State"] = container.State
+		containers = append(containers, c)
+	}
 
 	resp.Resp(c, "100200", "成功", res)
 }

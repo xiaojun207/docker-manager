@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func PublishAppTask(appInfo dto.AppInfo) error {
+func PublishAppTask(appInfo dto.ServiceInfo) error {
 	log.Println("PublishAppTask.appInfo:", utils.StructToJson(appInfo))
 	data.AddAppInfo(appInfo.Name, appInfo)
 

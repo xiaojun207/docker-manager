@@ -17,29 +17,23 @@ func GetStats(c *gin.Context) {
 	log.Println("serverNames:", serverNames, ",ContainerNames:", ContainerNames, ",Follow:", Follow)
 	res := []interface{}{}
 
-	data.Stats.ForEachArr(func(ServerName string, arr []interface{}) {
-		if len(serverNames) > 0 && !utils.StrInArr(serverNames, ServerName) {
-			return
+	statss, _ := data.GetContainerStats()
+	for _, stats := range statss {
+		if len(serverNames) > 0 && !utils.StrInArr(serverNames, stats.ServerName) {
+			continue
 		}
-
-		for _, v := range arr {
-			container := v.(map[string]interface{})
-			c_name := utils.TrimContainerName(container["name"])
-			container["Name"] = c_name
-
-			if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, c_name) {
+		c_name := utils.TrimContainerName(stats.Name)
+		if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, c_name) {
+			continue
+		}
+		if len(Follow) > 0 {
+			f, _ := strconv.ParseBool(Follow)
+			if f != stats.Follow {
 				continue
 			}
-			if len(Follow) > 0 {
-				f, _ := strconv.ParseBool(Follow)
-				if f != container["Follow"].(bool) {
-					continue
-				}
-			}
-			res = append(res, container)
 		}
-	})
-
+		res = append(res, stats)
+	}
 	resp.Resp(c, "100200", "成功", res)
 }
 
