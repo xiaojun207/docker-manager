@@ -2,12 +2,14 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/data/table"
 	"docker-manager/dto"
 	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
+	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
 
@@ -48,8 +50,18 @@ func PublishHandler(c *gin.Context) {
 	serviceInfo := dto.ServiceInfo{} //注意该结构接受的内容
 	c.BindJSON(&serviceInfo)
 	log.Println("serviceInfo:", serviceInfo)
+	s := table.Service{
+		Name:     serviceInfo.Name,
+		Image:    serviceInfo.Image,
+		Env:      serviceInfo.EnvToArrMap(),
+		Vol:      serviceInfo.VolumeToArrMap(),
+		Memory:   serviceInfo.Memory,
+		Running:  serviceInfo.Running,
+		Replicas: len(serviceInfo.ServerNames),
+	}
+	utils2.StructToMap(serviceInfo.Ports, &s.Ports)
 
-	err := service.PublishAppTask(serviceInfo)
+	err := service.PublishAppTask(serviceInfo.ServerNames, s)
 	if err != nil {
 		log.Println(err)
 		resp.Resp(c, "100100", err.Error(), "")

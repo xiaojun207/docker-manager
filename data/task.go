@@ -21,7 +21,7 @@ func AddTask(e table.Task) (err error) {
 	return
 }
 
-func UpdateTask(taskId, code, msg, resp string) (err error) {
+func UpdateTask(taskId, code, msg string, resp map[string]interface{}) (err error) {
 	var record table.Task
 	has, err := base.DBEngine.Table("task").Where("task_id=?", taskId).Get(&record)
 	if err != nil {

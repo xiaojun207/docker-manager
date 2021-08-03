@@ -14,17 +14,21 @@ func AddAppInfo(appname string, info dto.ServiceInfo) {
 	//}
 	//AppInfos.Store(appname, info)
 
-	AddService(table.Service{
-		Name:     appname,
-		Image:    info.Image,
-		Ports:    utils2.StructToJson(info.Ports),
-		Env:      utils2.StructToJson(info.Env),
-		Vol:      utils2.StructToJson(info.Volumes),
+	service := table.Service{
+		Name:  appname,
+		Image: info.Image,
+		//Ports:    utils2.StructToMap(info.Ports),
+		//Env:      utils2.StructToJson(info.Env),
+		//Vol:      utils2.StructToJson(info.Volumes),
 		Running:  info.Running,
 		Replicas: info.Replicas,
 		//Status: info.
 		//Summary: info.
-	})
+	}
+	utils2.StructToMap(info.Ports, &service.Ports)
+	utils2.StructToMap(info.Env, &service.Env)
+	utils2.StructToMap(info.Volumes, &service.Vol)
+	AddService(service)
 }
 
 func AddService(service table.Service) (err error) {

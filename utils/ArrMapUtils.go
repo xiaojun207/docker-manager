@@ -8,6 +8,15 @@ func MapInterfaceToString(m map[string]interface{}) map[string]string {
 	return res
 }
 
+func ArrInterfaceToMap(arr []interface{}) []map[string]interface{} {
+	res := []map[string]interface{}{}
+	for _, m := range arr {
+		m := m.(map[string]interface{})
+		res = append(res, m)
+	}
+	return res
+}
+
 func ArrInterfaceToStr(arr []interface{}) []string {
 	res := []string{}
 	for _, a := range arr {

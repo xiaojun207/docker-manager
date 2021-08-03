@@ -38,7 +38,7 @@ func GetStats(c *gin.Context) {
 }
 
 func UpdateStats(c *gin.Context) {
-	ch := "docker.container.stats"
+	ch := "docker.containers.stats"
 	service.SendToAllServer(ch, map[string]interface{}{})
 	resp.Resp(c, "100200", "成功", "")
 }

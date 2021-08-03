@@ -55,6 +55,8 @@ func ContainersStatsHandler(c *gin.Context) {
 
 		var e table.ContainerStats
 		utils2.MapToStruct(v, &e)
+		e.CpuStats = v["cpu_stats"].(map[string]interface{})
+		e.MemoryStats = v["memory_stats"].(map[string]interface{})
 		data.AddContainerStats(e)
 	}
 	resp.Resp(c, "100200", "成功", gin.H{})

@@ -13,7 +13,12 @@ import (
 )
 
 func GetServers(c *gin.Context) {
-	servers, _ := data.GetServers()
+	servers, err := data.GetServers()
+
+	if err != nil {
+		resp.Resp(c, "100100", "请求异常", err.Error())
+		return
+	}
 	for _, server := range servers {
 		if ws.AgentConnected(server.Name) {
 			server.State = "connected"
@@ -25,7 +30,12 @@ func GetServers(c *gin.Context) {
 }
 
 func GetServerNames(c *gin.Context) {
-	res, _ := data.GetServersName()
+	res, err := data.GetServersName()
+
+	if err != nil {
+		resp.Resp(c, "100100", "请求异常", err.Error())
+		return
+	}
 	resp.Resp(c, "100200", "成功", res)
 }
 
@@ -66,9 +76,12 @@ func GetContainerInfos(c *gin.Context) {
 	state := c.Query("state")
 	log.Println("serverName:", serverNames, ",state:", state)
 
-	res := []interface{}{}
 	containers, err := data.GetContainers()
-	log.Println("GetContainerInfos.err:", err)
+	if err != nil {
+		log.Println("GetContainerInfos.err:", err)
+	} else {
+		log.Println("GetContainerInfos.len:", len(containers))
+	}
 
 	serverMap := map[string]map[string]interface{}{}
 	for _, container := range containers {
@@ -80,24 +93,29 @@ func GetContainerInfos(c *gin.Context) {
 		}
 
 		server, ok := serverMap[container.ServerName]
-		var containers []map[string]string
+		var clist []map[string]string
 		if ok {
-			containers = server["containers"].([]map[string]string)
+			clist = server["containers"].([]map[string]string)
 		} else {
+			clist = []map[string]string{}
 			server = map[string]interface{}{}
-			containers = []map[string]string{}
 			server["serverName"] = container.ServerName
-			server["containers"] = containers
-			serverMap[container.ServerName] = server
-			res = append(res, server)
 		}
 
-		c := map[string]string{}
-		c["ServerName"] = container.ServerName
-		c["Id"] = container.ContainerId
-		c["Names"] = container.Name
-		c["State"] = container.State
-		containers = append(containers, c)
+		tmp := map[string]string{}
+		tmp["ServerName"] = container.ServerName
+		tmp["Id"] = container.ContainerId
+		tmp["Name"] = container.Name
+		tmp["State"] = container.State
+		clist = append(clist, tmp)
+
+		server["containers"] = clist
+		serverMap[container.ServerName] = server
+	}
+
+	res := []interface{}{}
+	for _, server := range serverMap {
+		res = append(res, server)
 	}
 
 	resp.Resp(c, "100200", "成功", res)

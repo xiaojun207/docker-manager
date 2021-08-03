@@ -5,7 +5,6 @@ import (
 	"docker-manager/data/table"
 	"docker-manager/web/ws"
 	"github.com/go-basic/uuid"
-	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"time"
 )
@@ -24,8 +23,8 @@ func SaveAndSendTask(serverName, ch string, param map[string]interface{}) error 
 		Msg:        "",
 		ServerName: serverName,
 		Ts:         time.Now().Unix(),
-		Param:      utils2.MapToJson(param),
-		Resp:       "",
+		Param:      param,
+		//Resp:       "",
 		CreateDate: time.Time{},
 		UpdateDate: time.Time{},
 	})

@@ -23,7 +23,7 @@ func RegDockerHandler(c *gin.Context) {
 	id := json["ID"].(string)
 	//AppId := c.GetHeader("AppId")
 
-	data.AddServer(table.Server{
+	server := table.Server{
 		Name:            Name,
 		OSType:          json["OSType"].(string),
 		OperatingSystem: json["OperatingSystem"].(string),
@@ -36,8 +36,9 @@ func RegDockerHandler(c *gin.Context) {
 		//PrivateIp:  "",
 		//PublicIp:   "",
 		//State:  "",
-		Summary: utils2.MapToJson(json),
-	})
+		Summary: json,
+	}
+	data.AddServer(server)
 	log.Println("reg server:", id, " Name:", Name)
 
 	resp.Resp(c, "100200", "成功", gin.H{
@@ -64,19 +65,12 @@ func ContainersHandler(c *gin.Context) {
 
 		data.AddReplicas(ContainerName, Name)
 
-		volumes := []string{}
-		for _, m := range v["Mounts"].([]interface{}) {
-			m := m.(map[string]interface{})
-			vol := m["Source"].(string) + ":" + m["Destination"].(string)
-			volumes = append(volumes, vol)
-		}
-
-		service := table.Service{
+		var service = table.Service{
 			Name:     ContainerName,
 			Image:    v["Image"].(string),
-			Ports:    utils2.MapToJson(v["Ports"]),
-			Vol:      utils2.MapToJson(volumes),
+			Vol:      utils.ArrInterfaceToMap(v["Mounts"].([]interface{})),
 			Running:  0,
+			Ports:    utils.ArrInterfaceToMap(v["Ports"].([]interface{})),
 			Replicas: 0,
 		}
 		data.AddService(service)
@@ -84,7 +78,7 @@ func ContainersHandler(c *gin.Context) {
 		var container table.Container
 		utils2.MapToStruct(v, &container)
 		container.ContainerId = v["Id"].(string)
-		container.Summary = utils2.MapToJson(v)
+		container.Summary = v
 
 		data.AddContainer(container)
 	}

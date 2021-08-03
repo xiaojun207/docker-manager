@@ -2,28 +2,28 @@ package service
 
 import (
 	"docker-manager/data"
-	"docker-manager/dto"
+	"docker-manager/data/table"
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
 
-func PublishAppTask(appInfo dto.ServiceInfo) error {
-	log.Println("PublishAppTask.appInfo:", utils.StructToJson(appInfo))
-	data.AddAppInfo(appInfo.Name, appInfo)
+func PublishAppTask(serverNames []string, service table.Service) error {
+	log.Println("PublishAppTask.appInfo:", utils.StructToJson(service))
+	data.AddService(service)
 
-	for _, serverName := range appInfo.ServerNames {
+	for _, serverName := range serverNames {
 		param := map[string]interface{}{
 			"taskId":        uuid.New(),
 			"serverName":    serverName,
-			"imageName":     appInfo.Image,
-			"containerName": appInfo.Name,
-			"ports":         appInfo.Ports,
-			"volumes":       appInfo.Volumes,
-			"env":           appInfo.Env, // {"appversion=1.0.1"}
-			"memory":        appInfo.Memory,
-			"logType":       appInfo.LogType,
-			"logConfig":     appInfo.LogConfig,
+			"imageName":     service.Image,
+			"containerName": service.Name,
+			"ports":         service.Ports,
+			"volumes":       service.Vol,
+			"env":           service.Env, // {"appversion=1.0.1"}
+			"memory":        service.Memory,
+			//"logType":       service.LogType,
+			//"logConfig":     service.LogConfig,
 		}
 		ch := "docker.container.run"
 

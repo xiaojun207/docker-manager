@@ -34,7 +34,7 @@ func GetServiceReplicasSize() int64 {
 	return count
 }
 
-func GetServiceReplicas() (record []table.Task, err error) {
+func GetServiceReplicas() (record []table.ServiceReplicas, err error) {
 	err = base.DBEngine.Table("service_replicas").Find(&record)
 	return
 }
