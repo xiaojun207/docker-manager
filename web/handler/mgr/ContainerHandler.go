@@ -19,12 +19,13 @@ func GetServers(c *gin.Context) {
 		resp.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	for _, server := range servers {
+	for i, server := range servers {
 		if ws.AgentConnected(server.Name) {
 			server.State = "connected"
 		} else {
 			server.State = "disconnect"
 		}
+		servers[i] = server
 	}
 	resp.Resp(c, "100200", "成功", servers)
 }

@@ -9,7 +9,9 @@ import (
 
 func AddContainer(e table.Container) (err error) {
 	var record table.Container
-	has, err := base.DBEngine.Table("container").Where("container_id=?", e.ContainerId).Get(&record)
+	has, err := base.DBEngine.Table("container").
+		Where("container_id=? or (name=? and server_name=?)", e.ContainerId, e.Name, e.ServerName).
+		Get(&record)
 	if err != nil {
 		log.Println("AddContainer.err:", err)
 		return err
@@ -23,7 +25,7 @@ func AddContainer(e table.Container) (err error) {
 }
 
 func GetContainers() (record []table.Container, err error) {
-	err = base.DBEngine.Table("container").Find(&record)
+	err = base.DBEngine.Table("container").OrderBy("server_name asc,name asc").Find(&record)
 	return
 }
 

@@ -14,7 +14,7 @@ func AddServer(server table.Server) (err error) {
 		return err
 	}
 	if has {
-		base.DBEngine.Table("server").ID(record.Id).Update(server)
+		_, err = base.DBEngine.Table("server").ID(record.Id).Update(server)
 	} else {
 		_, err = base.DBEngine.Table("server").Insert(&server)
 	}
@@ -22,7 +22,7 @@ func AddServer(server table.Server) (err error) {
 }
 
 func GetServers() (record []table.Server, err error) {
-	err = base.DBEngine.Table("server").Find(&record)
+	err = base.DBEngine.Table("server").OrderBy("name asc").Find(&record)
 	return
 }
 

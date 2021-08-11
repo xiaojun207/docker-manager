@@ -33,13 +33,17 @@ func RegDockerHandler(c *gin.Context) {
 		Containers:      int(json["Containers"].(float64)),
 		Cpu:             int(json["NCPU"].(float64)),
 		Memory:          int64(json["MemTotal"].(float64)),
+		Images:          int(json["Images"].(float64)),
 		//PrivateIp:  "",
 		//PublicIp:   "",
 		//State:  "",
 		Summary: json,
 	}
-	data.AddServer(server)
+	err := data.AddServer(server)
 	log.Println("reg server:", id, " Name:", Name)
+	if err != nil {
+		log.Println("add server.err:", err, " Name:", Name)
+	}
 
 	resp.Resp(c, "100200", "成功", gin.H{
 		"name": Name,

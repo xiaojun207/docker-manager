@@ -18,7 +18,7 @@ type Server struct {
 	Memory          int64                  `xorm:"default 1024 comment('内存') BIGINT"`
 	PrivateIp       string                 `xorm:"comment('内网ip') VARCHAR(24)"`
 	PublicIp        string                 `xorm:"comment('公网ip') VARCHAR(24)"`
-	Status          string                 `xorm:"comment('状态1， 不在线，在线') INT"`
+	Status          string                 `xorm:"comment('状态1， 不在线，在线') VARCHAR(20)"`
 	State           string                 `xorm:"comment('状态2， 不在线，在线') VARCHAR(20)"`
 	Summary         map[string]interface{} `xorm:"JSON"`
 	CreateDate      time.Time              `xorm:"created default CURRENT_TIMESTAMP TIMESTAMP"`

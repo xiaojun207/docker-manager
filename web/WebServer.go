@@ -41,7 +41,6 @@ func Start(port string, contextPath string, routers ...func(router *gin.RouterGr
 	rootRouter.NoRoute(_404Handler)
 	rootRouter.StaticFile("/", "./views/index.html")
 	rootRouter.StaticFile("/favicon.ico", "./views/favicon.ico")
-	rootRouter.StaticFile("/index-batch.html", "./views/index-batch.html")
 	rootRouter.StaticFS("/static/", http.Dir("./views/static/"))
 	//rootRouter.Static("/", "./views/")
 	apiRouter := rootRouter.Group(contextPath)
