@@ -55,10 +55,13 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/mgr/config", AuthInterceptor, mgr.GetConfig)
 	router.POST("/mgr/config/update", AuthInterceptor, mgr.UpdateConfig)
 
+	router.GET("/base/version", user.VersionHandler)
+
 	router.POST("/user/login", user.LoginHandler)
 	router.POST("/user/logout", user.LogoutHandler)
 	router.GET("/user/info", AuthInterceptor, user.UserInfoHandler)
-	router.GET("/base/version", user.VersionHandler)
+	router.GET("/user/userList", AuthInterceptor, user.UserListHandler)
+	router.POST("/user/alterPassword", AuthInterceptor, user.AlterPasswordHandler)
 
 }
 

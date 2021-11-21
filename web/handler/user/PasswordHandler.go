@@ -7,25 +7,19 @@ import (
 	"log"
 )
 
-/**
-eg.2
-*/
-func LoginHandler(c *gin.Context) {
+func AlterPasswordHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
 
-	username := json["username"].(string)
-	password := json["password"].(string)
+	username := c.GetString("username")
+	oldPassword := json["OldPassword"].(string)
+	newPassword := json["NewPassword"].(string)
 
-	token, err := service.Login(username, password)
+	err := service.AlterPassword(username, oldPassword, newPassword)
 	if err != nil {
 		log.Println(err)
 		resp.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", token)
-}
-
-func LogoutHandler(c *gin.Context) {
 	resp.Resp(c, "100200", "成功", "")
 }

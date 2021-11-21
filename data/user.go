@@ -9,6 +9,14 @@ import (
 	"log"
 )
 
+func FindUsers() (users []table.User, err error) {
+	err = base.DBEngine.Table("user").Find(&users)
+	if err != nil {
+		log.Println("FindUsers.err:", err)
+	}
+	return
+}
+
 func FindUserByUsername(username string) (user table.User, err error) {
 	has, err := base.DBEngine.Table("user").Where("username=?", username).Get(&user)
 	if err != nil {
@@ -17,6 +25,15 @@ func FindUserByUsername(username string) (user table.User, err error) {
 	}
 	if !has {
 		return user, errors.New("FindUserByUsername user '" + username + "' not exists")
+	}
+	return
+}
+
+func UpdatePasswordByUsername(user table.User) (err error) {
+	_, err = base.DBEngine.Exec("update user set password=? where username=?", user.Password, user.Username)
+	if err != nil {
+		log.Println("UpdatePasswordByUsername.err:", err)
+		return err
 	}
 	return
 }
