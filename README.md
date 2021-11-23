@@ -3,16 +3,16 @@
 也考虑过rancher这样的工具，但对于我们来说还是太重了。我需要一个更轻量的管理工具。因此docker-manager和docker-agent就诞生了。
 
 ## docker-manager
-基于docker的多主机容器web管理，依赖mysql
+基于docker的多主机容器web管理，依赖mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
 
 ## 使用方法
 
 ```
-docker pull xiaojun207/docker-manager:1.0.2
+docker pull xiaojun207/docker-manager:1.0.5
 
 docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
 
-docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.2
+docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.5
 
 ```
 
