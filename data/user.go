@@ -38,6 +38,15 @@ func UpdatePasswordByUsername(user table.User) (err error) {
 	return
 }
 
+func UpdateStatusByUsername(user table.User) (err error) {
+	_, err = base.DBEngine.Exec("update user set status=? where username=?", user.Status, user.Username)
+	if err != nil {
+		log.Println("UpdateStatusByUsername.err:", err)
+		return err
+	}
+	return
+}
+
 func CreateUser(user table.User) error {
 	_, err := base.DBEngine.Table("user").Insert(&user)
 	if err != nil {
@@ -55,7 +64,7 @@ func UserInit() {
 	if has {
 		log.Println("User is exists")
 	} else {
-		adminPassword := utils.Md5(uuid.New())
+		adminPassword := utils.RandomPassword(32, "mix")
 		adminUser := table.User{
 			Username: "admin",
 			Slat:     utils.Sha256(uuid.New()),
@@ -70,7 +79,7 @@ func UserInit() {
 			log.Println("InitUser insert [username:", adminUser.Username, ", password:", adminPassword, "], This password only show once!")
 		}
 
-		agentPassword := utils.Md5(uuid.New())
+		agentPassword := utils.RandomPassword(32, "mix")
 		agentUser := table.User{
 			Username: "agent",
 			Slat:     utils.Sha256(uuid.New()),

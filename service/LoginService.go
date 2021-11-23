@@ -24,6 +24,11 @@ func Login(username, password string) (string, error) {
 		log.Println("Login.err:", err)
 		return "", errors.New("用户密码错误")
 	}
+
+	if user.Status != table.USERSTATUS_NORMAL {
+		return "", errors.New("用户密码错误!!")
+	}
+
 	if user.Role != table.USERROLE_ADMIN && user.Role != table.USERROLE_USER {
 		// 角色不匹配
 		return "", errors.New("用户密码错误!")
@@ -45,6 +50,11 @@ func LoginApi(apiKey, apiSecret string) bool {
 		log.Println("LoginApi.err:", err)
 		return false
 	}
+
+	if user.Status != table.USERSTATUS_NORMAL {
+		return false
+	}
+
 	if user.Role != table.USERROLE_DEPLOY {
 		// 角色不匹配
 		return false
@@ -60,6 +70,11 @@ func LoginAgent(agentPassword string) bool {
 		log.Println("LoginAgent.err:", err)
 		return false
 	}
+
+	if user.Status != table.USERSTATUS_NORMAL {
+		return false
+	}
+
 	if user.Role != table.USERROLE_AGENT {
 		// 角色不匹配
 		return false
