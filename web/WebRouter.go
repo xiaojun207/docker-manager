@@ -62,6 +62,8 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/user/info", AuthInterceptor, user.UserInfoHandler)
 	router.GET("/user/userList", AuthInterceptor, user.UserListHandler)
 	router.POST("/user/alterPassword", AuthInterceptor, user.AlterPasswordHandler)
+	router.POST("/user/resetPassword", AuthInterceptor, user.ResetPasswordHandler)
+	router.POST("/user/changeStatus", AuthInterceptor, user.ChangeStatusHandler)
 
 }
 

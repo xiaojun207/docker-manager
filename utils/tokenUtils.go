@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -16,8 +17,9 @@ var (
 )
 
 type TokenFactory struct {
-	webName string
-	secret  []byte
+	webName  string
+	secret   []byte
+	cacheMap sync.Map
 }
 
 var TokenHelper = TokenFactory{
@@ -26,10 +28,18 @@ var TokenHelper = TokenFactory{
 }
 
 func CreateToken(data string) string {
-	return TokenHelper.CreateToken(data, 60*60*24)
+	expiration := int64(60 * 60 * 24)
+	token := TokenHelper.CreateToken(data, expiration)
+	// 缓存token到内存中，如果集群模式下，请存入redis
+	TokenHelper.cacheMap.Store(token, "1")
+	return token
 }
 
 func ValidToken(token string) (isValid bool, data string, err error) {
+	_, ok := TokenHelper.cacheMap.Load(token)
+	if !ok {
+		return false, "", errors.New("Token not exists")
+	}
 	return TokenHelper.ValidToken(token)
 }
 
