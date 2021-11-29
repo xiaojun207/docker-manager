@@ -40,4 +40,6 @@ docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -
 需配合xiaojun207/docker-agent镜像使用，docker-agent的具体使用方法，请参见其说明
 
 ## 联系邮箱
+如果，你有什么想法或建议，请你发送邮件到下面的邮箱：
+
 email: xiaojun207@126.com
