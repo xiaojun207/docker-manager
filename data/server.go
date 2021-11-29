@@ -21,6 +21,20 @@ func AddServer(server table.Server) (err error) {
 	return
 }
 
+func UpdateServerState(name string, state string) (err error) {
+	var record table.Server
+	has, err := base.DBEngine.Table("server").Where("Name=?", name).Get(&record)
+	if err != nil {
+		log.Println("AddServer.err:", err)
+		return err
+	}
+	if has {
+		record.State = state
+		_, err = base.DBEngine.Table("server").ID(record.Id).Update(record)
+	}
+	return
+}
+
 func GetServers() (record []table.Server, err error) {
 	err = base.DBEngine.Table("server").OrderBy("name asc").Find(&record)
 	return

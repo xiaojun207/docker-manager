@@ -8,13 +8,14 @@
 * 启动容器、删除容器、重新启动
 * 容器状态信息，包括：cpu使用、内存使用、网络使用
 * 发布新的容器到目标服务器
-* 容器实时日志（如果有的话），相当于docker logs -f --tail 10 容器名，比较耗资源，仅临时查看日志用比较好
+* 容器实时日志（如果有的话），相当于docker logs -f --tail 10 容器名，比较耗资源，仅临时查看日志用比较好（该功能不支持集群部署）
 * 服务器资产展示，主要包括：容器总数量、运行容器数量、cpu使用、内存使用、docker版本、docker-agent是否在线（该功能不支持集群部署）
 * 用户管理，对管理员和docker-agent账号、密码、状态管理
 * 
 
 ## docker-manager
 基于docker的多主机容器web管理，依赖mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
+
 
 ## 使用方法
 
@@ -26,6 +27,15 @@ docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-m
 docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.5
 
 ```
+
+参数说明:
+
+参数 |是否必填| 默认值   | 说明 
+---|---|-------|--- 
+dataSourceUrl | 必填 | -     | 数据库连接url，如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
+driveName | 否 | mysql | 参数默认为mysql，后期会考虑增加其它数据库支持
+useCache | 否 | false | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
+
 
 ## 登录账号
 初次启动，程序会自动创建管理员账号(admin)、客户端账号(agent, 密码即TOKEN)，用户名密码，会打印到日志输出中。（仅显示一次，请做好备份）

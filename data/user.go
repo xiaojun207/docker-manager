@@ -35,6 +35,7 @@ func UpdatePasswordByUsername(user table.User) (err error) {
 		log.Println("UpdatePasswordByUsername.err:", err)
 		return err
 	}
+	base.DBEngine.ClearCache(new(table.User))
 	return
 }
 
@@ -44,6 +45,7 @@ func UpdateStatusByUsername(user table.User) (err error) {
 		log.Println("UpdateStatusByUsername.err:", err)
 		return err
 	}
+	base.DBEngine.ClearCache(new(table.User))
 	return
 }
 
