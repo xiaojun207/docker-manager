@@ -1,4 +1,67 @@
-## 来源
+[中文说明](#zh) 
+<a name="en">English</a>
+## Foreword
+Because some of our servers are distributed in different network environments. And, these server programs use docker for publishing, but do not use k8s such tools. In a discrete management state.
+I've also considered tools like rancher, but it's still too heavy for us. I need a lighter management tool. Therefore, docker manager and docker agent were born.
+
+## Function description
+* Overview, including: number of servers, number of running containers, total number of containers, number of applications, number of distributed tasks, and number of real-time logs opened.
+* Display of all containers, including container name, ID, server, image used, port and creation time.
+* You can start container, delete container, restart container.
+* Container status information, including CPU usage, memory usage, and network usage.
+* Publish a new container to the target server.
+* The container real-time log (if exists) is like to: docker logs - F -- tail 10 containername. It is more resource consuming. It is better to only view the log temporarily (this function does not support cluster deployment).
+* Display of server assets, mainly including: total number of containers, number of running containers, CPU usage, memory usage, docker version, and whether docker agent is online (this function does not support cluster deployment).
+* User management, administrator and docker agent account, password and status management.
+
+
+## docker-manager
+The web management of multi host container based on docker relies on MySQL. You only need to configure the database connection parameters, and the database table will be automatically created and updated.
+
+
+## Start
+
+```
+docker pull xiaojun207/docker-manager:1.0.5
+
+docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
+
+docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.5
+
+```
+
+Parameter Description:
+
+Parameter | required | default value | description
+---|----------|-------|--- 
+dataSourceUrl | required | -     | database connection URL, such as：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
+driveName | no       | mysql | Defaults to MySQL. Other database support will be considered later
+useCache | no       | false | whether to enable local cache. It can be enabled in stand-alone deployment, but not in cluster deployment
+
+
+## Login account
+Upon initial startup, the program will automatically create an administrator account (admin), a client account (agent, password, token), and a user name and password, which will be printed into the log output. (only displayed once, please make a backup)
+
+## Client Agent
+```
+docker pull xiaojun207/docker-agent:latest
+
+docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi" -e Token="12345678" xiaojun207/docker-agent:latest
+
+```
+It should be used in conjunction with "xiaojun207/docker-agent" image. Please refer to the description for the specific usage of docker agent
+
+## Contact email
+If you have any ideas or suggestions, please send an email to the following email:
+
+email: xiaojun207@126.com
+
+
+## 中文说明
+
+<a name="zh">中文说明</a> | [English](#en)
+
+## 前言
 由于我们的一部分服务器，分布在不同的公共网络环境。而且，这些服务器程序，发布都使用了docker，但并没有使用k8s这样的工具。处于离散的管理状态。
 也考虑过rancher这样的工具，但对于我们来说还是太重了。我需要一个更轻量的管理工具。因此docker-manager和docker-agent就诞生了。
 
@@ -11,7 +74,7 @@
 * 容器实时日志（如果有的话），相当于docker logs -f --tail 10 容器名，比较耗资源，仅临时查看日志用比较好（该功能不支持集群部署）
 * 服务器资产展示，主要包括：容器总数量、运行容器数量、cpu使用、内存使用、docker版本、docker-agent是否在线（该功能不支持集群部署）
 * 用户管理，对管理员和docker-agent账号、密码、状态管理
-* 
+*
 
 ## docker-manager
 基于docker的多主机容器web管理，依赖mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
@@ -30,9 +93,9 @@ docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourc
 
 参数说明:
 
-参数 |是否必填| 默认值   | 说明 
+参数 |是否必填| 默认值   | 说明
 ---|---|-------|--- 
-dataSourceUrl | 必填 | -     | 数据库连接url，如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
+dataSourceUrl | 必填 | -     | 数据库连接url，如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
 driveName | 否 | mysql | 参数默认为mysql，后期会考虑增加其它数据库支持
 useCache | 否 | false | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
 
