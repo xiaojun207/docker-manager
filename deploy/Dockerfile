@@ -30,6 +30,7 @@ COPY --from=build /go/release/views /app/views
 COPY --from=build /go/release/deploy/entrypoint.sh /app/
 
 ENV driverName="mysql"\
+    useCache="false"\
     dataSourceUrl="root:Abc123@(dbhost:3306)/docker-manager?charset=utf8"
 
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]

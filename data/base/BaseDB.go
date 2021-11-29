@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"xorm.io/core"
 	"xorm.io/xorm"
+	"xorm.io/xorm/caches"
 )
 
 // https://www.kancloud.cn/kancloud/xorm-manual-zh-cn/56013
@@ -26,7 +27,7 @@ eg.:
 or
  Init("sqlite3", "./test.db")
 */
-func InitDB(driverName, dataSourceUrl string) *xorm.Engine {
+func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 	if !utils.ArrayContains(SUPPORT_DRIVER, driverName) {
 		log.Println("driver \"" + driverName + "\" is unsupport!")
 		panic("driver \"" + driverName + "\" is unsupport!")
@@ -49,6 +50,12 @@ func InitDB(driverName, dataSourceUrl string) *xorm.Engine {
 	log.Println(driverName + " 数据库配置成功")
 
 	DBConfig(DBEngine)
+	if useCache {
+		DBEngine.SetMapper(core.GonicMapper{})
+		// 启用内存缓存
+		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 1000)
+		DBEngine.SetDefaultCacher(cacher)
+	}
 	GetDBVersion()
 	return DBEngine
 }
@@ -82,7 +89,6 @@ func DBConfig(engine *xorm.Engine) {
 	// 但是我们通常在struct中使用"ID"
 	// 而SnakeMapper将"ID"转换为"i_d"
 	// 因此我们需要手动指定转换器为core.GonicMapper{}
-	engine.SetMapper(core.GonicMapper{})
 }
 
 func Transaction(engine *xorm.Engine, f func(*xorm.Session) (interface{}, error)) (interface{}, error) {

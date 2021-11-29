@@ -11,9 +11,11 @@ import (
 )
 
 type WsConnectionGroup struct {
-	connectionMap model.SyncMap
-	lock          sync.Mutex
-	LastData      model.SyncMap
+	connectionMap  model.SyncMap
+	lock           sync.Mutex
+	LastData       model.SyncMap
+	OnConnected    func(id interface{})
+	OnDisconnected func(id interface{})
 }
 
 func NewWsConnectionGroup() WsConnectionGroup {
@@ -42,6 +44,9 @@ func (e *WsConnectionGroup) Clean() {
 func (e *WsConnectionGroup) AddConn(id string, conn *Connection) {
 	log.Println("AddConn.id:", id)
 	e.connectionMap.Store(id, conn)
+	if e.OnConnected != nil {
+		e.OnConnected(id)
+	}
 }
 
 func (e *WsConnectionGroup) GetList() model.SyncMap {
@@ -54,6 +59,9 @@ func (e *WsConnectionGroup) GetCount() int {
 
 func (e *WsConnectionGroup) removeConnection(id interface{}) {
 	e.connectionMap.Delete(id)
+	if e.OnDisconnected != nil {
+		e.OnDisconnected(id)
+	}
 }
 
 func (e *WsConnectionGroup) Load(id string) (error, *Connection) {

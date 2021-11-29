@@ -11,11 +11,11 @@ func Close() {
 	base.CloseDBEngine()
 }
 
-func InitDB(driverName, dataSourceUrl string) {
+func InitDB(driverName, dataSourceUrl string, useCache bool) {
 	//Init("sqlite3", "./db/data.db")
 	//InitDB("mysql", "root:Abc123@(127.0.0.1:3306)/docker-manager?charset=utf8")
 	//DBEngine.Sync2(new(table.User), new(table.UserApi), new(table.Servers), new(table.Services))
-	base.InitDB(driverName, dataSourceUrl)
+	base.InitDB(driverName, dataSourceUrl, useCache)
 	TableInit()
 	UserInit()
 }

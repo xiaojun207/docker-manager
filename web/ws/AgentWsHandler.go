@@ -10,6 +10,16 @@ import (
 
 var AgentWsConnectGroup = baseWs.NewWsConnectionGroup()
 
+func init() {
+	AgentWsConnectGroup.OnConnected = func(id interface{}) {
+		data.UpdateServerState(id.(string), "connected")
+	}
+
+	AgentWsConnectGroup.OnDisconnected = func(id interface{}) {
+		data.UpdateServerState(id.(string), "disconnect")
+	}
+}
+
 func WSAgentHandler(c *gin.Context) {
 	serverName := c.GetHeader("ServerName")
 	log.Println("WSAgentHandler.coming", ",ServerName:", serverName)

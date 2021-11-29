@@ -48,6 +48,7 @@ func AddService(service table.Service) (err error) {
 
 func DeleteService(serviceName string) (err error) {
 	_, err = base.DBEngine.Exec("delete from service where Name=?", serviceName)
+	base.DBEngine.ClearCache(new(table.Service))
 	return
 }
 
