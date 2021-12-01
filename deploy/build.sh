@@ -1,7 +1,7 @@
 
 DOCKER_BASE_REPO="xiaojun207"
 APP_NAME="docker-manager"
-DOCKER_BUILD_TAG="1.0.6"
+DOCKER_BUILD_TAG="1.0.7"
 
 docker build -t ${DOCKER_BASE_REPO}/${APP_NAME}:${DOCKER_BUILD_TAG} -f deploy/Dockerfile .
 docker tag ${DOCKER_BASE_REPO}/${APP_NAME}:${DOCKER_BUILD_TAG} ${DOCKER_BASE_REPO}/${APP_NAME}:latest
