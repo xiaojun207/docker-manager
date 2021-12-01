@@ -1,4 +1,4 @@
-[中文说明](#zh) 
+[中文说明](#zh) | 
 <a name="en">English</a>
 ## Foreword
 Because some of our servers are distributed in different network environments. And, these server programs use docker for publishing, but do not use k8s such tools. In a discrete management state.
@@ -22,11 +22,11 @@ The web management of multi host container based on docker relies on MySQL. You 
 ## Start
 
 ```
-docker pull xiaojun207/docker-manager:1.0.5
+docker pull xiaojun207/docker-manager:latest
 
 docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
 
-docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.5
+docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:latest
 
 ```
 
@@ -83,11 +83,11 @@ email: xiaojun207@126.com
 ## 使用方法
 
 ```
-docker pull xiaojun207/docker-manager:1.0.5
+docker pull xiaojun207/docker-manager:latest
 
 docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
 
-docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:1.0.5
+docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:latest
 
 ```
 
