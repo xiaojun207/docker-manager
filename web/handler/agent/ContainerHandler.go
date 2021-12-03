@@ -3,12 +3,10 @@ package agent
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
-	"docker-manager/utils"
+	"docker-manager/service"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
-	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
-	"time"
 )
 
 var (
@@ -57,36 +55,8 @@ func ContainersHandler(c *gin.Context) {
 	AppId := c.GetHeader("AppId")
 
 	id := json["ID"].(string)
-	Name := json["Name"].(string)
 
-	for _, t := range json["conainers"].([]interface{}) {
-		v := t.(map[string]interface{})
-		v["AppId"] = AppId
-		v["ServerName"] = Name
-		v["Update"] = time.Now().Unix()
-		ContainerName := utils.TrimContainerName(v["Names"])
-		v["Name"] = ContainerName
-
-		data.AddReplicas(ContainerName, Name)
-
-		var service = table.Service{
-			Name:     ContainerName,
-			Image:    v["Image"].(string),
-			Vol:      utils.ArrInterfaceToMap(v["Mounts"].([]interface{})),
-			Running:  0,
-			Ports:    utils.ArrInterfaceToMap(v["Ports"].([]interface{})),
-			Replicas: 0,
-		}
-		data.AddService(service)
-
-		var container table.Container
-		utils2.MapToStruct(v, &container)
-		container.ContainerId = v["Id"].(string)
-		container.Summary = v
-
-		data.AddContainer(container)
-	}
-	//data.Container.Store(Name, json["conainers"])
+	service.UpdateServerContainer(AppId, json)
 
 	resp.Resp(c, "100200", "成功", gin.H{
 		"id": id,

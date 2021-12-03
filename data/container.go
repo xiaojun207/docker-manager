@@ -24,8 +24,25 @@ func AddContainer(e table.Container) (err error) {
 	return
 }
 
+func DelContainer(e table.Container) (err error) {
+	affected, err := base.DBEngine.Table("container").Delete(&e)
+	if err != nil {
+		log.Println("DelContainer.err:", err)
+		return err
+	}
+	if affected == 0 {
+		log.Println("DelContainer.affected is 0")
+	}
+	return
+}
+
 func GetContainers() (record []table.Container, err error) {
 	err = base.DBEngine.Table("container").OrderBy("server_name asc,name asc").Find(&record)
+	return
+}
+
+func GetContainersByServerName(serverName string) (record []table.Container, err error) {
+	err = base.DBEngine.Table("container").Where("server_name=?", serverName).OrderBy("name asc").Find(&record)
 	return
 }
 
