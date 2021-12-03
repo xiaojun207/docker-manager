@@ -51,6 +51,9 @@ docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -
 ```
 It should be used in conjunction with "xiaojun207/docker-agent" image. Please refer to the description for the specific usage of docker agent
 
+Special note:
+    The hostname of each server (the host of docker agent) must be unique
+
 ## Contact email
 If you have any ideas or suggestions, please send an email to the following email:
 
@@ -111,6 +114,9 @@ docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -
 
 ```
 需配合xiaojun207/docker-agent镜像使用，docker-agent的具体使用方法，请参见其说明
+
+特别说明:
+    每台服务器(docker-agent的宿主机)的hostname，必须唯一
 
 ## 联系邮箱
 如果，你有什么想法或建议，请你发送邮件到下面的邮箱：

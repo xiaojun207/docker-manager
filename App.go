@@ -11,12 +11,12 @@ import (
 var (
 	driverName    = "mysql"
 	dataSourceUrl string
-	useCache      = false
+	useCache      = "false"
 )
 
 func ParseParam() {
 	flag.StringVar(&driverName, "driverName", driverName, "driverName, eg.: mysql or sqlite3")
-	flag.BoolVar(&useCache, "useCache", useCache, "useCache, eg.: true or false")
+	flag.StringVar(&useCache, "useCache", useCache, "useCache, eg.: true or false")
 	flag.StringVar(&dataSourceUrl, "dataSourceUrl", dataSourceUrl, "dataSourceUrl, eg.: root:123456@(127.0.0.1:3306)/docker-manager?charset=utf8")
 	flag.Parse()
 	log.Println("flag.driverName:", driverName)
@@ -27,7 +27,7 @@ func ParseParam() {
 func main() {
 	ParseParam()
 
-	data.InitDB(driverName, dataSourceUrl, useCache)
+	data.InitDB(driverName, dataSourceUrl, utils.StrToBool(useCache))
 
 	web.Start("8068", "/dockerMgrApi/")
 
