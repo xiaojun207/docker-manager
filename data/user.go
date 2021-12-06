@@ -7,12 +7,38 @@ import (
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
+	"strconv"
 )
 
 func FindUsers() (users []table.User, err error) {
 	err = base.DBEngine.Table("user").Find(&users)
 	if err != nil {
 		log.Println("FindUsers.err:", err)
+	}
+	return
+}
+
+func FindUserByUid(uid int) (user table.User, err error) {
+	has, err := base.DBEngine.Table("user").Where("id=?", uid).Get(&user)
+	if err != nil {
+		log.Println("FindUserByUid.err:", err)
+		return user, err
+	}
+	if !has {
+		return user, errors.New("FindUserByUid user '" + strconv.Itoa(uid) + "' not exists")
+	}
+	return
+}
+
+func FindUserByUsernameMobileMail(username, mobile, email string) (users []table.User, err error) {
+	user := table.User{
+		Username: username,
+		Mobile:   mobile,
+		Email:    email,
+	}
+	err = base.DBEngine.Table("user").Find(&users, user)
+	if err != nil {
+		log.Println("FindUserByUsernameMobileMail.err:", err)
 	}
 	return
 }
@@ -25,6 +51,30 @@ func FindUserByUsername(username string) (user table.User, err error) {
 	}
 	if !has {
 		return user, errors.New("FindUserByUsername user '" + username + "' not exists")
+	}
+	return
+}
+
+func FindUserByMobile(mobile string) (user table.User, err error) {
+	has, err := base.DBEngine.Table("user").Where("mobile=?", mobile).Get(&user)
+	if err != nil {
+		log.Println("FindUserByMobile.err:", err)
+		return user, err
+	}
+	if !has {
+		return user, errors.New("FindUserByMobile user '" + mobile + "' not exists")
+	}
+	return
+}
+
+func FindUserByEmail(email string) (user table.User, err error) {
+	has, err := base.DBEngine.Table("user").Where("email=?", email).Get(&user)
+	if err != nil {
+		log.Println("FindUserByEmail.err:", err)
+		return user, err
+	}
+	if !has {
+		return user, errors.New("FindUserByEmail user '" + email + "' not exists")
 	}
 	return
 }
@@ -53,6 +103,19 @@ func CreateUser(user table.User) error {
 	_, err := base.DBEngine.Table("user").Insert(&user)
 	if err != nil {
 		log.Println("insert user err:", err)
+	}
+	return err
+}
+
+func DeleteUser(uid int) error {
+	user, err := FindUserByUid(uid)
+	if err != nil {
+		log.Println("DeleteUser.find user err:", err)
+	}
+
+	_, err = base.DBEngine.Table("user").Delete(&user)
+	if err != nil {
+		log.Println("DeleteUser user err:", err)
 	}
 	return err
 }

@@ -13,15 +13,18 @@ import (
 */
 var BaseRouter = func(router *gin.RouterGroup) {
 	//router.Use(AuthInterceptor)
-	//router.POST("/login", loginHandler)
-	//router.GET("/hello", helloHandler)
-	router.POST("/reg", AgentTokenInterceptor, agent.RegDockerHandler)
-	router.POST("/containers", AgentTokenInterceptor, agent.ContainersHandler)
-	router.POST("/containers/stats", AgentTokenInterceptor, agent.ContainersStatsHandler)
-	router.POST("/container/stats", AgentTokenInterceptor, agent.ContainerStatsHandler)
-	router.POST("/images", AgentTokenInterceptor, agent.ImagesHandler)
-	router.POST("/image/", AgentTokenInterceptor, agent.ImagesHandler)
-	router.GET("/config", AgentTokenInterceptor, agent.GetConfig)
+
+	//
+	router.POST("/agent/reg", AgentTokenInterceptor, agent.RegDockerHandler)
+	router.POST("/agent/containers", AgentTokenInterceptor, agent.ContainersHandler)
+	router.POST("/agent/containers/stats", AgentTokenInterceptor, agent.ContainersStatsHandler)
+	router.POST("/agent/container/stats", AgentTokenInterceptor, agent.ContainerStatsHandler)
+	router.POST("/agent/images", AgentTokenInterceptor, agent.ImagesHandler)
+	router.POST("/agent/image/", AgentTokenInterceptor, agent.ImagesHandler)
+	router.GET("/agent/config", AgentTokenInterceptor, agent.GetConfig)
+	router.POST("/agent/login", agent.LoginHandler)
+
+	///
 
 	router.GET("/mgr/servers", AuthInterceptor, mgr.GetServers)
 	router.GET("/mgr/serverNames", AuthInterceptor, mgr.GetServerNames)
@@ -64,12 +67,14 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.POST("/user/alterPassword", AuthInterceptor, user.AlterPasswordHandler)
 	router.POST("/user/resetPassword", AuthInterceptor, user.ResetPasswordHandler)
 	router.POST("/user/changeStatus", AuthInterceptor, user.ChangeStatusHandler)
+	router.POST("/user/addUser", AuthInterceptor, user.AddUserHandler)
+	router.POST("/user/deleteUser", AuthInterceptor, user.DeleteUserHandler)
 
 }
 
 // 路由，把URL和执行方法连接起来
 var WsRouter = func(router *gin.RouterGroup) {
-	router.GET("/ws", AgentTokenInterceptor, ws.WSAgentHandler)
+	router.GET("/agent/ws", AgentTokenInterceptor, ws.WSAgentHandler)
 	router.GET("/ws/log", AuthInterceptor, ws.WSManagerHandler)
 	//router.GET("/ws/:token", TokenInterceptor, wsHandler)
 }

@@ -46,7 +46,7 @@ Upon initial startup, the program will automatically create an administrator acc
 ```
 docker pull xiaojun207/docker-agent:latest
 
-docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi" -e Token="12345678" xiaojun207/docker-agent:latest
+docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Token="12345678" xiaojun207/docker-agent:latest
 
 ```
 It should be used in conjunction with "xiaojun207/docker-agent" image. Please refer to the description for the specific usage of docker agent
@@ -110,7 +110,7 @@ useCache | 否 | false | 是否启用本地缓存，单机部署的时候启用�
 ```
 docker pull xiaojun207/docker-agent:latest
 
-docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi" -e Token="12345678" xiaojun207/docker-agent:latest
+docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Token="12345678" xiaojun207/docker-agent:latest
 
 ```
 需配合xiaojun207/docker-agent镜像使用，docker-agent的具体使用方法，请参见其说明

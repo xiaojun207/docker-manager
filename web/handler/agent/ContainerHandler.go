@@ -9,10 +9,6 @@ import (
 	"log"
 )
 
-var (
-	Version = "0.0.1"
-)
-
 func RegDockerHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
