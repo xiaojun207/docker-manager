@@ -23,7 +23,7 @@ type TokenFactory struct {
 }
 
 var TokenHelper = TokenFactory{
-	webName: "GoApp",
+	webName: "DockerManager",
 	secret:  []byte("50c9b0ac9f38836d4efb0dfa7504455f8304d8a16a7034f11e144e69e277a713"),
 }
 
@@ -38,7 +38,7 @@ func CreateToken(data string) string {
 func ValidToken(token string) (isValid bool, data string, err error) {
 	_, ok := TokenHelper.cacheMap.Load(token)
 	if !ok {
-		return false, "", errors.New("Token not exists")
+		//return false, "", errors.New("Token not exists")
 	}
 	return TokenHelper.ValidToken(token)
 }
