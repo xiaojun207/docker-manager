@@ -15,6 +15,7 @@ func GetConfigValue(name, defValue string) string {
 		return defValue
 	}
 	if !has {
+		UpdateConfig(name, defValue, "")
 		return defValue
 	}
 	return conf.Value
@@ -22,7 +23,7 @@ func GetConfigValue(name, defValue string) string {
 
 func GetAgentConfig() map[string]interface{} {
 	conf := map[string]interface{}{
-		"TaskFrequency": utils2.StrToFloat64(GetConfigValue("agent.TaskFrequency", "300")),
+		"TaskFrequency": utils2.StrToFloat64(GetConfigValue("agent.TaskFrequency", "60")),
 	}
 	return map[string]interface{}{
 		"agentConfig": conf,
@@ -35,6 +36,7 @@ func GetConfigList() (record []table.Config) {
 }
 
 func UpdateConfig(name, value, memo string) (err error) {
+	log.Println("UpdateConfig.name:", name, ",value:", value, ",memo:", memo)
 	var record table.Config
 	has, err := base.DBEngine.Table("config").Where("name=?", name).Get(&record)
 	if err != nil {
@@ -45,7 +47,14 @@ func UpdateConfig(name, value, memo string) (err error) {
 		record.Name = name
 		record.Value = value
 		record.Memo = memo
-		base.DBEngine.Table("task").ID(record.Id).Update(record)
+		base.DBEngine.Table("config").ID(record.Id).Update(record)
+	} else {
+		record.Name = name
+		record.Value = value
+		record.Memo = memo
+		i, err := base.DBEngine.Table("config").Insert(record)
+
+		log.Println("UpdateConfig.err:", i, err)
 	}
 	return
 }

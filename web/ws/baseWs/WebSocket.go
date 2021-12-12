@@ -13,6 +13,7 @@ type Connection struct {
 	outChan      chan []byte
 	closeChan    chan byte
 	channels     map[string]string
+	Headers      map[string]string
 	mutex        sync.Mutex // 对closeChan关闭上锁
 	Closed       bool       // 防止closeChan被关闭多次
 	LastPongTime int64      // 毫秒级
@@ -25,6 +26,7 @@ func NewConnection(id string, wsConn *websocket.Conn) (conn *Connection, err err
 		outChan:   make(chan []byte, 1000),
 		closeChan: make(chan byte, 1),
 		channels:  map[string]string{},
+		Headers:   map[string]string{},
 		id:        id,
 	}
 

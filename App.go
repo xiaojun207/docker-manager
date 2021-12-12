@@ -2,6 +2,7 @@ package main
 
 import (
 	"docker-manager/data"
+	"docker-manager/service"
 	"docker-manager/web"
 	"flag"
 	"github.com/xiaojun207/go-base-utils/utils"
@@ -9,8 +10,8 @@ import (
 )
 
 var (
-	driverName    = "mysql"
-	dataSourceUrl string
+	driverName    = "sqlite3"
+	dataSourceUrl = "data/database.db"
 	useCache      = "false"
 )
 
@@ -28,7 +29,7 @@ func main() {
 	ParseParam()
 
 	data.InitDB(driverName, dataSourceUrl, utils.StrToBool(useCache))
-
+	service.InitTokenHelper()
 	web.Start("8068", "/dockerMgrApi/")
 
 	defer data.Close()

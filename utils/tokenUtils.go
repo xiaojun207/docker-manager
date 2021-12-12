@@ -22,9 +22,14 @@ type TokenFactory struct {
 	cacheMap sync.Map
 }
 
-var TokenHelper = TokenFactory{
-	webName: "DockerManager",
-	secret:  []byte("50c9b0ac9f38836d4efb0dfa7504455f8304d8a16a7034f11e144e69e277a713"),
+var TokenHelper TokenFactory
+
+func InitTokenHelper(tokenSecret string) TokenFactory {
+	TokenHelper = TokenFactory{
+		webName: "DockerManager",
+		secret:  []byte(tokenSecret),
+	}
+	return TokenHelper
 }
 
 func CreateToken(data string) string {

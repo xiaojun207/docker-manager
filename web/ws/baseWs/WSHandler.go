@@ -16,7 +16,7 @@ var (
 	}
 )
 
-func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConnectionGroup, wsMsgHandler func(msg *WsMsg, conn *Connection) error) {
+func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConnectionGroup) {
 	//log.Println("coming:", getCount())
 	//	w.Write([]byte("hello"))
 	var (
@@ -40,7 +40,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConne
 		log.Println("WsHandler.InitConnection.error", err)
 		goto ERR
 	}
-
+	conn.Headers["AppId"] = r.Header.Get("AppId")
 	group.AddConn(id, conn)
 
 	for {
@@ -50,7 +50,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConne
 		}
 		msg := ToWsMsg(data)
 
-		if err = wsMsgHandler(msg, conn); err != nil {
+		if err = group.MsgHandler(msg, conn); err != nil {
 			log.Println("WsHandler.WsMsgHandler.error", err)
 			goto ERR
 		}
