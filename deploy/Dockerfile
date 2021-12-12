@@ -17,7 +17,8 @@ WORKDIR /go/release
 
 ADD . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -o App App.go
+#RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -o App App.go
+RUN go build -a -ldflags "-linkmode external -extldflags '-static' -s -w" -o App App.go
 
 #运行镜像
 FROM alpine:latest AS production
@@ -30,9 +31,9 @@ COPY --from=build /go/release/App /app/
 COPY --from=build /go/release/views /app/views
 COPY --from=build /go/release/deploy/entrypoint.sh /app/
 
-ENV driverName="mysql"\
+ENV driverName="sqlite3"\
     useCache="false"\
-    dataSourceUrl="root:Abc123@(dbhost:3306)/docker-manager?charset=utf8"
+    dataSourceUrl="/app/data/database.db"
 
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]
 
