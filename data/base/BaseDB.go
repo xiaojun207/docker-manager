@@ -56,11 +56,12 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 1000)
 		DBEngine.SetDefaultCacher(cacher)
 	}
-	GetDBVersion()
+	//GetDBVersion()
 	return DBEngine
 }
 
 func GetDBVersion() {
+	log.Println("DBEngine.DataSourceName():", DBEngine.DataSourceName())
 	result, err := DBEngine.QueryInterface("select version();")
 	if err != nil {
 		log.Println(err)

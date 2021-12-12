@@ -3,11 +3,17 @@ package service
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	sutils "docker-manager/utils"
 	"errors"
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
+
+func InitTokenHelper() {
+	tokenSecret := data.GetConfigValue("server.tokenSecret", uuid.New())
+	sutils.InitTokenHelper(tokenSecret)
+}
 
 func FindUsers() (users []table.User, err error) {
 	return data.FindUsers()

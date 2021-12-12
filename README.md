@@ -16,8 +16,8 @@ I've also considered tools like rancher, but it's still too heavy for us. I need
 
 
 ## docker-manager
-The web management of multi host container based on docker relies on MySQL. You only need to configure the database connection parameters, and the database table will be automatically created and updated.
-
+Docker based multi host container web management, data is stored as sqlit3 by default
+It can also be mysql. You only need to configure the database connection parameters, and the database tables will be created and updated automatically.
 
 ## Start
 
@@ -33,10 +33,10 @@ docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourc
 Parameter Description:
 
 Parameter | required | default value | description
----|----------|-------|--- 
-dataSourceUrl | required | -     | database connection URL, such as：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
-driveName | no       | mysql | Defaults to MySQL. Other database support will be considered later
-useCache | no       | false | whether to enable local cache. It can be enabled in stand-alone deployment, but not in cluster deployment
+---|----------|---------------|--- 
+driveName | no       | sqlite3  | The default is "sqlite3", or "mysql". If MySQL is used, the "datasourceurl" must be configured.
+dataSourceUrl | no       | -     | Database connection URL, <br>when driveName is "sqlite3"，"dataSourceUrl" default：data/database.db（/app/data/database.db），<br>when driveName is "mysql"，the "dataSourceUrl" is required，such as：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
+useCache | no       | false         | whether to enable local cache. It can be enabled in stand-alone deployment, but not in cluster deployment
 
 
 ## Login account
@@ -80,7 +80,8 @@ email: xiaojun207@126.com
 *
 
 ## docker-manager
-基于docker的多主机容器web管理，依赖mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
+基于docker的多主机容器web管理，数据默认存储为sqlit3
+也可以是mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
 
 
 ## 使用方法
@@ -96,11 +97,11 @@ docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourc
 
 参数说明:
 
-参数 |是否必填| 默认值   | 说明
----|---|-------|--- 
-dataSourceUrl | 必填 | -     | 数据库连接url，如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
-driveName | 否 | mysql | 参数默认为mysql，后期会考虑增加其它数据库支持
-useCache | 否 | false | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
+参数 | 是否必填 | 默认值     | 说明
+---|------|---------|--- 
+driveName | 否    | sqlite3 | 也可以是mysql，如果是mysql，则dataSourceUrl必须配置
+dataSourceUrl | 否    | -       | 数据库连接url<br>，当driveName为sqlite3时，dataSourceUrl默认为：data/database.db（即/app/data/database.db），<br>当driveName为mysql时，dataSourceUrl则必填，例如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
+useCache | 否    | false   | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
 
 
 ## 登录账号

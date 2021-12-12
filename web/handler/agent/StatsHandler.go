@@ -3,6 +3,7 @@ package agent
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
@@ -13,22 +14,10 @@ import (
 func ContainerStatsHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
-	//AppId := c.GetHeader("AppId")
+	AppId := c.GetHeader("AppId")
 	log.Printf("%v", &json)
 	ContainerId := json["ContainerId"].(string)
-	Name := json["Name"].(string)
-	Time := json["Time"].(string)
-
-	for _, t := range json["Stats"].([]interface{}) {
-		v := t.(map[string]interface{})
-		v["ContainerId"] = v["id"].(string)
-		v["ServerName"] = Name
-		v["Time"] = Time
-		v["name"] = utils.TrimContainerName(v["name"].(string))
-		var stats table.ContainerStats
-		utils2.MapToStruct(v, &stats)
-		data.AddContainerStats(stats)
-	}
+	service.UpdateStats(AppId, json)
 	resp.Resp(c, "100200", "成功", gin.H{
 		"id": ContainerId,
 	})

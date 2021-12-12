@@ -16,6 +16,7 @@ type WsConnectionGroup struct {
 	LastData       model.SyncMap
 	OnConnected    func(id interface{})
 	OnDisconnected func(id interface{})
+	MsgHandler     func(msg *WsMsg, conn *Connection) error
 }
 
 func NewWsConnectionGroup() WsConnectionGroup {
