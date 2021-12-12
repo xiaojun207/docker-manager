@@ -60,10 +60,18 @@ func GetServerNameByContainerId(containerId string) string {
 }
 
 func GetContainerSize() map[string]int64 {
+	follow_if := "if(follow=1, 1, null)"
+	if base.IsSqlite3() {
+		follow_if = "CASE follow WHEN 1 THEN 1 END"
+	}
+	state_if := "if(state='running', 1, null)"
+	if base.IsSqlite3() {
+		state_if = "CASE state WHEN 'running' THEN 1 END"
+	}
 	sql := "select " +
-		"count(if(follow=1, 1, null)) followSize, " +
+		"count(" + follow_if + ") followSize, " +
 		"count(*) totalSize," +
-		"count(if(state='running', 1, null)) runningSize" +
+		"count(" + state_if + ") runningSize" +
 		" from container"
 	resMap, err := base.DBEngine.QueryString(sql)
 	if err != nil {
