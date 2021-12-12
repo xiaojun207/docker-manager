@@ -16,7 +16,8 @@ import (
 
 // https://www.kancloud.cn/kancloud/xorm-manual-zh-cn/56013
 var (
-	DBEngine *xorm.Engine
+	DBEngine   *xorm.Engine
+	DriverName = ""
 )
 
 var (
@@ -34,7 +35,7 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 		log.Println("driver \"" + driverName + "\" is unsupport!")
 		panic("driver \"" + driverName + "\" is unsupport!")
 	}
-
+	DriverName = driverName
 	if driverName == "sqlite3" {
 		os.MkdirAll(filepath.Dir(dataSourceUrl), os.ModePerm)
 	}
@@ -64,6 +65,10 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 	}
 	//GetDBVersion()
 	return DBEngine
+}
+
+func IsSqlite3() bool {
+	return DriverName == "sqlite3"
 }
 
 func GetDBVersion() {
