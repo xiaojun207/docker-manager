@@ -21,14 +21,21 @@ It can also be mysql. You only need to configure the database connection paramet
 
 ## Start
 
-```
+```shell
 docker pull xiaojun207/docker-manager:latest
 
 docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
 
+docker run -d --name docker-manager -p 8068:8068 -v /app/docker-manager/data:/app/data xiaojun207/docker-manager:latest
+
+```
+
+or
+```shell
 docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:latest
 
 ```
+
 
 Parameter Description:
 
@@ -43,10 +50,10 @@ useCache | no       | false         | whether to enable local cache. It can be e
 Upon initial startup, the program will automatically create an administrator account (admin), a client account (agent, password, token), and a user name and password, which will be printed into the log output. (only displayed once, please make a backup)
 
 ## Client Agent
-```
+```shell
 docker pull xiaojun207/docker-agent:latest
 
-docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Token="12345678" xiaojun207/docker-agent:latest
+docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Username="agent" -e Password="12345678" xiaojun207/docker-agent:latest
 
 ```
 It should be used in conjunction with "xiaojun207/docker-agent" image. Please refer to the description for the specific usage of docker agent
@@ -80,20 +87,25 @@ email: xiaojun207@126.com
 *
 
 ## docker-manager
-基于docker的多主机容器web管理，数据默认存储为sqlit3
+基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
 也可以是mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
 
 
 ## 使用方法
 
-```
+```shell
 docker pull xiaojun207/docker-manager:latest
 
 docker ps -aq --filter "name=docker-manager" | grep -q . && docker stop docker-manager && docker rm -fv docker-manager
 
-docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:latest
+docker run -d --name docker-manager -p 8068:8068 -v /app/docker-manager/data:/app/data xiaojun207/docker-manager:latest
 
 ```
+或者
+```shell
+docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' xiaojun207/docker-manager:latest
+```
+
 
 参数说明:
 
@@ -108,10 +120,10 @@ useCache | 否    | false   | 是否启用本地缓存，单机部署的时候�
 初次启动，程序会自动创建管理员账号(admin)、客户端账号(agent, 密码即TOKEN)，用户名密码，会打印到日志输出中。（仅显示一次，请做好备份）
 
 ## 客户端
-```
+```shell
 docker pull xiaojun207/docker-agent:latest
 
-docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Token="12345678" xiaojun207/docker-agent:latest
+docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -e DockerServer="http://192.168.1.200:8068/dockerMgrApi/agent" -e Username="agent" -e Password="12345678" xiaojun207/docker-agent:latest
 
 ```
 需配合xiaojun207/docker-agent镜像使用，docker-agent的具体使用方法，请参见其说明

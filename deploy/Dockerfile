@@ -6,11 +6,12 @@ MAINTAINER xiaojun "xiaojun207@126.com"
 #ENV GOPROXY https://goproxy.io
 ENV GO111MODULE on
 
-WORKDIR /go/cache
+WORKDIR /go/release
 
 ADD go.mod .
 ADD go.sum .
 RUN go mod download
+RUN go mod tidy
 
 WORKDIR /go/release
 
