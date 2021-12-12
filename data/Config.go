@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const DesKey = "aefpwf123"
+const DesKey = "bdea7bcf"
 
 func GetConfigValue(name, defValue string, encrypt bool) string {
 	var conf table.Config
