@@ -5,9 +5,12 @@ import (
 	"docker-manager/data/table"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
+	"strings"
 )
 
-func GetConfigValue(name, defValue string) string {
+const DesKey = "aefpwf123"
+
+func GetConfigValue(name, defValue string, encrypt bool) string {
 	var conf table.Config
 	has, err := base.DBEngine.Table("config").Where("name=?", name).Get(&conf)
 	if err != nil {
@@ -15,15 +18,20 @@ func GetConfigValue(name, defValue string) string {
 		return defValue
 	}
 	if !has {
-		UpdateConfig(name, defValue, "")
+		UpdateConfig(name, defValue, "", encrypt)
 		return defValue
+	}
+	if strings.HasPrefix(conf.Value, "DESEncrypt(") {
+		value := strings.TrimPrefix(conf.Value, "DESEncrypt(")
+		value = strings.TrimSuffix(value, ")")
+		return utils2.DESDecrypt(value, DesKey)
 	}
 	return conf.Value
 }
 
 func GetAgentConfig() map[string]interface{} {
 	conf := map[string]interface{}{
-		"TaskFrequency": utils2.StrToFloat64(GetConfigValue("agent.TaskFrequency", "60")),
+		"TaskFrequency": utils2.StrToFloat64(GetConfigValue("agent.TaskFrequency", "60", false)),
 	}
 	return map[string]interface{}{
 		"agentConfig": conf,
@@ -35,7 +43,11 @@ func GetConfigList() (record []table.Config) {
 	return
 }
 
-func UpdateConfig(name, value, memo string) (err error) {
+func UpdateConfig(name, value, memo string, encrypt bool) (err error) {
+	if encrypt {
+		value = "DESEncrypt(" + utils2.DESEncrypt(value, DesKey) + ")"
+	}
+
 	log.Println("UpdateConfig.name:", name, ",value:", value, ",memo:", memo)
 	var record table.Config
 	has, err := base.DBEngine.Table("config").Where("name=?", name).Get(&record)
