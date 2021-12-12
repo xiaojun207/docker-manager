@@ -11,7 +11,7 @@ import (
 )
 
 func InitTokenHelper() {
-	tokenSecret := data.GetConfigValue("server.tokenSecret", uuid.New())
+	tokenSecret := data.GetConfigValue("server.tokenSecret", uuid.New(), true)
 	sutils.InitTokenHelper(tokenSecret)
 }
 

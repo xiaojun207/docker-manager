@@ -6,6 +6,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
+	"os"
+	"path/filepath"
 	"strconv"
 	"xorm.io/core"
 	"xorm.io/xorm"
@@ -31,6 +33,10 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 	if !utils.ArrayContains(SUPPORT_DRIVER, driverName) {
 		log.Println("driver \"" + driverName + "\" is unsupport!")
 		panic("driver \"" + driverName + "\" is unsupport!")
+	}
+
+	if driverName == "sqlite3" {
+		os.MkdirAll(filepath.Dir(dataSourceUrl), os.ModePerm)
 	}
 
 	// 创建一个引擎，对于xorm，一个引擎对应一个数据库

@@ -24,7 +24,7 @@ func UpdateConfig(c *gin.Context) {
 	c.BindJSON(&json)
 	TaskFrequency := json["TaskFrequency"]
 
-	data.UpdateConfig("agent.TaskFrequency", TaskFrequency.(string), "任务数据上报频率")
+	data.UpdateConfig("agent.TaskFrequency", TaskFrequency.(string), "任务数据上报频率", false)
 
 	ch := "base.config.update"
 	service.SendToAllServer(ch, map[string]interface{}{})
