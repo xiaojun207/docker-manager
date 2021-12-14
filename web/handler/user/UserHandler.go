@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	Version = "1.2.1"
+	Version = "1.2.2"
 )
 
 func UserListHandler(c *gin.Context) {

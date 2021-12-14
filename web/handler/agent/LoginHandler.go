@@ -17,7 +17,6 @@ func LoginHandler(c *gin.Context) {
 	username := json["username"].(string)
 	password := json["password"].(string)
 
-	log.Println("json:", json)
 	token, err := service.LoginAgent(username, password)
 	if err != nil {
 		log.Println(err)
