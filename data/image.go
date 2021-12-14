@@ -8,7 +8,7 @@ import (
 
 func AddImage(e table.Image) (err error) {
 	var record table.Image
-	has, err := base.DBEngine.Table("image").Where("image=?", e.Image).Get(&record)
+	has, err := base.DBEngine.Table("image").Where("server_name=? and image_id=?", e.ServerName, e.ImageId).Get(&record)
 	if err != nil {
 		log.Println("AddTask.err:", err)
 		return err

@@ -36,6 +36,17 @@ func managerWsMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	case baseWs.CH_PONG:
 		conn.LastPongTime = time.Now().UnixNano() / 1e6
 		break
+	case "docker.container.stats":
+		containerId := d["cId"].(string)
+		res := map[string]interface{}{
+			"ts":   d["ts"],
+			"line": d["line"],
+		}
+		err := ws.ManagerWsConnectGroup.Push(containerId, "docker.container.stats", res)
+		if err != nil {
+
+		}
+		break
 	default:
 		break
 	}
@@ -63,16 +74,7 @@ func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 		data.UpdateTask(taskId, code, d["msg"].(string), d["resp"].(map[string]interface{}))
 		break
 	case "docker.container.stats":
-		containerId := d["cId"].(string)
-		res := map[string]interface{}{
-			"ts":   d["ts"],
-			"line": d["line"],
-		}
 		UpdateStats(AppId, d)
-		err := ws.ManagerWsConnectGroup.Push(containerId, "docker.container.stats", res)
-		if err != nil {
-
-		}
 		break
 	case "docker.container.log.line":
 		// {"code":code, "msg": err, "taskId":taskId, "resp": resp }
@@ -133,9 +135,10 @@ func SendToAllServer(ch string, param map[string]interface{}) {
 	if err != nil {
 		log.Println("SendToAllServer.err:", err)
 	}
+
 	for _, ServerName := range reslist {
 		param["taskId"] = uuid.New()
-		param["ServerName"] = ServerName
+		param["ServerName"] = ServerName.Name
 
 		if !ws.AgentConnected(ServerName.Name) {
 			log.Println("ServerName:" + ServerName.Name + "服务器已离线")

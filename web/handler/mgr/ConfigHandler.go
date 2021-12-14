@@ -22,11 +22,21 @@ func GetConfig(c *gin.Context) {
 func UpdateConfig(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
-	TaskFrequency := json["TaskFrequency"]
 
-	data.UpdateConfig("agent.TaskFrequency", TaskFrequency.(string), "任务数据上报频率", false)
+	name := json["Name"].(string)
+	value := json["Value"].(string)
+	memo := json["Memo"].(string)
 
-	ch := "base.config.update"
-	service.SendToAllServer(ch, map[string]interface{}{})
+	if name != "agent.TaskFrequency" {
+		resp.Resp(c, "100100", "配置参数错误", "")
+		return
+	}
+
+	data.UpdateConfig(name, value, memo, false)
+	if name == "agent.TaskFrequency" {
+		ch := "base.config.update"
+		service.SendToAllServer(ch, map[string]interface{}{})
+	}
+
 	resp.Resp(c, "100200", "成功", "")
 }
