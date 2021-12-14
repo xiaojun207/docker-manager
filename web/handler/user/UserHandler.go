@@ -12,6 +12,10 @@ var (
 	Version = "1.2.2"
 )
 
+func init() {
+	log.Println("Version:", Version)
+}
+
 func UserListHandler(c *gin.Context) {
 	users, _ := service.FindUsers()
 	resp.Resp(c, "100200", "成功", users)
