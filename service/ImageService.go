@@ -31,6 +31,7 @@ import (
 func UpdateImages(AppId string, json map[string]interface{}) {
 	Name := json["Name"].(string)
 
+	imageMap := map[string]table.Image{}
 	for _, tmp := range json["Images"].([]interface{}) {
 		v := tmp.(map[string]interface{})
 		v["AppId"] = AppId
@@ -50,5 +51,14 @@ func UpdateImages(AppId string, json map[string]interface{}) {
 		img.Size = int64(v["Size"].(float64))
 		img.Summary = v
 		data.AddImage(img)
+		imageMap[img.ImageId] = img
+	}
+
+	dbArr, _ := data.GetImages(Name, "")
+	for _, image := range dbArr {
+		_, ok := imageMap[image.ImageId]
+		if !ok {
+			data.DelImage(image)
+		}
 	}
 }

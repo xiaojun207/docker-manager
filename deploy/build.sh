@@ -1,7 +1,7 @@
 
 DOCKER_BASE_REPO="xiaojun207"
 APP_NAME="docker-manager"
-DOCKER_BUILD_TAG="1.2.2"
+DOCKER_BUILD_TAG="1.2.3"
 
 sh ./deploy/version.sh ${DOCKER_BUILD_TAG}
 
