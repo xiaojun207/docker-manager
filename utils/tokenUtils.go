@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	"log"
 	"sync"
 	"time"
@@ -63,15 +63,14 @@ func (e *TokenFactory) newWithClaims(claims jwt.Claims) *jwt.Token {
 expiration 秒级
 */
 func (e *TokenFactory) CreateToken(data string, expiration int64) string {
-	now := time.Now().Unix()
-
-	var tk jwt.StandardClaims
+	now := time.Now()
+	var tk jwt.RegisteredClaims
 
 	tk.Issuer = e.webName
-	tk.Audience = "web"
+	tk.Audience = jwt.ClaimStrings{"web"}
 	tk.Subject = data
-	tk.IssuedAt = now
-	tk.ExpiresAt = now + expiration
+	tk.IssuedAt = jwt.NewNumericDate(now)
+	tk.ExpiresAt = jwt.NewNumericDate(now.Add(time.Second * time.Duration(expiration)))
 
 	token := e.newWithClaims(tk)
 	tokenString, _ := token.SignedString(e.secret)
@@ -79,7 +78,7 @@ func (e *TokenFactory) CreateToken(data string, expiration int64) string {
 }
 
 func (e *TokenFactory) ValidToken(tokenString string) (isValid bool, data string, err error) {
-	var tk jwt.StandardClaims
+	var tk jwt.RegisteredClaims
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
 		return e.secret, nil
 	}
