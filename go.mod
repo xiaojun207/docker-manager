@@ -3,7 +3,6 @@ module docker-manager
 go 1.17
 
 require (
-	github.com/dgrijalva/jwt-go v0.0.0-20180308231308-06ea1031745c
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-basic/uuid v1.0.0
 	github.com/go-sql-driver/mysql v1.5.0
@@ -21,6 +20,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9 // indirect
+	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/protobuf v1.3.3 // indirect
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
