@@ -38,6 +38,29 @@ func ContainerOperatorHandler(c *gin.Context) {
 	resp.Resp(c, "100200", "成功", "")
 }
 
+func ImageCmd(c *gin.Context) {
+	operator := c.Param("operator")      // stop, remove, restart
+	json := make(map[string]interface{}) //注意该结构接受的内容
+	c.BindJSON(&json)
+	log.Println("json:", json)
+	serverName := json["serverName"].(string)
+	image_id := json["image_id"].(string)
+
+	param := map[string]interface{}{
+		"taskId":  uuid.New(),
+		"imageId": image_id,
+	}
+	ch := "docker.image." + operator
+
+	err := service.SaveAndSendTask(serverName, ch, param)
+	if err != nil {
+		log.Println(err)
+		resp.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
+		return
+	}
+	resp.Resp(c, "100200", "成功", "")
+}
+
 func RePublishHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)

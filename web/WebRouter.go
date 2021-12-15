@@ -58,6 +58,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 	router.POST("/container/:operator", AuthInterceptor, mgr.ContainerOperatorHandler)
 
 	router.GET("/image/list", AuthInterceptor, mgr.ImageList)
+	router.POST("/image/:operator", AuthInterceptor, mgr.ImageCmd)
 
 	router.GET("/app/list", AuthInterceptor, mgr.ServiceList)
 	router.POST("/app/del", AuthInterceptor, mgr.DeleteService)

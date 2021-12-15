@@ -21,6 +21,18 @@ func AddImage(e table.Image) (err error) {
 	return
 }
 
+func DelImage(e table.Image) (err error) {
+	affected, err := base.DBEngine.Table("image").Delete(&e)
+	if err != nil {
+		log.Println("DelImage.err:", err)
+		return err
+	}
+	if affected == 0 {
+		log.Println("DelImage.affected is 0")
+	}
+	return
+}
+
 func GetImageSize() int64 {
 	count, err := base.DBEngine.Table("image").Count()
 	if err != nil {
@@ -30,7 +42,15 @@ func GetImageSize() int64 {
 	return count
 }
 
-func GetImages() (record []table.Image, err error) {
-	err = base.DBEngine.Table("image").Find(&record)
+func GetImages(serverName, tagName string) (record []table.Image, err error) {
+	session := base.DBEngine.Table("image")
+	if serverName != "" {
+		session.Where("server_name=?", serverName)
+	}
+
+	if tagName != "" {
+		session.Where("image_id=?", tagName)
+	}
+	err = session.Find(&record)
 	return
 }
