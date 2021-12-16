@@ -17,7 +17,7 @@ func GetStats(c *gin.Context) {
 	log.Println("serverNames:", serverNames, ",ContainerNames:", ContainerNames, ",Follow:", Follow)
 	res := []interface{}{}
 
-	statss, _ := data.GetContainerStats()
+	statss, _ := data.GetContainerStats("")
 	for _, stats := range statss {
 		if len(serverNames) > 0 && !utils.StrInArr(serverNames, stats.ServerName) {
 			continue

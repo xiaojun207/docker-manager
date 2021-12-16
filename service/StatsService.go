@@ -14,6 +14,7 @@ func UpdateStats(AppId string, json map[string]interface{}) {
 	Name := json["Name"].(string)
 	Time := json["Time"].(float64)
 
+	statsMap := map[string]table.ContainerStats{}
 	for _, t := range json["Stats"].([]interface{}) {
 		v := t.(map[string]interface{})
 		v["ContainerId"] = v["id"].(string)
@@ -35,5 +36,14 @@ func UpdateStats(AppId string, json map[string]interface{}) {
 
 		//log.Println("", v["name"], cpu, memory)
 		data.AddContainerStats(stats)
+		statsMap[stats.ContainerId] = stats
+	}
+
+	dbArr, _ := data.GetContainerStats(Name)
+	for _, stats := range dbArr {
+		_, ok := statsMap[stats.ContainerId]
+		if !ok {
+			data.DelStats(stats)
+		}
 	}
 }

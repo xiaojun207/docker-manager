@@ -6,6 +6,7 @@ import (
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 )
 
 var (
@@ -97,4 +98,8 @@ func VersionHandler(c *gin.Context) {
 		"current": Version,
 		"latest":  service.GetLatestTag(),
 	})
+}
+
+func VersionTextHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, []string{"1.2.3", "1.1.1"})
 }

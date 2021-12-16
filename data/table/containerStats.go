@@ -1,6 +1,8 @@
 package table
 
-import "time"
+import (
+	"docker-manager/model"
+)
 
 type ContainerStats struct {
 	Id           int                    `xorm:"not null pk autoincr INT"`
@@ -20,6 +22,6 @@ type ContainerStats struct {
 	StorageStats map[string]interface{} `xorm:"JSON" json:"storage_stats"`
 	Follow       bool                   `xorm:"default 0 comment('是否日志跟随') Bool"`
 	Summary      map[string]interface{} `xorm:"JSON"`
-	CreateDate   time.Time              `xorm:"created default CURRENT_TIMESTAMP TIMESTAMP"`
-	UpdateDate   time.Time              `xorm:"updated default CURRENT_TIMESTAMP TIMESTAMP"`
+	CreateDate   model.Time             `xorm:"created default CURRENT_TIMESTAMP TIMESTAMP"`
+	UpdateDate   model.Time             `xorm:"updated default CURRENT_TIMESTAMP TIMESTAMP"`
 }
