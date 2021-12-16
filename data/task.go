@@ -47,6 +47,6 @@ func GetTaskSize() int64 {
 }
 
 func GetTasks() (record []table.Task, err error) {
-	err = base.DBEngine.Table("task").Find(&record)
+	err = base.DBEngine.Table("task").OrderBy("id desc").Find(&record)
 	return
 }

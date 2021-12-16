@@ -30,7 +30,24 @@ func GetContainerStatsSize() int64 {
 	return count
 }
 
-func GetContainerStats() (record []table.ContainerStats, err error) {
-	err = base.DBEngine.Table("container_stats").Find(&record)
+func GetContainerStats(serverName string) (record []table.ContainerStats, err error) {
+	session := base.DBEngine.Table("container_stats")
+	if serverName != "" {
+		session.Where("server_name=?", serverName)
+	}
+
+	err = session.Find(&record)
+	return
+}
+
+func DelStats(e table.ContainerStats) (err error) {
+	affected, err := base.DBEngine.Table("container_stats").Delete(&e)
+	if err != nil {
+		log.Println("DelStats.err:", err)
+		return err
+	}
+	if affected == 0 {
+		log.Println("DelStats.affected is 0")
+	}
 	return
 }

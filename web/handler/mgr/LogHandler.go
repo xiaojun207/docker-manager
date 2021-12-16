@@ -12,7 +12,7 @@ import (
 
 func GetFollowLogList(c *gin.Context) {
 	tmps := []map[string]interface{}{}
-	statss, _ := data.GetContainerStats()
+	statss, _ := data.GetContainerStats("")
 	for _, stats := range statss {
 		if stats.Follow {
 			c := map[string]interface{}{
