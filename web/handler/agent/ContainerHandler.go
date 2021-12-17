@@ -34,8 +34,8 @@ func RegDockerHandler(c *gin.Context) {
 		Cpu:             int(json["NCPU"].(float64)),
 		Memory:          int64(json["MemTotal"].(float64)),
 		Images:          int(json["Images"].(float64)),
-		//PrivateIp:  "",
-		PublicIp: reqIP,
+		PrivateIp:       ip.String(),
+		PublicIp:        reqIP,
 		//State:  "",
 		Summary: json,
 	}
