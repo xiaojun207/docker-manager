@@ -42,15 +42,24 @@ func GetImageSize() int64 {
 	return count
 }
 
-func GetImages(serverName, tagName string) (record []table.Image, err error) {
+func GetImages(serverNames []string, tagName string) (record []table.Image, err error) {
 	session := base.DBEngine.Table("image")
-	if serverName != "" {
-		session.Where("server_name=?", serverName)
+	if len(serverNames) > 0 {
+		sql, params := base.ArrayParams(serverNames)
+		session.Where("server_name in ("+sql+")", params...)
 	}
 
 	if tagName != "" {
 		session.Where("image_id=?", tagName)
 	}
 	err = session.Find(&record)
+	return
+}
+
+func GetImage(imageId string) (record table.Image, err error) {
+	_, err = base.DBEngine.Table("image").Where("image_id=?", imageId).Get(&record)
+	if err != nil {
+		log.Println("AddTask.err:", err)
+	}
 	return
 }

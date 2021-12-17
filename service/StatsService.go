@@ -39,7 +39,7 @@ func UpdateStats(AppId string, json map[string]interface{}) {
 		statsMap[stats.ContainerId] = stats
 	}
 
-	dbArr, _ := data.GetContainerStats(Name)
+	dbArr, _ := data.GetContainerStatsList([]string{Name})
 	for _, stats := range dbArr {
 		_, ok := statsMap[stats.ContainerId]
 		if !ok {

@@ -12,34 +12,6 @@ import (
 	"strings"
 )
 
-func GetServers(c *gin.Context) {
-	servers, err := data.GetServers()
-
-	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
-		return
-	}
-	for i, server := range servers {
-		if ws.AgentConnected(server.Name) {
-			server.State = "connected"
-		} else {
-			server.State = "disconnect"
-		}
-		servers[i] = server
-	}
-	resp.Resp(c, "100200", "成功", servers)
-}
-
-func GetServerNames(c *gin.Context) {
-	res, err := data.GetServersName()
-
-	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
-		return
-	}
-	resp.Resp(c, "100200", "成功", res)
-}
-
 func UpdateContainerList(c *gin.Context) {
 	ch := "docker.container.list"
 	service.SendToAllServer(ch, map[string]interface{}{})
@@ -47,11 +19,11 @@ func UpdateContainerList(c *gin.Context) {
 }
 
 func GetContainers(c *gin.Context) {
-	serverNames := strings.Join(c.QueryArray("serverNames[]"), ",")
+	serverNames := strings.Join(c.QueryArray("ServerNames[]"), ",")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	state := c.Query("state")
 	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
-	res := []interface{}{}
+	res := []map[string]interface{}{}
 
 	containers, err := data.GetContainers()
 	log.Println("GetContainers.err:", err)
@@ -66,9 +38,25 @@ func GetContainers(c *gin.Context) {
 		if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, container.Name) {
 			continue
 		}
-		res = append(res, container)
+		res = append(res, map[string]interface{}{
+			"ServerName":  container.ServerName,
+			"ContainerId": container.ContainerId,
+			"Name":        container.Name,
+			"Image":       container.Image,
+			"Status":      container.Status,
+			"State":       container.State,
+			"Ports":       container.Ports,
+			"Created":     container.Created,
+		})
 	}
 	resp.Resp(c, "100200", "成功", res)
+}
+
+func GetContainer(c *gin.Context) {
+	ContainerId := c.Query("ContainerId")
+	container, err := data.GetContainer(ContainerId)
+	log.Println("GetContainers.err:", err)
+	resp.Resp(c, "100200", "成功", container)
 }
 
 // info,服务和容器基本信息

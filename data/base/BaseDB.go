@@ -169,3 +169,16 @@ func QueryOneStr(engine *xorm.Engine, sqlOrArgs string) (map[string]string, erro
 	}
 	return result[0], err
 }
+
+func ArrayParams(s []string) (sql string, params []interface{}) {
+	sql = ""
+	for i := 0; i < len(s); i++ {
+		if i == 0 {
+			sql += "?"
+		} else {
+			sql += "?,"
+		}
+		params = append(params, s[i])
+	}
+	return sql, params
+}

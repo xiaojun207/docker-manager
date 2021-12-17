@@ -11,19 +11,19 @@ import (
 )
 
 func GetFollowLogList(c *gin.Context) {
-	tmps := []map[string]interface{}{}
-	statss, _ := data.GetContainerStats("")
-	for _, stats := range statss {
+	statsList, _ := data.GetContainerStatsList([]string{})
+
+	var res []map[string]interface{}
+	for _, stats := range statsList {
 		if stats.Follow {
-			c := map[string]interface{}{
+			res = append(res, map[string]interface{}{
 				"ID":         stats.ContainerId,
 				"Name":       stats.Name,
 				"ServerName": stats.ServerName,
-			}
-			tmps = append(tmps, c)
+			})
 		}
 	}
-	resp.Resp(c, "100200", "成功", tmps)
+	resp.Resp(c, "100200", "成功", res)
 }
 
 func LogFollowStart(c *gin.Context) {

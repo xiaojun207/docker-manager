@@ -53,13 +53,6 @@ func FormatCpu(cpu_stats, precpu_stats map[string]interface{}) float64 {
 	return cpu_usage_percent
 }
 
-func FormatMemoryPercent(m map[string]interface{}) float64 {
-	if m == nil || m["usage"] == nil {
-		return 0
-	}
-	return (m["usage"].(float64) * 100.0 / m["limit"].(float64))
-}
-
 func FormatSize(s float64) string {
 	res := ""
 	if s < 1024 {
@@ -74,9 +67,27 @@ func FormatSize(s float64) string {
 	return res
 }
 
+func FormatMemoryPercent(m map[string]interface{}) float64 {
+	if m == nil || m["usage"] == nil {
+		return 0
+	}
+	return m["usage"].(float64) * 100.0 / m["limit"].(float64)
+}
+
 func FormatMemory(m map[string]interface{}) string {
 	if m == nil || m["usage"] == nil {
 		return ""
 	}
 	return FormatSize(m["usage"].(float64)) + " / " + FormatSize(m["limit"].(float64))
+}
+
+func FormatNet(n map[string]interface{}) string {
+	if n == nil || n["eth0"] == nil {
+		return ""
+	}
+	/**
+	 * { "eth0": { "rx_bytes": 2336, "rx_dropped": 0, "rx_errors": 0, "rx_packets": 32, "tx_bytes": 0, "tx_dropped": 0, "tx_errors": 0, "tx_packets": 0 } }
+	 */
+	e := n["eth0"].(map[string]interface{})
+	return FormatSize(e["rx_bytes"].(float64)) + " / " + FormatSize(e["tx_bytes"].(float64))
 }
