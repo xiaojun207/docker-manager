@@ -54,7 +54,7 @@ func UpdateImages(AppId string, json map[string]interface{}) {
 		imageMap[img.ImageId] = img
 	}
 
-	dbArr, _ := data.GetImages(Name, "")
+	dbArr, _ := data.GetImages([]string{Name}, "")
 	for _, image := range dbArr {
 		_, ok := imageMap[image.ImageId]
 		if !ok {

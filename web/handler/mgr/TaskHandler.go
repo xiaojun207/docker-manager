@@ -18,8 +18,8 @@ func ContainerOperatorHandler(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
 	log.Println("json:", json)
-	serverNames := utils.ArrInterfaceToStr(json["serverNames"].([]interface{}))
-	containerId := json["containerId"].(string)
+	serverNames := utils.ArrInterfaceToStr(json["ServerNames"].([]interface{}))
+	containerId := json["ContainerId"].(string)
 
 	for _, serverName := range serverNames {
 		param := map[string]interface{}{

@@ -50,16 +50,22 @@ var AgentRouter = func(router *gin.RouterGroup) {
 
 var MgrRouter = func(router *gin.RouterGroup) {
 
-	router.GET("/servers", AuthInterceptor, mgr.GetServers)
-	router.GET("/serverNames", AuthInterceptor, mgr.GetServerNames)
-	router.GET("/containers", AuthInterceptor, mgr.GetContainers)
+	router.GET("/server/list", AuthInterceptor, mgr.GetServers)
+	router.GET("/server/detail", AuthInterceptor, mgr.GetServer)
+	router.GET("/server/names", AuthInterceptor, mgr.GetServerNames)
+
+	router.GET("/container/list", AuthInterceptor, mgr.GetContainers)
 	router.POST("/containers/update", AuthInterceptor, mgr.UpdateContainerList)
-	router.GET("/stats", AuthInterceptor, mgr.GetStats)
-	router.POST("/stats/update", AuthInterceptor, mgr.UpdateStats)
 	router.GET("/containerInfos", AuthInterceptor, mgr.GetContainerInfos)
+	router.GET("/container/detail", AuthInterceptor, mgr.GetContainer)
 	router.POST("/container/:operator", AuthInterceptor, mgr.ContainerOperatorHandler)
 
+	router.GET("/stats/list", AuthInterceptor, mgr.GetStatsList)
+	router.GET("/stats/detail", AuthInterceptor, mgr.GetStats)
+	router.POST("/stats/update", AuthInterceptor, mgr.UpdateStats)
+
 	router.GET("/image/list", AuthInterceptor, mgr.ImageList)
+	router.GET("/image/detail", AuthInterceptor, mgr.ImageDetail)
 	router.POST("/image/:operator", AuthInterceptor, mgr.ImageCmd)
 
 	router.GET("/app/list", AuthInterceptor, mgr.ServiceList)

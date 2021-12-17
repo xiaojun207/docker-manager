@@ -36,6 +36,11 @@ func DelContainer(e table.Container) (err error) {
 	return
 }
 
+func GetContainer(ContainerId string) (record table.Container, err error) {
+	_, err = base.DBEngine.Table("container").Where("container_id=?", ContainerId).Get(&record)
+	return
+}
+
 func GetContainers() (record []table.Container, err error) {
 	err = base.DBEngine.Table("container").OrderBy("server_name asc,name asc").Find(&record)
 	return

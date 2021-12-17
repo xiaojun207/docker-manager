@@ -30,10 +30,16 @@ func GetContainerStatsSize() int64 {
 	return count
 }
 
-func GetContainerStats(serverName string) (record []table.ContainerStats, err error) {
+func GetContainerStatss(ContainerId string) (record table.ContainerStats, err error) {
+	_, err = base.DBEngine.Table("container_stats").Where("container_id=?", ContainerId).Get(&record)
+	return
+}
+
+func GetContainerStatsList(serverNames []string) (record []table.ContainerStats, err error) {
 	session := base.DBEngine.Table("container_stats")
-	if serverName != "" {
-		session.Where("server_name=?", serverName)
+	if len(serverNames) > 0 {
+		sql, params := base.ArrayParams(serverNames)
+		session.Where("server_name in ("+sql+")", params...)
 	}
 
 	err = session.Find(&record)

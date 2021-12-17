@@ -35,6 +35,11 @@ func UpdateServerState(name string, state string) (err error) {
 	return
 }
 
+func GetServer(ServerName string) (record table.Server, err error) {
+	_, err = base.DBEngine.Table("server").Where("Name=?", ServerName).Get(&record)
+	return
+}
+
 func GetServers() (record []table.Server, err error) {
 	err = base.DBEngine.Table("server").OrderBy("name asc").Find(&record)
 	return
