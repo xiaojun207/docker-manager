@@ -16,6 +16,12 @@ func RegDockerHandler(c *gin.Context) {
 	Name := json["Name"].(string)
 	id := json["ID"].(string)
 	//AppId := c.GetHeader("AppId")
+	ip, b := c.RemoteIP()
+	reqIP := c.ClientIP()
+
+	log.Println("RemoteIP:", ip.String(), ", ClientIP:", reqIP)
+	if b {
+	}
 
 	server := table.Server{
 		Name:            Name,
@@ -29,7 +35,7 @@ func RegDockerHandler(c *gin.Context) {
 		Memory:          int64(json["MemTotal"].(float64)),
 		Images:          int(json["Images"].(float64)),
 		//PrivateIp:  "",
-		//PublicIp:   "",
+		PublicIp: reqIP,
 		//State:  "",
 		Summary: json,
 	}
