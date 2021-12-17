@@ -44,11 +44,11 @@ func ImageCmd(c *gin.Context) {
 	c.BindJSON(&json)
 	log.Println("json:", json)
 	serverName := json["serverName"].(string)
-	image_id := json["image_id"].(string)
+	ImageId := json["ImageId"].(string)
 
 	param := map[string]interface{}{
 		"taskId":  uuid.New(),
-		"imageId": image_id,
+		"imageId": ImageId,
 	}
 	ch := "docker.image." + operator
 
