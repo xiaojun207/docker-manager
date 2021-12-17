@@ -40,7 +40,7 @@ func UpdateService(c *gin.Context) {
 	c.BindJSON(&serviceInfo)
 	data.AddService(serviceInfo)
 	log.Println("UpdateService.serviceInfo:", utils.StructToJson(serviceInfo))
-	serverNames := []string{}
+	serverNames := []string{""}
 	service.PublishAppTask(serverNames, serviceInfo)
 	resp.Resp(c, "100200", "成功", "")
 }
