@@ -21,6 +21,7 @@ func GetServers(c *gin.Context) {
 			server.State = "disconnect"
 		}
 		server.Summary = nil
+		server.LastDataTime = ws.AgentLastDataTime(server.Name)
 		servers[i] = server
 	}
 	resp.Resp(c, "100200", "成功", servers)

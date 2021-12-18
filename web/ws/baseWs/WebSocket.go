@@ -17,6 +17,7 @@ type Connection struct {
 	mutex        sync.Mutex // 对closeChan关闭上锁
 	Closed       bool       // 防止closeChan被关闭多次
 	LastPongTime int64      // 毫秒级
+	LastDataTime int64      // 毫秒级
 }
 
 func NewConnection(id string, wsConn *websocket.Conn) (conn *Connection, err error) {

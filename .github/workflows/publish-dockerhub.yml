@@ -6,8 +6,8 @@ on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
   push:
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    # Publish server tags as releases.
+    tags: [ '*.*.*' ]
 
 env:
   # Use docker.io for Docker Hub if empty
