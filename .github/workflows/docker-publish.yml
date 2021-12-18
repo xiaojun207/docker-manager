@@ -1,4 +1,4 @@
-name: Docker
+name: Publish to ghcr.io
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -9,7 +9,6 @@ on:
   schedule:
     - cron: '16 3 * * *'
   push:
-    branches: [ master ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
