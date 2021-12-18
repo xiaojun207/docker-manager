@@ -6,8 +6,6 @@ name: Publish to ghcr.io
 # documentation.
 
 on:
-  schedule:
-    - cron: '16 3 * * *'
   push:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
