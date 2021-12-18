@@ -54,6 +54,7 @@ func managerWsMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 }
 
 func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
+	conn.LastDataTime = time.Now().UnixNano() / 1e6
 	tmp := msg.Data
 	AppId := conn.Headers["AppId"]
 	d, ok := tmp.(map[string]interface{})
@@ -63,7 +64,7 @@ func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	case baseWs.CH_PING:
 		return conn.Pong()
 	case baseWs.CH_PONG:
-		conn.LastPongTime = time.Now().UnixNano() / 1e6
+		conn.LastPongTime = conn.LastDataTime
 		break
 	case "docker.task.ack":
 		// {"code":code, "msg": err, "taskId":taskId, "resp": resp }

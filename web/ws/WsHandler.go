@@ -25,3 +25,11 @@ func WSManagerHandler(c *gin.Context) {
 func AgentConnected(id string) bool {
 	return AgentWsConnectGroup.IsConnected(id)
 }
+
+func AgentConnectedCount() int {
+	return AgentWsConnectGroup.GetCount()
+}
+
+func AgentLastDataTime(id string) int64 {
+	return AgentWsConnectGroup.LastDataTime(id)
+}

@@ -73,6 +73,14 @@ func (e *WsConnectionGroup) Load(id string) (error, *Connection) {
 	return nil, conn.(*Connection)
 }
 
+func (e *WsConnectionGroup) LastDataTime(id string) int64 {
+	err, conn := e.Load(id)
+	if err != nil {
+		return 0
+	}
+	return conn.LastDataTime
+}
+
 func (e *WsConnectionGroup) IsConnected(id string) bool {
 	_, res := e.connectionMap.Load(id)
 	return res
