@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image
+name: Publish to DockerHub
 
 # refer to https://github.com/actions/starter-workflows/blob/main/ci/docker-publish.yml
 
@@ -6,7 +6,6 @@ on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
   push:
-    branches: [ master ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
 
@@ -46,13 +45,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}
-
-      - name: Get Time
-        id: time
-        uses: nanzm/get-time-action@v1.1
-        with:
-          timeZone: 8
-          format: 'YYYY-MM-DD-HH-mm-ss'
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
