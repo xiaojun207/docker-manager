@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
 )
 
@@ -42,7 +43,7 @@ func GetImageSize() int64 {
 	return count
 }
 
-func GetImages(serverNames []string, tagName string) (record []table.Image, err error) {
+func GetImages(serverNames []string, tagName string, page model.Page) (record []table.Image, tatol int64, err error) {
 	session := base.DBEngine.Table("image")
 	if len(serverNames) > 0 {
 		sql, params := base.ArrayParams(serverNames)
@@ -52,7 +53,12 @@ func GetImages(serverNames []string, tagName string) (record []table.Image, err 
 	if tagName != "" {
 		session.Where("image_id=?", tagName)
 	}
-	err = session.Find(&record)
+	page.SetPageSql(session)
+
+	tatol, err = session.FindAndCount(&record)
+	if err != nil {
+		log.Println("GetImages.FindAndCount:", err)
+	}
 	return
 }
 

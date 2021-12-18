@@ -3,6 +3,7 @@ package service
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/utils"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"strings"
@@ -54,7 +55,7 @@ func UpdateImages(AppId string, json map[string]interface{}) {
 		imageMap[img.ImageId] = img
 	}
 
-	dbArr, _ := data.GetImages([]string{Name}, "")
+	dbArr, _, _ := data.GetImages([]string{Name}, "", model.Page{})
 	for _, image := range dbArr {
 		_, ok := imageMap[image.ImageId]
 		if !ok {
