@@ -48,7 +48,7 @@ useCache | no       | false         | whether to enable local cache. It can be e
 
 
 ## Login account
-Upon initial startup, the program will automatically create an administrator account (admin), a client account (agent, password, token), and a user name and password, which will be printed into the log output. (only displayed once, please make a backup)
+Upon initial startup, the program will automatically create an administrator account (admin), a client account (agent, password), and a user name and password, which will be printed into the log output. (only displayed once, please make a backup)
 
 ## Client Agent
 ```shell
@@ -118,7 +118,7 @@ useCache | 否    | false   | 是否启用本地缓存，单机部署的时候�
 
 
 ## 登录账号
-初次启动，程序会自动创建管理员账号(admin)、客户端账号(agent, 密码即TOKEN)，用户名密码，会打印到日志输出中。（仅显示一次，请做好备份）
+初次启动，程序会自动创建管理员账号(admin)、客户端账号(agent)，用户名密码，会打印到日志输出中。（仅显示一次，请做好备份）
 
 ## 客户端
 ```shell
