@@ -43,7 +43,7 @@ Parameter Description:
 Parameter | required | default value | description
 ---|----------|---------------|--- 
 driveName | no       | sqlite3  | The default is "sqlite3", or "mysql". If MySQL is used, the "datasourceurl" must be configured.
-dataSourceUrl | no       | -     | Database connection URL, <br>when driveName is "sqlite3"，"dataSourceUrl" default：data/database.db（/app/data/database.db），<br>when driveName is "mysql"，the "dataSourceUrl" is required，such as：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
+dataSourceUrl | no       | /app/data/database.db   | Database connection URL, <br>when driveName is "sqlite3"，"dataSourceUrl" default：data/database.db（/app/data/database.db），<br>when driveName is "mysql"，the "dataSourceUrl" is required，such as：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8' 
 useCache | no       | false         | whether to enable local cache. It can be enabled in stand-alone deployment, but not in cluster deployment
 
 
@@ -113,7 +113,7 @@ docker run -d --name docker-manager -p 8068:8068 -e driveName=mysql -e dataSourc
 参数 | 是否必填 | 默认值     | 说明
 ---|------|---------|--- 
 driveName | 否    | sqlite3 | 也可以是mysql，如果是mysql，则dataSourceUrl必须配置
-dataSourceUrl | 否    | -       | 数据库连接url<br>，当driveName为sqlite3时，dataSourceUrl默认为：data/database.db（即/app/data/database.db），<br>当driveName为mysql时，dataSourceUrl则必填，例如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
+dataSourceUrl | 否    | /app/data/database.db   | 数据库连接url<br>，当driveName为sqlite3时，dataSourceUrl默认为：data/database.db（即/app/data/database.db），<br>当driveName为mysql时，dataSourceUrl则必填，例如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
 useCache | 否    | false   | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
 
 
