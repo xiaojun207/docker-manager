@@ -1,5 +1,10 @@
 [中文说明](#zh) | 
 <a name="en">English</a>
+
+## docker-manager
+Docker based multi host container web management, data is stored as sqlit3 by default
+It can also be mysql. You only need to configure the database connection parameters, and the database tables will be created and updated automatically.
+
 ## Foreword
 Because some of our servers are distributed in different network environments. And, these server programs use docker for publishing, but do not use k8s such tools. In a discrete management state.
 I've also considered tools like rancher, but it's still too heavy for us. I need a lighter management tool. Therefore, docker manager and docker agent were born.
@@ -14,10 +19,6 @@ I've also considered tools like rancher, but it's still too heavy for us. I need
 * Display of server assets, mainly including: total number of containers, number of running containers, CPU usage, memory usage, docker version, and whether docker agent is online (this function does not support cluster deployment).
 * User management, administrator and docker agent account, password and status management.
 
-
-## docker-manager
-Docker based multi host container web management, data is stored as sqlit3 by default
-It can also be mysql. You only need to configure the database connection parameters, and the database tables will be created and updated automatically.
 
 ## Start
 
@@ -71,6 +72,10 @@ email: xiaojun207@126.com
 
 <a name="zh">中文说明</a> | [English](#en)
 
+## docker-manager
+基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
+也可以是mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
+
 ## 前言
 由于我们的一部分服务器，分布在不同的公共网络环境。而且，这些服务器程序，发布都使用了docker，但并没有使用k8s这样的工具。处于离散的管理状态。
 也考虑过rancher这样的工具，但对于我们来说还是太重了。我需要一个更轻量的管理工具。因此docker-manager和docker-agent就诞生了。
@@ -85,10 +90,6 @@ email: xiaojun207@126.com
 * 服务器资产展示，主要包括：容器总数量、运行容器数量、cpu使用、内存使用、docker版本、docker-agent是否在线（该功能不支持集群部署）
 * 用户管理，对管理员和docker-agent账号、密码、状态管理
 *
-
-## docker-manager
-基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
-也可以是mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
 
 
 ## 使用方法
