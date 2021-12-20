@@ -25,7 +25,7 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		var service = table.Service{
 			Name:     ContainerName,
 			Image:    v["Image"].(string),
-			Vol:      utils.ArrInterfaceToMap(v["Mounts"].([]interface{})),
+			Volumes:  GetVolumes(v["Mounts"].([]interface{})),
 			Running:  0,
 			Ports:    utils.ArrInterfaceToMap(v["Ports"].([]interface{})),
 			Replicas: 0,
@@ -50,4 +50,13 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		}
 	}
 
+}
+
+func GetVolumes(volmap []interface{}) (res []string) {
+	for _, t := range volmap {
+		v := t.(map[string]interface{})
+		tmp := v["Source"].(string) + ":" + v["Destination"].(string) + ":" + utils2.If(v["RW"].(bool), "rw", "ro").(string)
+		res = append(res, tmp)
+	}
+	return
 }

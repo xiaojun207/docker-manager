@@ -76,11 +76,12 @@ func PublishHandler(c *gin.Context) {
 	s := table.Service{
 		Name:     serviceInfo.Name,
 		Image:    serviceInfo.Image,
-		Env:      serviceInfo.EnvToArrMap(),
-		Vol:      serviceInfo.VolumeToArrMap(),
+		Envs:     serviceInfo.Env,
+		Volumes:  serviceInfo.Volumes,
 		Memory:   serviceInfo.Memory,
 		Running:  serviceInfo.Running,
 		Replicas: len(serviceInfo.ServerNames),
+		Cover:    serviceInfo.Cover,
 	}
 	utils2.StructToMap(serviceInfo.Ports, &s.Ports)
 
