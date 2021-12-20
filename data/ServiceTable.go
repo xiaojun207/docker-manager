@@ -18,16 +18,16 @@ func AddAppInfo(appname string, info dto.ServiceInfo) {
 		Name:  appname,
 		Image: info.Image,
 		//Ports:    utils2.StructToMap(info.Ports),
-		//Env:      utils2.StructToJson(info.Env),
-		//Vol:      utils2.StructToJson(info.Volumes),
+		Envs:     info.Env,
+		Volumes:  info.Volumes,
 		Running:  info.Running,
 		Replicas: info.Replicas,
 		//Status: info.
 		//Summary: info.
 	}
 	utils2.StructToMap(info.Ports, &service.Ports)
-	utils2.StructToMap(info.Env, &service.Env)
-	utils2.StructToMap(info.Volumes, &service.Vol)
+	//utils2.StructToMap(info.Env, &service.Envs)
+	//utils2.StructToMap(info.Volumes, &service.Volumes)
 	AddService(service)
 }
 
@@ -35,7 +35,7 @@ func AddService(service table.Service) (err error) {
 	var record table.Service
 	has, err := base.DBEngine.Table("service").Where("Name=?", service.Name).Get(&record)
 	if err != nil {
-		log.Println("AddService.err:", err)
+		log.Println("data.AddService.err:", err)
 		return err
 	}
 	if has {

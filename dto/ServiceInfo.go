@@ -21,6 +21,7 @@ type ServiceInfo struct {
 	LogType     string            `json:"LogType"`
 	Running     int               `json:"Running"`
 	Replicas    int               `json:"Replicas"`
+	Cover       bool              `json:"cover"`
 }
 
 func (e ServiceInfo) VolumeToArrMap() []map[string]interface{} {

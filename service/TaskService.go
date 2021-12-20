@@ -19,9 +19,10 @@ func PublishAppTask(serverNames []string, service table.Service) error {
 			"imageName":     service.Image,
 			"containerName": service.Name,
 			"ports":         service.Ports,
-			"volumes":       service.Vol,
-			"env":           service.Env, // {"appversion=1.0.1"}
+			"volumes":       service.Volumes,
+			"env":           service.Envs, // {"appversion=1.0.1"}
 			"memory":        service.Memory,
+			"cover":         service.Cover,
 			//"logType":       service.LogType,
 			//"logConfig":     service.LogConfig,
 		}
