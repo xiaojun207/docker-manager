@@ -85,6 +85,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 	router.POST("/log/close", AuthInterceptor, mgr.LogFollowClose)
 
 	router.POST("/publish", AuthInterceptor, mgr.PublishHandler)
+	router.POST("/publish/yaml", AuthInterceptor, mgr.PublishYamlHandler)
 	router.GET("/tasks", AuthInterceptor, mgr.GetTasks)
 	router.GET("/cmd", AuthInterceptor, mgr.ContainerCmd)
 

@@ -6,6 +6,7 @@ import (
 	"docker-manager/dto"
 	"docker-manager/service"
 	"docker-manager/utils"
+	"docker-manager/web/handler/mgr/reqDto"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
@@ -67,6 +68,14 @@ func RePublishHandler(c *gin.Context) {
 	ServiceName := json["ServiceName"].(string)
 	appInfo, err := data.GetService(ServiceName)
 	log.Println(appInfo, err)
+}
+
+func PublishYamlHandler(c *gin.Context) {
+	req := reqDto.ReqPublishYaml{} //注意该结构接受的内容
+	c.BindJSON(&req)
+	//log.Println(req.ServerNames, req.Yaml)
+	service.PublishYaml(req.ServerNames, req.Yaml)
+	resp.Resp(c, "100200", "成功", "")
 }
 
 func PublishHandler(c *gin.Context) {
