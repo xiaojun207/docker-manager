@@ -6,16 +6,7 @@ import (
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 )
-
-var (
-	Version = "1.2.12"
-)
-
-func init() {
-	log.Println("Version:", Version)
-}
 
 func UserListHandler(c *gin.Context) {
 	users, _ := service.FindUsers()
@@ -89,17 +80,4 @@ func ChangeStatusHandler(c *gin.Context) {
 		return
 	}
 	resp.Resp(c, "100200", "成功", "")
-}
-
-func VersionHandler(c *gin.Context) {
-	latest := service.GetLatestTag()
-	log.Println("Version Handler, current:", Version, ",latest:", latest)
-	resp.Resp(c, "100200", "成功", gin.H{
-		"current": Version,
-		"latest":  service.GetLatestTag(),
-	})
-}
-
-func VersionTextHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, []string{"1.2.3", "1.1.1"})
 }

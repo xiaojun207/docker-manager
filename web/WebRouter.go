@@ -2,6 +2,7 @@ package web
 
 import (
 	"docker-manager/web/handler/agent"
+	"docker-manager/web/handler/base"
 	"docker-manager/web/handler/mgr"
 	"docker-manager/web/handler/user"
 	"docker-manager/web/ws"
@@ -16,8 +17,8 @@ var WsRouter = func(router *gin.RouterGroup) {
 
 // BaseRoute 基础路由
 var BaseRouter = func(router *gin.RouterGroup) {
-	router.GET("/base/version", user.VersionHandler)
-	router.GET("/base/Textversion", user.VersionTextHandler)
+	router.GET("/base/version", base.VersionHandler)
+	router.GET("/base/Textversion", base.VersionTextHandler)
 
 	AgentRouter(router.Group("/agent"))
 	MgrRouter(router.Group("/mgr"))
