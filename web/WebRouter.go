@@ -53,6 +53,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 	router.GET("/server/list", AuthInterceptor, mgr.GetServers)
 	router.GET("/server/detail", AuthInterceptor, mgr.GetServer)
 	router.GET("/server/names", AuthInterceptor, mgr.GetServerNames)
+	router.POST("/server/delete", AuthInterceptor, mgr.DeleteServer)
 
 	router.GET("/container/list", AuthInterceptor, mgr.GetContainers)
 	router.POST("/containers/update", AuthInterceptor, mgr.UpdateContainerList)

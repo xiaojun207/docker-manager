@@ -35,6 +35,19 @@ func UpdateServerState(name string, state string) (err error) {
 	return
 }
 
+func DeleteServer(name string) (err error) {
+	var record table.Server
+	has, err := base.DBEngine.Table("server").Where("Name=?", name).Get(&record)
+	if err != nil {
+		log.Println("AddServer.err:", err)
+		return err
+	}
+	if has {
+		_, err = base.DBEngine.Table("server").Delete(record)
+	}
+	return
+}
+
 func GetServer(ServerName string) (record table.Server, err error) {
 	_, err = base.DBEngine.Table("server").Where("Name=?", ServerName).Get(&record)
 	return
