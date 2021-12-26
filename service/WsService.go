@@ -66,6 +66,9 @@ func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	case baseWs.CH_PONG:
 		conn.LastPongTime = conn.LastDataTime
 		break
+	case "docker.info":
+
+		break
 	case "docker.task.ack":
 		// {"code":code, "msg": err, "taskId":taskId, "resp": resp }
 		log.Println("docker.task.ack :", d)

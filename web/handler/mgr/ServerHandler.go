@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/data/table"
 	"docker-manager/web/resp"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,10 @@ func GetServers(c *gin.Context) {
 		server.LastDataTime = ws.AgentLastDataTime(server.Name)
 		servers[i] = server
 	}
+	if servers == nil {
+		servers = []table.Server{}
+	}
+
 	resp.Resp(c, "100200", "成功", servers)
 }
 
@@ -36,6 +41,20 @@ func GetServer(c *gin.Context) {
 		return
 	}
 	resp.Resp(c, "100200", "成功", server)
+}
+
+func DeleteServer(c *gin.Context) {
+	json := make(map[string]interface{}) //注意该结构接受的内容
+	c.BindJSON(&json)
+
+	ServerName := json["ServerName"].(string)
+
+	err := data.DeleteServer(ServerName)
+	if err != nil {
+		resp.Resp(c, "100100", "请求异常", err.Error())
+		return
+	}
+	resp.Resp(c, "100200", "成功", "")
 }
 
 func GetServerNames(c *gin.Context) {
