@@ -7,12 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strings"
 )
 
 //go:embed version
 var Version string
 
 func init() {
+	Version = strings.TrimSpace(Version)
 	log.Println("Version:", Version)
 }
 
