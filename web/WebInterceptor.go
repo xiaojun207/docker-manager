@@ -9,6 +9,20 @@ import (
 	"strconv"
 )
 
+func WhiteIpInterceptor(c *gin.Context) {
+	reqIP := c.GetHeader("HostIp")
+	if reqIP == "" {
+		reqIP = c.ClientIP()
+	}
+
+	if !service.IsWhiteIp(reqIP) {
+		resp.Resp(c, "403", "禁止访问", "")
+		c.Status(403)
+		c.Abort()
+		return
+	}
+}
+
 func AgentTokenInterceptor(c *gin.Context) {
 	token := c.GetHeader("authorization")
 	if token == "" {

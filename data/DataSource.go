@@ -30,7 +30,8 @@ func TableInit() {
 		new(table.ContainerStats),
 		new(table.Image),
 		new(table.Task),
-		new(table.Config))
+		new(table.Config),
+		new(table.WhiteIp))
 	if err != nil {
 		log.Println("TableInit.err:", err)
 	}

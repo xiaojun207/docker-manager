@@ -20,6 +20,8 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/base/version", base.VersionHandler)
 	router.GET("/base/Textversion", base.VersionTextHandler)
 
+	router.Use(WhiteIpInterceptor)
+
 	AgentRouter(router.Group("/agent"))
 	MgrRouter(router.Group("/mgr"))
 	UserRouter(router.Group("/user"))
@@ -93,4 +95,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 
 	router.GET("/config", AuthInterceptor, mgr.GetConfig)
 	router.POST("/config/update", AuthInterceptor, mgr.UpdateConfig)
+	router.GET("/config/whiteList", AuthInterceptor, mgr.GetWhiteList)
+	router.POST("/config/addWhiteIp", AuthInterceptor, mgr.AddWhiteIp)
+	router.POST("/config/deleteWhiteIp", AuthInterceptor, mgr.DeleteWhiteIp)
 }

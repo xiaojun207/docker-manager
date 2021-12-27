@@ -13,7 +13,7 @@ func ImageList(c *gin.Context) {
 	serverNames := c.QueryArray("serverNames[]")
 	tagName := c.Query("tagName")
 	page := model.GetPage(c)
-	log.Println("page:", page)
+	//log.Println("page:", page)
 	imageList, total, err := data.GetImages(serverNames, tagName, page)
 	page.Total = total
 	if err != nil {
