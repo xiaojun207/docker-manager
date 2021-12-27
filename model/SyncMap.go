@@ -145,3 +145,8 @@ func (e *SyncMap) LoadMap(key interface{}) (map[string]interface{}, bool) {
 	}
 	return map[string]interface{}{}, ok
 }
+
+func (e *SyncMap) ContainKey(key string) (res bool) {
+	_, res = e.Load(key)
+	return
+}

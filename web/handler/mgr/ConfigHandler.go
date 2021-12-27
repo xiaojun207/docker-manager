@@ -6,6 +6,7 @@ import (
 	"docker-manager/service"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func GetConfig(c *gin.Context) {
@@ -38,5 +39,31 @@ func UpdateConfig(c *gin.Context) {
 		service.SendToAllServer(ch, map[string]interface{}{})
 	}
 
+	resp.Resp(c, "100200", "成功", "")
+}
+
+func GetWhiteList(c *gin.Context) {
+	ipList, err := data.GetWhiteIpList()
+	if err != nil {
+		log.Println("GetWhiteList.err:", err)
+	}
+	resp.Resp(c, "100200", "成功", ipList)
+}
+
+func AddWhiteIp(c *gin.Context) {
+	json := make(map[string]interface{}) //注意该结构接受的内容
+	c.BindJSON(&json)
+	IP := json["IP"].(string)
+	data.AddWhiteIp(IP)
+	service.LoadWhiteList()
+	resp.Resp(c, "100200", "成功", "")
+}
+
+func DeleteWhiteIp(c *gin.Context) {
+	json := make(map[string]interface{}) //注意该结构接受的内容
+	c.BindJSON(&json)
+	IP := json["IP"].(string)
+	data.DelWhiteIp(IP)
+	service.LoadWhiteList()
 	resp.Resp(c, "100200", "成功", "")
 }
