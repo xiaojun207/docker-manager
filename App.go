@@ -30,6 +30,7 @@ func main() {
 
 	data.InitDB(driverName, dataSourceUrl, utils.StrToBool(useCache))
 	service.InitTokenHelper()
+	service.LoadWhiteList()
 	web.Start("8068", "/dockerMgrApi/")
 
 	defer data.Close()
