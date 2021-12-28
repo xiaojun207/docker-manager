@@ -10,11 +10,7 @@ import (
 )
 
 func WhiteIpInterceptor(c *gin.Context) {
-	reqIP := c.GetHeader("HostIp")
-	if reqIP == "" {
-		reqIP = c.ClientIP()
-	}
-
+	reqIP := utils.GetRemoteIP(c)
 	if !service.IsWhiteIp(reqIP) {
 		resp.Resp(c, "403", "禁止访问", "")
 		c.Status(403)

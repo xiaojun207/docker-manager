@@ -4,6 +4,7 @@ import (
 	"docker-manager/data"
 	"docker-manager/data/table"
 	"docker-manager/service"
+	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -17,11 +18,6 @@ func RegDockerHandler(c *gin.Context) {
 	id := json["ID"].(string)
 	//AppId := c.GetHeader("AppId")
 
-	reqIP := c.GetHeader("HostIp")
-	if reqIP == "" {
-		reqIP = c.ClientIP()
-	}
-
 	server := table.Server{
 		Name:            Name,
 		OSType:          json["OSType"].(string),
@@ -34,7 +30,8 @@ func RegDockerHandler(c *gin.Context) {
 		Memory:          int64(json["MemTotal"].(float64)),
 		Images:          int(json["Images"].(float64)),
 		PrivateIp:       c.GetHeader("PrivateIp"),
-		PublicIp:        reqIP,
+		HostIp:          c.GetHeader("HostIp"),
+		PublicIp:        utils.GetRemoteIP(c),
 		//State:  "",
 		Summary: json,
 	}

@@ -150,3 +150,13 @@ func (e *SyncMap) ContainKey(key string) (res bool) {
 	_, res = e.Load(key)
 	return
 }
+
+func (e *SyncMap) Remove(key string) {
+	e.Delete(key)
+}
+
+func (e *SyncMap) RemoveAll() {
+	e.ForEach(func(key, value interface{}) {
+		e.Delete(key)
+	})
+}
