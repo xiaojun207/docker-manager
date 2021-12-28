@@ -6,6 +6,6 @@ import (
 
 type WhiteIp struct {
 	Id         int       `xorm:"not null pk autoincr INT"`
-	IP         string    `xorm:"comment('ip') VARCHAR(24)"`
+	IP         string    `xorm:"'ip' comment('ip') VARCHAR(24)"`
 	CreateDate time.Time `xorm:"created default CURRENT_TIMESTAMP TIMESTAMP"`
 }

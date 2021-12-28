@@ -14,6 +14,8 @@ func LoadWhiteList() {
 	if err != nil {
 		log.Println("LoadWhiteList.err:", err)
 	}
+	log.Println("LoadWhiteList:", ipList)
+	ipMap.RemoveAll()
 	for _, ip := range ipList {
 		ipMap.Store(ip.IP, ip.Id)
 	}
@@ -22,6 +24,7 @@ func LoadWhiteList() {
 }
 
 func IsWhiteIp(reqIp string) bool {
+	log.Println("reqIp:", reqIp)
 	if useWhiteList {
 		return ipMap.ContainKey(reqIp)
 	}
