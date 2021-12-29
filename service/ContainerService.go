@@ -5,6 +5,7 @@ import (
 	"docker-manager/data/table"
 	"docker-manager/utils"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
+	"log"
 	"time"
 )
 
@@ -50,6 +51,15 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		}
 	}
 
+}
+
+func DeleteContainer(containerId string) {
+	c, err := data.GetContainer(containerId)
+	if err != nil {
+		log.Println("DeleteContainer.containerId", containerId)
+		return
+	}
+	data.DelContainer(c)
 }
 
 func GetVolumes(volmap []interface{}) (res []string) {
