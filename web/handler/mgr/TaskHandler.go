@@ -28,6 +28,9 @@ func ContainerOperatorHandler(c *gin.Context) {
 			"containerId": containerId,
 		}
 		ch := "docker.container." + operator
+		if operator == "remove" {
+			service.DeleteContainer(containerId)
+		}
 
 		err := service.SaveAndSendTask(serverName, ch, param)
 		if err != nil {
