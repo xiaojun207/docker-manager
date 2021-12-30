@@ -19,6 +19,10 @@ func FindUsers() (users []table.User, err error) {
 	return data.FindUsers()
 }
 
+func FindUserByUsername(username string) (user table.User, err error) {
+	return data.FindUserByUsername(username)
+}
+
 func FindUser(uid int) (user table.User, err error) {
 	return data.FindUserByUid(uid)
 }
