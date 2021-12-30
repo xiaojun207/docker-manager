@@ -19,6 +19,7 @@ var WsRouter = func(router *gin.RouterGroup) {
 var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/base/version", base.VersionHandler)
 	router.GET("/base/Textversion", base.VersionTextHandler)
+	router.POST("/base/sendCode", base.SendCodeHandler)
 
 	router.Use(WhiteIpInterceptor)
 
@@ -30,6 +31,8 @@ var BaseRouter = func(router *gin.RouterGroup) {
 var UserRouter = func(router *gin.RouterGroup) {
 	router.POST("/login", user.LoginHandler)
 	router.POST("/logout", user.LogoutHandler)
+	router.POST("/forgetPassword", user.ForgetPasswordHandler)
+
 	router.GET("/info", AuthInterceptor, user.UserInfoHandler)
 	router.GET("/userList", AuthInterceptor, user.UserListHandler)
 	router.POST("/alterPassword", AuthInterceptor, user.AlterPasswordHandler)

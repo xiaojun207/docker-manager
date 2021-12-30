@@ -23,7 +23,7 @@ func VersionHandler(c *gin.Context) {
 	log.Println("Version Handler, current:", Version, ",latest:", latest)
 	resp.Resp(c, "100200", "成功", gin.H{
 		"current": Version,
-		"latest":  service.GetLatestTag(),
+		"latest":  latest,
 	})
 }
 

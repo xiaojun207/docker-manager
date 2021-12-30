@@ -24,7 +24,7 @@ func UserInfoHandler(c *gin.Context) {
 	info := map[string]interface{}{
 		"roles":        []string{user.Role},
 		"introduction": user.Summary,
-		"avatar":       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+		"avatar":       "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 		"name":         user.Username,
 	}
 	resp.Resp(c, "100200", "成功", info)
