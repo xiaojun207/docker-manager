@@ -13,7 +13,7 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 	Name := json["Name"].(string)
 
 	containerMap := map[string]table.Container{}
-	for _, t := range json["conainers"].([]interface{}) {
+	for _, t := range json["containers"].([]interface{}) {
 		v := t.(map[string]interface{})
 		v["AppId"] = AppId
 		v["ServerName"] = Name
