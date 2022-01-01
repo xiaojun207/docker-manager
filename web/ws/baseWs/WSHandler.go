@@ -41,16 +41,22 @@ func WsHandler(w http.ResponseWriter, r *http.Request, id string, group *WsConne
 		goto ERR
 	}
 	conn.Headers["AppId"] = r.Header.Get("AppId")
+	for key, _ := range r.Header {
+		conn.Headers[key] = r.Header.Get(key)
+	}
+	for key, _ := range r.URL.Query() {
+		conn.Query[key] = r.URL.Query().Get(key)
+	}
+
 	group.AddConn(id, conn)
 
 	for {
 		if data, err = conn.ReadMessage(); err != nil {
-			log.Println("WsHandler.ReadMessage.error", err)
+			log.Println("WsHandler.ReadMessage.error:", err)
 			goto ERR
 		}
-		msg := ToWsMsg(data)
 
-		if err = group.MsgHandler(msg, conn); err != nil {
+		if err = group.MsgHandler(data, conn); err != nil {
 			log.Println("WsHandler.WsMsgHandler.error", err)
 			goto ERR
 		}

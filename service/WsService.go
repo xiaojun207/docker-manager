@@ -13,23 +13,53 @@ import (
 func init() {
 	ws.AgentWsConnectGroup.MsgHandler = agentMsgHandler
 	ws.ManagerWsConnectGroup.MsgHandler = managerWsMsgHandler
+	ws.ManagerExecWsConnectGroup.MsgHandler = managerExecWsMsgHandler
 
-	ws.AgentWsConnectGroup.OnConnected = func(id interface{}) {
-		data.UpdateServerState(id.(string), "connected")
+	ws.AgentWsConnectGroup.OnConnected = func(serverName string, conn *baseWs.Connection) {
+		data.UpdateServerState(serverName, "connected")
 	}
 
-	ws.AgentWsConnectGroup.OnDisconnected = func(id interface{}) {
-		data.UpdateServerState(id.(string), "disconnect")
+	ws.AgentWsConnectGroup.OnDisconnected = func(serverName string) {
+		data.UpdateServerState(serverName, "disconnect")
 	}
 
+	ws.ManagerExecWsConnectGroup.OnConnected = func(cId string, conn *baseWs.Connection) {
+		cmd := conn.Query["cmd"]
+		serverName := GetServerNameByContainerShortId(cId)
+		res := map[string]interface{}{
+			"cId": cId,
+			"cmd": cmd,
+			"d":   "",
+		}
+		ws.AgentWsConnectGroup.Push(serverName, "docker.container.exec", res)
+	}
+	ws.ManagerExecWsConnectGroup.OnDisconnected = func(cId string) {
+		serverName := GetServerNameByContainerShortId(cId)
+		res := map[string]interface{}{"cId": cId}
+		ws.AgentWsConnectGroup.Push(serverName, "docker.container.exec.close", res)
+	}
 }
 
-func managerWsMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
+func managerExecWsMsgHandler(wsData []byte, conn *baseWs.Connection) error {
+	cId := conn.Id
+	serverName := GetServerNameByContainerShortId(cId)
+	res := map[string]interface{}{
+		"cId": cId,
+		"d":   string(wsData),
+	}
+	err := ws.AgentWsConnectGroup.Push(serverName, "docker.container.exec", res)
+	if err != nil {
+		log.Println("managerExecWsMsgHandler.push, err:", err)
+	}
+	return err
+}
+
+func managerWsMsgHandler(wsData []byte, conn *baseWs.Connection) error {
+	msg := baseWs.ToWsMsg(wsData)
 	tmp := msg.Data
 	d, ok := tmp.(map[string]interface{})
 	if !ok {
 	}
-	log.Println("ManagerWsMsgHandler.d:", d)
 	switch msg.Channel {
 	case baseWs.CH_PING:
 		return conn.Pong()
@@ -53,12 +83,14 @@ func managerWsMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 	return nil
 }
 
-func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
+func agentMsgHandler(wsData []byte, conn *baseWs.Connection) error {
+	msg := baseWs.ToWsMsg(wsData)
 	conn.LastDataTime = time.Now().UnixNano() / 1e6
 	tmp := msg.Data
 	AppId := conn.Headers["AppId"]
 	d, ok := tmp.(map[string]interface{})
 	if !ok {
+
 	}
 	switch msg.Channel {
 	case baseWs.CH_PING:
@@ -108,6 +140,14 @@ func agentMsgHandler(msg *baseWs.WsMsg, conn *baseWs.Connection) error {
 		break
 	case "docker.image.list":
 		UpdateImages(AppId, d)
+		break
+	case "docker.container.exec":
+		cId := d["cId"].(string)
+		res := ([]byte)(d["d"].(string))
+		err := ws.ManagerExecWsConnectGroup.PushData(cId, res)
+		if err != nil {
+			log.Println("docker.container.exec, err:", err)
+		}
 		break
 	default:
 		break

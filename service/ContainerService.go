@@ -3,11 +3,32 @@ package service
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/utils"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"time"
 )
+
+var ContainerIdServerNameMap model.SyncMap
+var ContainerShortIdServerNameMap model.SyncMap
+
+func LoadContainerIdMap() {
+	records, err := data.GetContainers()
+	if err != nil {
+		log.Println("LoadContainerIdMap.err:", err)
+	}
+	ContainerIdServerNameMap.RemoveAll()
+	for _, record := range records {
+		ContainerIdServerNameMap.Store(record.ContainerId, record.ServerName)
+		ContainerShortIdServerNameMap.Store(utils.ContainerShortId(record.ContainerId), record.ServerName)
+	}
+}
+
+func removeContainerIdServerNameMapCache(containerId string) {
+	ContainerIdServerNameMap.Remove(containerId)
+	ContainerShortIdServerNameMap.Remove(containerId)
+}
 
 func UpdateServerContainer(AppId string, json map[string]interface{}) {
 	Name := json["Name"].(string)
@@ -48,6 +69,7 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		if !ok {
 			// 如果没有，说明已经删除了
 			data.DelContainer(container)
+			removeContainerIdServerNameMapCache(container.ContainerId)
 		}
 	}
 
@@ -69,4 +91,12 @@ func GetVolumes(volmap []interface{}) (res []string) {
 		res = append(res, tmp)
 	}
 	return
+}
+
+func GetServerNameByContainerId(containerId string) string {
+	return ContainerShortIdServerNameMap.GetStr(containerId)
+}
+
+func GetServerNameByContainerShortId(cId string) string {
+	return ContainerShortIdServerNameMap.GetStr(cId)
 }

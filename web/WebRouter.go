@@ -13,6 +13,7 @@ import (
 var WsRouter = func(router *gin.RouterGroup) {
 	router.GET("/agent/ws", AgentTokenInterceptor, ws.WSAgentHandler)
 	router.GET("/ws/log", AuthInterceptor, ws.WSManagerHandler)
+	router.GET("/ws/exec", AuthInterceptor, ws.WSManagerExecHandler)
 }
 
 // BaseRoute 基础路由

@@ -1,11 +1,16 @@
 package utils
 
 import (
+	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"reflect"
 	"strconv"
 	"strings"
 )
+
+func ContainerShortId(containerId string) string {
+	return utils.Substring(containerId, 0, 12)
+}
 
 func TrimContainerName(s interface{}) string {
 	names := ""

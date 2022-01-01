@@ -89,6 +89,17 @@ func (e *SyncMap) StoreStr(key interface{}, value string) {
 	e.Store(key, value)
 }
 
+func (e *SyncMap) LoadInit(key interface{}, Init func() interface{}) (interface{}, bool) {
+	val, ok := e.Load(key)
+	if ok {
+		return val, ok
+	} else {
+		value := Init()
+		e.Store(key, value)
+		return value, ok
+	}
+}
+
 func (e *SyncMap) LoadStr(key interface{}) (string, bool) {
 	val, ok := e.Load(key)
 	if ok {
