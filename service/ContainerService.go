@@ -19,15 +19,21 @@ func LoadContainerIdMap() {
 		log.Println("LoadContainerIdMap.err:", err)
 	}
 	ContainerIdServerNameMap.RemoveAll()
+	ContainerShortIdServerNameMap.RemoveAll()
 	for _, record := range records {
-		ContainerIdServerNameMap.Store(record.ContainerId, record.ServerName)
-		ContainerShortIdServerNameMap.Store(utils.ContainerShortId(record.ContainerId), record.ServerName)
+		AddContainerIdServerNameMapCache(record.ContainerId, record.ServerName)
 	}
+	log.Println("LoadContainerIdMap.size:", ContainerIdServerNameMap.Size())
+}
+
+func AddContainerIdServerNameMapCache(containerId, serverName string) {
+	ContainerIdServerNameMap.Store(containerId, serverName)
+	ContainerShortIdServerNameMap.Store(utils.ContainerShortId(containerId), serverName)
 }
 
 func removeContainerIdServerNameMapCache(containerId string) {
 	ContainerIdServerNameMap.Remove(containerId)
-	ContainerShortIdServerNameMap.Remove(containerId)
+	ContainerShortIdServerNameMap.Remove(utils.ContainerShortId(containerId))
 }
 
 func UpdateServerContainer(AppId string, json map[string]interface{}) {
@@ -60,6 +66,7 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		container.Summary = v
 
 		data.AddContainer(container)
+		AddContainerIdServerNameMapCache(container.ContainerId, container.ServerName)
 		containerMap[ContainerName] = container
 	}
 
