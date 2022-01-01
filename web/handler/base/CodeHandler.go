@@ -21,8 +21,8 @@ func SendCodeHandler(c *gin.Context) {
 		resp.Resp(c, "100100", "用户名错误", "")
 		return
 	}
-	code := service.SendCode(user.Id, codeType, key)
+	service.SendCode(user.Id, codeType, key)
 
-	log.Println("SendCode, username:", ",code:", code)
+	log.Println("SendCode, username:", username, ",code:", "-there is no code-")
 	resp.Resp(c, "100200", "成功", "")
 }
