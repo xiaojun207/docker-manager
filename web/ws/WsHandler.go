@@ -8,6 +8,7 @@ import (
 
 var AgentWsConnectGroup = baseWs.NewWsConnectionGroup()
 var ManagerWsConnectGroup = baseWs.NewWsConnectionGroup()
+var ManagerExecWsConnectGroup = baseWs.NewWsConnectionGroup()
 
 func WSAgentHandler(c *gin.Context) {
 	serverName := c.GetHeader("ServerName")
@@ -20,6 +21,15 @@ func WSManagerHandler(c *gin.Context) {
 	containerId := c.Query("containerId")
 	log.Println("WSManagerHandler.coming", ",containerId:", containerId)
 	baseWs.WsHandler(c.Writer, c.Request, containerId, &ManagerWsConnectGroup)
+}
+
+func WSManagerExecHandler(c *gin.Context) {
+	containerId := c.Query("containerId")
+	cmd := c.Query("cmd")
+	c.Request.Header.Add("containerId", containerId)
+	c.Request.Header.Add("cmd", cmd)
+	log.Println("WSManagerExecHandler.coming", ",containerId:", containerId, ",cmd:", cmd)
+	baseWs.WsHandler(c.Writer, c.Request, containerId, &ManagerExecWsConnectGroup)
 }
 
 func AgentConnected(id string) bool {

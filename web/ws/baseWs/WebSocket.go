@@ -7,13 +7,14 @@ import (
 )
 
 type Connection struct {
-	id           string
+	Id           string
 	wsConnect    *websocket.Conn
 	inChan       chan []byte
 	outChan      chan []byte
 	closeChan    chan byte
 	channels     map[string]string
 	Headers      map[string]string
+	Query        map[string]string
 	mutex        sync.Mutex // 对closeChan关闭上锁
 	Closed       bool       // 防止closeChan被关闭多次
 	LastPongTime int64      // 毫秒级
@@ -28,7 +29,8 @@ func NewConnection(id string, wsConn *websocket.Conn) (conn *Connection, err err
 		closeChan: make(chan byte, 1),
 		channels:  map[string]string{},
 		Headers:   map[string]string{},
-		id:        id,
+		Query:     map[string]string{},
+		Id:        id,
 	}
 
 	// 启动读协程

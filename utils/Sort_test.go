@@ -29,3 +29,11 @@ func TestSort(t *testing.T) {
 	})
 	log.Println("ls:", ls)
 }
+
+func TestShortContainerId(t *testing.T) {
+	containerId := "11223444445223333333333333333333333333333333333"
+	cId := ContainerShortId(containerId)
+	log.Println("cId:", cId)
+	//8348fa022f23
+	//348fa022f23
+}

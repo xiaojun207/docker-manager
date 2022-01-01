@@ -4,19 +4,18 @@ import (
 	"docker-manager/model"
 	"encoding/json"
 	"errors"
-	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"sync"
-	"time"
 )
 
 type WsConnectionGroup struct {
 	connectionMap  model.SyncMap
 	lock           sync.Mutex
 	LastData       model.SyncMap
-	OnConnected    func(id interface{})
-	OnDisconnected func(id interface{})
-	MsgHandler     func(msg *WsMsg, conn *Connection) error
+	OnConnected    func(id string, conn *Connection)
+	OnDisconnected func(id string)
+	DataParse      func(d []byte) (msg *WsMsg)
+	MsgHandler     func(wsData []byte, conn *Connection) error
 }
 
 func NewWsConnectionGroup() WsConnectionGroup {
@@ -27,16 +26,16 @@ func NewWsConnectionGroup() WsConnectionGroup {
 
 func (e *WsConnectionGroup) init() {
 	// 定时清理掉线的连接
-	utils.NewFixedDelayJob(5*time.Second, e.Clean)
-	// 启动心跳线程
-	utils.NewFixedDelayJob(1*time.Minute, e.pingAll)
+	//utils.NewFixedDelayJob(5*time.Second, e.Clean)
+	//启动心跳线程
+	//utils.NewFixedDelayJob(1*time.Minute, e.pingAll)
 }
 
 func (e *WsConnectionGroup) Clean() {
 	e.connectionMap.Range(func(key, value interface{}) bool {
 		conn := value.(*Connection)
 		if conn != nil && conn.Closed {
-			e.removeConnection(key)
+			e.removeConnection(key.(string))
 		}
 		return true
 	})
@@ -46,7 +45,7 @@ func (e *WsConnectionGroup) AddConn(id string, conn *Connection) {
 	log.Println("AddConn.id:", id)
 	e.connectionMap.Store(id, conn)
 	if e.OnConnected != nil {
-		e.OnConnected(id)
+		e.OnConnected(id, conn)
 	}
 }
 
@@ -58,7 +57,7 @@ func (e *WsConnectionGroup) GetCount() int {
 	return e.connectionMap.Size()
 }
 
-func (e *WsConnectionGroup) removeConnection(id interface{}) {
+func (e *WsConnectionGroup) removeConnection(id string) {
 	e.connectionMap.Delete(id)
 	if e.OnDisconnected != nil {
 		e.OnDisconnected(id)
@@ -90,18 +89,23 @@ func (e *WsConnectionGroup) pingAll() {
 	e.connectionMap.Range(func(key, value interface{}) bool {
 		conn := value.(*Connection)
 		if conn == nil || conn.Closed {
-			e.removeConnection(key)
+			e.removeConnection(key.(string))
 		}
 		err := conn.Ping()
 		if err != nil && !conn.Closed {
 			conn.Close()
-			e.removeConnection(key)
+			e.removeConnection(key.(string))
 		}
 		return true
 	})
 }
 
 func (e *WsConnectionGroup) PushResp(id string, msg WsMsg) error {
+	data, _ := json.Marshal(msg)
+	return e.PushData(id, data)
+}
+
+func (e *WsConnectionGroup) PushData(id string, data []byte) error {
 	err, conn := e.Load(id)
 	if err != nil {
 		log.Println("PushResp, id:", id, ",err:", err)
@@ -116,7 +120,6 @@ func (e *WsConnectionGroup) PushResp(id string, msg WsMsg) error {
 		//	data, _ := json.Marshal(resp)
 		//	return conn.WriteMessage(data)
 	} else {
-		data, _ := json.Marshal(msg)
 		return conn.WriteMessage(data)
 	}
 }

@@ -51,6 +51,19 @@ func GetContainersByServerName(serverName string) (record []table.Container, err
 	return
 }
 
+func GetServerNameByContainerShortId(cId string) string {
+	var record table.Container
+	has, err := base.DBEngine.Table("container").Where("substr(container_id,1,12)=?", cId).Get(&record)
+	if err != nil {
+		log.Println("GetServerNameByContainerShortId.err:", err)
+		return ""
+	}
+	if has {
+		return record.ServerName
+	}
+	return ""
+}
+
 func GetServerNameByContainerId(containerId string) string {
 	var record table.Container
 	has, err := base.DBEngine.Table("container").Where("container_id=?", containerId).Get(&record)
