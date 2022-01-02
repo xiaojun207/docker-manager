@@ -140,6 +140,12 @@ func (e *SyncMap) LoadInt64(key interface{}) (int64, bool) {
 	return 0, ok
 }
 
+func (e *SyncMap) IncInt(key interface{}, step int) int {
+	value, _ := e.LoadInt(key)
+	e.Store(key, value+step)
+	return value + step
+}
+
 func (e *SyncMap) Size() int {
 	count := 0
 	e.Range(func(key, value interface{}) bool {

@@ -64,6 +64,7 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 		DBEngine.SetDefaultCacher(cacher)
 	}
 	//GetDBVersion()
+	DBEngine.AddHook(DBTracingHook)
 	return DBEngine
 }
 

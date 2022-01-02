@@ -21,6 +21,7 @@ var BaseRouter = func(router *gin.RouterGroup) {
 	router.GET("/base/version", base.VersionHandler)
 	router.GET("/base/Textversion", base.VersionTextHandler)
 	router.POST("/base/sendCode", base.SendCodeHandler)
+	router.GET("/base/dbtrace", AuthInterceptor, base.DBTraceHandler)
 
 	router.Use(WhiteIpInterceptor)
 

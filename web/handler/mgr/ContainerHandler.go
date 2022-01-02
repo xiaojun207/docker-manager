@@ -26,7 +26,9 @@ func GetContainers(c *gin.Context) {
 	res := []map[string]interface{}{}
 
 	containers, err := data.GetContainers()
-	log.Println("GetContainers.err:", err)
+	if err != nil {
+		log.Println("GetContainers.err:", err)
+	}
 
 	for _, container := range containers {
 		if state != "" && container.State != state {
