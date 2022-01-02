@@ -43,7 +43,7 @@ func CreateToken(data string) string {
 func ValidToken(token string) (isValid bool, data string, err error) {
 	_, ok := TokenHelper.cacheMap.Load(token)
 	if !ok {
-		//return false, "", errors.New("Token not exists")
+		return false, "", errors.New("Token not exists")
 	}
 	return TokenHelper.ValidToken(token)
 }

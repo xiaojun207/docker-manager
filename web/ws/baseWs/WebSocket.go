@@ -19,6 +19,7 @@ type Connection struct {
 	Closed       bool       // 防止closeChan被关闭多次
 	LastPongTime int64      // 毫秒级
 	LastDataTime int64      // 毫秒级
+	OnClose      func(conn *Connection)
 }
 
 func NewConnection(id string, wsConn *websocket.Conn) (conn *Connection, err error) {
@@ -82,6 +83,9 @@ func (conn *Connection) Close() {
 	if !conn.Closed {
 		close(conn.closeChan)
 		conn.Closed = true
+		if conn.OnClose != nil {
+			conn.OnClose(conn)
+		}
 	}
 	conn.mutex.Unlock()
 }
