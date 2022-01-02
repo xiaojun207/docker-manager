@@ -22,14 +22,16 @@ func WhiteIpInterceptor(c *gin.Context) {
 func AgentTokenInterceptor(c *gin.Context) {
 	token := c.GetHeader("authorization")
 	if token == "" {
-		log.Println("URI:", c.Request.RequestURI+", AgentTokenInterceptor token is empty:")
+		reqIP := utils.GetRemoteIP(c)
+		log.Println("URI:", c.Request.RequestURI+", AgentTokenInterceptor token is empty:", ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}
 	isValid, uid, err := utils.ValidToken(token)
 	if err != nil || !isValid {
-		log.Println("AgentToken.err:", err, ", isValid:", isValid)
+		reqIP := utils.GetRemoteIP(c)
+		log.Println("AgentToken.err:", err, ", isValid:", isValid, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
@@ -43,7 +45,8 @@ func ApiTokenInterceptor(c *gin.Context) {
 	apiKey := c.GetHeader("authorization")
 	apiSecret := c.GetHeader("authorization")
 	if apiKey == "" || !service.LoginApi(apiKey, apiSecret) {
-		log.Println("URI:", c.Request.RequestURI+", ApiTokenInterceptor:", apiKey, apiSecret)
+		reqIP := utils.GetRemoteIP(c)
+		log.Println("ApiTokenInterceptor:", apiKey, apiSecret, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
@@ -55,7 +58,8 @@ func AuthInterceptor(c *gin.Context) {
 	if token == "" {
 		_token, err := c.Request.Cookie("c-token")
 		if err != nil {
-			log.Println("AuthInterceptor.err", err)
+			reqIP := utils.GetRemoteIP(c)
+			log.Println("AuthInterceptor.err", err, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
 			resp.Resp(c, "105101", "账户未登录", "")
 			c.Abort()
 			return
@@ -71,7 +75,8 @@ func AuthInterceptor(c *gin.Context) {
 
 	isValid, uid, err := utils.ValidToken(token)
 	if err != nil || !isValid {
-		log.Println("AuthInterceptor.err:", err, ", isValid:", isValid)
+		reqIP := utils.GetRemoteIP(c)
+		log.Println("AuthInterceptor.err:", err, ", isValid:", isValid, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
 		resp.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return

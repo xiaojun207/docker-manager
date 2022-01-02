@@ -18,7 +18,7 @@ func ContainerOperatorHandler(c *gin.Context) {
 	operator := c.Param("operator")      // stop, remove, restart
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
-	log.Println("json:", json)
+	log.Println("ContainerOperatorHandler.json:", json)
 	serverNames := utils.ArrInterfaceToStr(json["ServerNames"].([]interface{}))
 	containerId := json["ContainerId"].(string)
 
@@ -46,7 +46,7 @@ func ImageCmd(c *gin.Context) {
 	operator := c.Param("operator")      // stop, remove, restart
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
-	log.Println("json:", json)
+	log.Println("ImageCmd.json:", json)
 	serverName := json["serverName"].(string)
 	ImageId := json["ImageId"].(string)
 

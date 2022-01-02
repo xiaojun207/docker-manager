@@ -4,8 +4,10 @@ import (
 	"docker-manager/model"
 	"encoding/json"
 	"errors"
+	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"sync"
+	"time"
 )
 
 type WsConnectionGroup struct {
@@ -25,8 +27,8 @@ func NewWsConnectionGroup() WsConnectionGroup {
 }
 
 func (e *WsConnectionGroup) init() {
-	// 定时清理掉线的连接
-	//utils.NewFixedDelayJob(5*time.Second, e.Clean)
+	//定时清理掉线的连接
+	utils.NewFixedDelayJob(30*time.Second, e.Clean)
 	//启动心跳线程
 	//utils.NewFixedDelayJob(1*time.Minute, e.pingAll)
 }
@@ -44,6 +46,9 @@ func (e *WsConnectionGroup) Clean() {
 func (e *WsConnectionGroup) AddConn(id string, conn *Connection) {
 	log.Println("AddConn.id:", id)
 	e.connectionMap.Store(id, conn)
+	conn.OnClose = func(conn *Connection) {
+		e.removeConnection(id)
+	}
 	if e.OnConnected != nil {
 		e.OnConnected(id, conn)
 	}
@@ -108,7 +113,7 @@ func (e *WsConnectionGroup) PushResp(id string, msg WsMsg) error {
 func (e *WsConnectionGroup) PushData(id string, data []byte) error {
 	err, conn := e.Load(id)
 	if err != nil {
-		log.Println("PushResp, id:", id, ",err:", err)
+		log.Println("PushResp, err:", err)
 		return errors.New("push resp conn is not exists , id:" + id)
 	}
 	//log.Println("PushResp, id:", id, ",msg:", msg)
