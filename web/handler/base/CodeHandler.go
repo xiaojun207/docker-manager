@@ -1,10 +1,12 @@
 package base
 
 import (
+	"docker-manager/conf"
 	"docker-manager/service"
 	"docker-manager/web/resp"
 	_ "embed"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
 
@@ -21,8 +23,11 @@ func SendCodeHandler(c *gin.Context) {
 		resp.Resp(c, "100100", "用户名错误", "")
 		return
 	}
-	service.SendCode(user.Id, codeType, key)
-
-	log.Println("SendCode, username:", username, ",code:", "-there is no code-")
+	code := service.SendCode(user.Id, codeType, key)
+	if utils.StrToBool(conf.ConsoleCode) {
+		log.Println("SendCode, username:", username, ",code:", "-there is no code-")
+	} else {
+		log.Println("SendCode, username:", username, ",code:", code)
+	}
 	resp.Resp(c, "100200", "成功", "")
 }
