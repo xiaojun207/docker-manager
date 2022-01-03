@@ -3,33 +3,8 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
-	"docker-manager/dto"
-	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
-
-func AddAppInfo(appname string, info dto.ServiceInfo) {
-	//if AppInfos.Has(appname) {
-	//	//return
-	//}
-	//AppInfos.Store(appname, info)
-
-	service := table.Service{
-		Name:  appname,
-		Image: info.Image,
-		//Ports:    utils2.StructToMap(info.Ports),
-		Envs:     info.Env,
-		Volumes:  info.Volumes,
-		Running:  info.Running,
-		Replicas: info.Replicas,
-		//Status: info.
-		//Summary: info.
-	}
-	utils2.StructToMap(info.Ports, &service.Ports)
-	//utils2.StructToMap(info.Env, &service.Envs)
-	//utils2.StructToMap(info.Volumes, &service.Volumes)
-	AddService(service)
-}
 
 func AddService(service table.Service) (err error) {
 	var record table.Service

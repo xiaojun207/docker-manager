@@ -81,6 +81,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 	router.POST("/app/del", AuthInterceptor, mgr.DeleteService)
 	router.POST("/app/update", AuthInterceptor, mgr.UpdateService)
 	router.GET("/app/group", AuthInterceptor, mgr.AppGroupList)
+	router.POST("/app/group/del", AuthInterceptor, mgr.DeleteGroup)
 
 	router.GET("/dashboardSize", AuthInterceptor, mgr.GetDashboardSize)
 	router.GET("/serverSize", AuthInterceptor, mgr.GetServerSize)

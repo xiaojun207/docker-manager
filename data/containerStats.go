@@ -21,6 +21,16 @@ func AddContainerStats(e table.ContainerStats) (err error) {
 	return
 }
 
+func InsertContainerStats(e *table.ContainerStats) (err error) {
+	_, err = base.DBEngine.Table("container_stats").Insert(e)
+	return
+}
+
+func UpdateContainerStats(e table.ContainerStats) (err error) {
+	_, err = base.DBEngine.Table("container_stats").ID(e.Id).Update(e)
+	return
+}
+
 func GetContainerStatsSize() int64 {
 	count, err := base.DBEngine.Table("container_stats").Count()
 	if err != nil {
@@ -43,6 +53,14 @@ func GetContainerStatsList(serverNames []string) (record []table.ContainerStats,
 	}
 
 	err = session.Find(&record)
+	return
+}
+
+func DeleteStats(id int) (err error) {
+	_, err = base.DBEngine.Table("container_stats").Exec("delete from container_stats where id=?", id)
+	if err != nil {
+		log.Println("DelStats.err:", err)
+	}
 	return
 }
 

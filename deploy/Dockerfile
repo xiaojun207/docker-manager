@@ -34,13 +34,13 @@ COPY --from=build /go/release/views /app/views
 COPY --from=build /go/release/deploy/entrypoint.sh /app/
 
 ENV driverName="sqlite3"\
-    useCache="false"\
+    useCache="true"\
     dataSourceUrl="/app/data/database.db"
 
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]
 
 #暴露端口
-#EXPOSE 8068
+EXPOSE 8068
 
 
 

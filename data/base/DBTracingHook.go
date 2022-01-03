@@ -3,16 +3,18 @@ package base
 import (
 	"context"
 	"docker-manager/model"
+	"time"
 	"xorm.io/xorm/contexts"
 )
 
 type TracingHook struct {
-	BeforeNum int           `json:"before_num"`
-	AfterNum  int           `json:"after_num"`
+	StartTime time.Time
+	BeforeNum int64         `json:"before_num"`
+	AfterNum  int64         `json:"after_num"`
 	SqlMap    model.SyncMap `json:"sql_map"`
 }
 
-var DBTracingHook = &TracingHook{}
+var DBTracingHook = &TracingHook{StartTime: time.Now()}
 
 // xorm的hook接口需要满足BeforeProcess和AfterProcess函数
 func (h *TracingHook) BeforeProcess(c *contexts.ContextHook) (context.Context, error) {
