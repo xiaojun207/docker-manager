@@ -35,6 +35,7 @@ COPY --from=build /go/release/deploy/entrypoint.sh /app/
 
 ENV driverName="sqlite3"\
     useCache="true"\
+    consoleCode="false"\
     dataSourceUrl="/app/data/database.db"
 
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]

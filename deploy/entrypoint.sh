@@ -9,6 +9,10 @@ if [[ "$useCache" != "" ]]; then
     param="$param -useCache $useCache"
 fi
 
+if [[ "$consoleCode" != "" ]]; then
+    param="$param -consoleCode $consoleCode"
+fi
+
 if [[ "$dataSourceUrl" != "" ]]; then
     param="$param -dataSourceUrl $dataSourceUrl"
 fi
