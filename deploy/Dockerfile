@@ -34,7 +34,7 @@ COPY --from=build /go/release/views /app/views
 COPY --from=build /go/release/deploy/entrypoint.sh /app/
 
 ENV driverName="sqlite3"\
-    useCache="true"\
+    useCache="false"\
     consoleCode="false"\
     dataSourceUrl="/app/data/database.db"
 
