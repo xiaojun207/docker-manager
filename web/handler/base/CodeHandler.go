@@ -25,9 +25,9 @@ func SendCodeHandler(c *gin.Context) {
 	}
 	code := service.SendCode(user.Id, codeType, key)
 	if utils.StrToBool(conf.ConsoleCode) {
-		log.Println("SendCode, username:", username, ",code:", "-there is no code-")
-	} else {
 		log.Println("SendCode, username:", username, ",code:", code)
+	} else {
+		log.Println("SendCode, username:", username, ",code:", "-there is no code-")
 	}
 	resp.Resp(c, "100200", "成功", "")
 }
