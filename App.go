@@ -12,7 +12,7 @@ import (
 var (
 	driverName    = "sqlite3"
 	dataSourceUrl = "data/database.db"
-	useCache      = "false"
+	useCache      = "true"
 )
 
 func ParseParam() {
@@ -31,7 +31,8 @@ func main() {
 	data.InitDB(driverName, dataSourceUrl, utils.StrToBool(useCache))
 	service.InitTokenHelper()
 	service.LoadWhiteList()
-	service.LoadContainerIdMap()
+	service.LoadContainerMap()
+	service.LoadContainerStatsMap()
 	web.Start("8068", "/dockerMgrApi/")
 
 	defer data.Close()

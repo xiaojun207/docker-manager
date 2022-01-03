@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"xorm.io/core"
 	"xorm.io/xorm"
 	"xorm.io/xorm/caches"
 )
@@ -58,10 +57,12 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 
 	DBConfig(DBEngine)
 	if useCache {
-		DBEngine.SetMapper(core.GonicMapper{})
+		//DBEngine.SetMapper(core.GonicMapper{})
 		// 启用内存缓存
 		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 1000)
 		DBEngine.SetDefaultCacher(cacher)
+		DBEngine.SetDisableGlobalCache(false)
+		log.Println("SetDefaultCacher")
 	}
 	//GetDBVersion()
 	DBEngine.AddHook(DBTracingHook)
@@ -93,7 +94,7 @@ func CloseDBEngine() {
 // Config xorm一些可选设置
 func DBConfig(engine *xorm.Engine) {
 	// 设置日志等级，设置显示sql，设置显示执行时间
-	//engine.SetLogLevel(xorm.DEFAULT_LOG_LEVEL)
+	//engine.SetLogLevel(log2.DEFAULT_LOG_LEVEL)
 	//engine.ShowSQL(true)
 	//engine.ShowExecTime(true)
 

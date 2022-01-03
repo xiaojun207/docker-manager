@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func AddContainer(e table.Container) (err error) {
+func AddContainer(e *table.Container) (err error) {
 	var record table.Container
 	has, err := base.DBEngine.Table("container").
 		Where("container_id=? or (name=? and server_name=?)", e.ContainerId, e.Name, e.ServerName).
@@ -19,7 +19,7 @@ func AddContainer(e table.Container) (err error) {
 	if has {
 		_, err = base.DBEngine.Table("container").ID(record.Id).Update(e)
 	} else {
-		_, err = base.DBEngine.Table("container").Insert(&e)
+		_, err = base.DBEngine.Table("container").Insert(e)
 	}
 	return
 }

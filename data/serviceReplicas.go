@@ -25,6 +25,13 @@ func AddReplicas(serviceName, serverName string) (err error) {
 	return
 }
 
+func DeleteReplicas(id int) (err error) {
+	log.Println("DeleteReplicas.id:", id)
+	_, err = base.DBEngine.Exec("delete from service_replicas where id=?", id)
+	base.DBEngine.ClearCache(new(table.ServiceReplicas))
+	return
+}
+
 func GetServiceReplicasSize() int64 {
 	count, err := base.DBEngine.Table("service_replicas").Count()
 	if err != nil {

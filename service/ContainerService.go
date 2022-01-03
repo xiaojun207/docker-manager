@@ -10,45 +10,45 @@ import (
 	"time"
 )
 
-var ContainerIdServerNameMap model.SyncMap
+var ContainerMap model.SyncMap
 var ContainerShortIdServerNameMap model.SyncMap
 
-func LoadContainerIdMap() {
+func LoadContainerMap() {
 	records, err := data.GetContainers()
 	if err != nil {
 		log.Println("LoadContainerIdMap.err:", err)
 	}
-	ContainerIdServerNameMap.RemoveAll()
+	ContainerMap.RemoveAll()
 	ContainerShortIdServerNameMap.RemoveAll()
 	for _, record := range records {
-		AddContainerIdServerNameMapCache(record.ContainerId, record.ServerName)
+		AddContainerMapCache(record)
 	}
-	log.Println("LoadContainerIdMap.size:", ContainerIdServerNameMap.Size())
+	log.Println("LoadContainerIdMap.size:", ContainerMap.Size())
 }
 
-func AddContainerIdServerNameMapCache(containerId, serverName string) {
-	ContainerIdServerNameMap.Store(containerId, serverName)
-	ContainerShortIdServerNameMap.Store(utils.ContainerShortId(containerId), serverName)
+func AddContainerMapCache(record table.Container) {
+	ContainerMap.Store(record.ContainerId, record)
+	ContainerShortIdServerNameMap.Store(utils.ContainerShortId(record.ContainerId), record.ServerName)
 }
 
-func removeContainerIdServerNameMapCache(containerId string) {
-	ContainerIdServerNameMap.Remove(containerId)
+func removeContainerMapCache(containerId string) {
+	ContainerMap.Remove(containerId)
 	ContainerShortIdServerNameMap.Remove(utils.ContainerShortId(containerId))
 }
 
 func UpdateServerContainer(AppId string, json map[string]interface{}) {
-	Name := json["Name"].(string)
+	ServerName := json["Name"].(string)
 
 	containerMap := map[string]table.Container{}
 	for _, t := range json["containers"].([]interface{}) {
 		v := t.(map[string]interface{})
 		v["AppId"] = AppId
-		v["ServerName"] = Name
+		v["ServerName"] = ServerName
 		v["Update"] = time.Now().Unix()
 		ContainerName := utils.TrimContainerName(v["Names"])
 		v["Name"] = ContainerName
 
-		data.AddReplicas(ContainerName, Name)
+		data.AddReplicas(ContainerName, ServerName)
 
 		var service = table.Service{
 			Name:     ContainerName,
@@ -65,18 +65,18 @@ func UpdateServerContainer(AppId string, json map[string]interface{}) {
 		container.ContainerId = v["Id"].(string)
 		container.Summary = v
 
-		data.AddContainer(container)
-		AddContainerIdServerNameMapCache(container.ContainerId, container.ServerName)
+		data.AddContainer(&container)
+		AddContainerMapCache(container)
 		containerMap[ContainerName] = container
 	}
 
-	dbArr, _ := data.GetContainersByServerName(Name)
+	dbArr, _ := data.GetContainersByServerName(ServerName)
 	for _, container := range dbArr {
 		_, ok := containerMap[container.Name]
 		if !ok {
 			// 如果没有，说明已经删除了
 			data.DelContainer(container)
-			removeContainerIdServerNameMapCache(container.ContainerId)
+			removeContainerMapCache(container.ContainerId)
 		}
 	}
 

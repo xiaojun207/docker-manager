@@ -102,7 +102,10 @@ func agentMsgHandler(wsData []byte, conn *baseWs.Connection) error {
 
 		break
 	case "docker.info":
-
+		d["PrivateIp"] = conn.Headers["PrivateIp"]
+		d["HostIp"] = conn.Headers["HostIp"]
+		d["PublicIp"] = conn.Headers["PublicIp"]
+		DockerReg(d)
 		break
 	case "docker.task.ack":
 		// {"code":code, "msg": err, "taskId":taskId, "resp": resp }

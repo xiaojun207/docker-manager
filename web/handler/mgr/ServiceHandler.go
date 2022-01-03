@@ -28,6 +28,13 @@ func AppGroupList(c *gin.Context) {
 	resp.Resp(c, "100200", "成功", res)
 }
 
+func DeleteGroup(c *gin.Context) {
+	replicas := table.ServiceReplicas{} //注意该结构接受的内容
+	c.BindJSON(&replicas)
+	data.DeleteReplicas(replicas.Id)
+	resp.Resp(c, "100200", "成功", "")
+}
+
 func DeleteService(c *gin.Context) {
 	service := table.Service{} //注意该结构接受的内容
 	c.BindJSON(&service)

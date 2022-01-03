@@ -64,6 +64,14 @@ func (e *SyncMap) ForEach(f func(key, value interface{})) {
 	})
 }
 
+func (e *SyncMap) ForEachInt(f func(key interface{}, value int)) {
+
+	e.Range(func(key, value interface{}) bool {
+		f(key, value.(int))
+		return true
+	})
+}
+
 func (e *SyncMap) ForEachMap(f func(key string, value map[string]interface{})) {
 	e.Range(func(key, value interface{}) bool {
 		f(key.(string), value.(map[string]interface{}))
@@ -126,6 +134,14 @@ func (e *SyncMap) LoadInt(key interface{}) (int, bool) {
 		return val.(int), ok
 	}
 	return 0, ok
+}
+
+func (e *SyncMap) GetInt(key interface{}) int {
+	val, ok := e.Load(key)
+	if ok {
+		return val.(int)
+	}
+	return 0
 }
 
 func (e *SyncMap) StoreInt64(key interface{}, value int64) {
