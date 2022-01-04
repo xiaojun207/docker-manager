@@ -59,7 +59,9 @@ func InitDB(driverName, dataSourceUrl string, useCache bool) *xorm.Engine {
 	if useCache {
 		//DBEngine.SetMapper(core.GonicMapper{})
 		// 启用内存缓存
-		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 1000)
+		//cacheStore, _ := caches.NewLevelDBStore("./db.caches")
+		//cacher := caches.NewLRUCacher(cacheStore, 100000)
+		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), 100000)
 		DBEngine.SetDefaultCacher(cacher)
 		DBEngine.SetDisableGlobalCache(false)
 		log.Println("SetDefaultCacher")
