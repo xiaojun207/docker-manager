@@ -15,7 +15,8 @@ func main() {
 	service.InitTokenHelper()
 	service.LoadWhiteList()
 	service.LoadContainerMap()
-	web.Start("8068", "/dockerMgrApi/")
+
+	web.Start(conf.Port, conf.ContextPath)
 
 	defer data.Close()
 

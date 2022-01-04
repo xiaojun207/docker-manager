@@ -1,0 +1,9 @@
+server:
+  port: 8068
+  contextPath: /dockerMgrApi/
+  consoleCode: false # 控制台验证码开关
+
+db:
+  driverName: sqlite3 # 可选：mysql、sqlite3
+  dataSourceUrl: data/database.db # root:123456@(127.0.0.1:3306)/docker-manager?charset=utf8
+  useCache: false # 是否启用缓存，sqlite下，缓存会容易导致数据库文件锁定

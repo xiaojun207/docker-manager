@@ -47,6 +47,13 @@ dataSourceUrl | no       | /app/data/database.db   | Database connection URL, <b
 useCache      | no       | false                   | Whether to enable local cache. It can be enabled in stand-alone deployment, but not in cluster deployment
 consoleCode   | no       | false                   | Whether to enable the console verification code. When the administrator retrieves the password, please set consolecode = true
 
+or use `docker exec -it ...` go into container，use config file(/app/config.yml).
+
+Parameter priority: 
+```
+ [HardCode] < [ConfigFile(./config.yml)] < [Cmd parameters (or docker -e)]
+```
+
 ## Login account
 Upon initial startup, the program will automatically create an administrator account (admin), a client account (agent, password), and a user name and password, which will be printed into the log output. (only displayed once, please make a backup)
 
@@ -151,6 +158,13 @@ driveName     | 否    | sqlite3                 | 也可以是mysql，如果是
 dataSourceUrl | 否    | /app/data/database.db   | 数据库连接url<br>，当driveName为sqlite3时，dataSourceUrl默认为：data/database.db（即/app/data/database.db），<br>当driveName为mysql时，dataSourceUrl则必填，例如：-e dataSourceUrl='root:Abc123@(dbhost:3306)/dbname?charset=utf8'
 useCache      | 否    | false                   | 是否启用本地缓存，单机部署的时候启用，集群部署请不要启用
 consoleCode   | 否    | false                   | 是否启用控制台验证码，管理员找回密码时，请设置consoleCode=true
+
+也可以进入到容器内部，利用配置文件/app/config.yml。
+
+配置参数优先级：
+```
+ [代码] < [配置文件(./config.yml)] < [命令行参数 (或 docker -e)]
+```
 
 ## 登录账号
 初次启动，程序会自动创建管理员账号(admin)、客户端账号(agent)，用户名密码，会打印到日志输出中。（仅显示一次，请做好备份）
