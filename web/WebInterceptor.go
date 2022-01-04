@@ -12,7 +12,7 @@ import (
 func WhiteIpInterceptor(c *gin.Context) {
 	reqIP := utils.GetRemoteIP(c)
 	if !service.IsWhiteIp(reqIP) {
-		log.Println("禁止访问,IP:", reqIP)
+		service.AddForbiddenLog(reqIP)
 		resp.Resp(c, "403", "禁止访问", "")
 		c.Status(403)
 		c.Abort()
