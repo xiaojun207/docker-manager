@@ -2,6 +2,7 @@ package base
 
 import (
 	"docker-manager/data/base"
+	"docker-manager/service"
 	"docker-manager/web/resp"
 	_ "embed"
 	"github.com/gin-gonic/gin"
@@ -21,4 +22,8 @@ func DBTraceHandler(c *gin.Context) {
 		"SqlMap":    base.DBTracingHook.SqlMap.ToStrMap(),
 	}
 	resp.Resp(c, "100200", "成功", data)
+}
+
+func ForbiddenLogHandler(c *gin.Context) {
+	resp.Resp(c, "100200", "成功", service.ForbiddenLogMap())
 }
