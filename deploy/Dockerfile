@@ -32,9 +32,9 @@ COPY --from=build /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 COPY --from=build /go/release/App /app/
 COPY --from=build /go/release/views /app/views
 COPY --from=build /go/release/deploy/entrypoint.sh /app/
-COPY --from=build /go/release/deploy/config.yml /app/
-COPY --from=build /go/release/deploy/config-example-mysql.yml /app/
-COPY --from=build /go/release/deploy/config-example-sqlite3.yml /app/
+COPY --from=build /go/release/config.yml /app/
+COPY --from=build /go/release/config-example-mysql.yml /app/
+COPY --from=build /go/release/config-example-sqlite3.yml /app/
 
 ENV driverName=""\
     useCache=""\
