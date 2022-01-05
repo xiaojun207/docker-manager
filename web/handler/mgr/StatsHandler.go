@@ -2,34 +2,24 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/model"
 	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"log"
-	"strconv"
 )
 
 func GetStatsList(c *gin.Context) {
 	serverNames := c.QueryArray("serverNames[]")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	Follow := c.Query("Follow")
+	page := model.GetPage(c)
 	log.Println("serverNames:", serverNames, ",ContainerNames:", ContainerNames, ",Follow:", Follow)
 
 	var res []map[string]interface{}
-	statss, _ := data.GetContainerStatsList(serverNames)
+	statss, _ := data.GetContainerStatsList(Follow, serverNames, ContainerNames, &page)
 	for _, stats := range statss {
-		c_name := utils.TrimContainerName(stats.Name)
-		if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, c_name) {
-			continue
-		}
-		if len(Follow) > 0 {
-			f, _ := strconv.ParseBool(Follow)
-			if f != stats.Follow {
-				continue
-			}
-		}
-
 		res = append(res, map[string]interface{}{
 			"Name":               stats.Name,
 			"ServerName":         stats.ServerName,
@@ -40,7 +30,10 @@ func GetStatsList(c *gin.Context) {
 			"ContainerId":        stats.ContainerId,
 		})
 	}
-	resp.Resp(c, "100200", "成功", res)
+	resp.Resp(c, "100200", "成功", gin.H{
+		"list": res,
+		"page": page,
+	})
 }
 
 func GetStats(c *gin.Context) {

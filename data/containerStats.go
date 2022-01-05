@@ -3,7 +3,9 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
+	"strconv"
 )
 
 func AddContainerStats(e table.ContainerStats) (err error) {
@@ -45,14 +47,20 @@ func GetContainerStatss(ContainerId string) (record table.ContainerStats, err er
 	return
 }
 
-func GetContainerStatsList(serverNames []string) (record []table.ContainerStats, err error) {
+func GetContainerStatsList(Follow string, serverNames, containerNames []string, page *model.Page) (record []table.ContainerStats, err error) {
 	session := base.DBEngine.Table("container_stats")
+	if Follow != "" {
+		f, _ := strconv.ParseBool(Follow)
+		session.Where("follow=?", f)
+	}
 	if len(serverNames) > 0 {
-		sql, params := base.ArrayParams(serverNames)
-		session.Where("server_name in ("+sql+")", params...)
+		base.SetArrayParams(session, "server_name", serverNames)
+	}
+	if len(containerNames) > 0 {
+		base.SetArrayParams(session, "name", containerNames)
 	}
 
-	err = session.Find(&record)
+	err = page.FindPage(session, &record)
 	return
 }
 
