@@ -2,6 +2,7 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/model"
 	"docker-manager/service"
 	"docker-manager/web/resp"
 	"docker-manager/web/ws"
@@ -11,17 +12,15 @@ import (
 )
 
 func GetFollowLogList(c *gin.Context) {
-	statsList, _ := data.GetContainerStatsList([]string{})
+	statsList, _ := data.GetContainerStatsList("true", []string{}, []string{}, &model.Page{})
 
 	var res []map[string]interface{}
 	for _, stats := range statsList {
-		if stats.Follow {
-			res = append(res, map[string]interface{}{
-				"ID":         stats.ContainerId,
-				"Name":       stats.Name,
-				"ServerName": stats.ServerName,
-			})
-		}
+		res = append(res, map[string]interface{}{
+			"ID":         stats.ContainerId,
+			"Name":       stats.Name,
+			"ServerName": stats.ServerName,
+		})
 	}
 	resp.Resp(c, "100200", "成功", res)
 }

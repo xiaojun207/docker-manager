@@ -46,8 +46,7 @@ func GetImageSize() int64 {
 func GetImages(serverNames []string, tagName string, page model.Page) (record []table.Image, tatol int64, err error) {
 	session := base.DBEngine.Table("image")
 	if len(serverNames) > 0 {
-		sql, params := base.ArrayParams(serverNames)
-		session.Where("server_name in ("+sql+")", params...)
+		base.SetArrayParams(session, "server_name", serverNames)
 	}
 
 	if tagName != "" {

@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xiaojun207/go-base-utils/utils"
-	"reflect"
 	"xorm.io/xorm"
 )
 
@@ -24,7 +23,7 @@ func (e *Page) FindPage(session *xorm.Session, record interface{}) (err error) {
 }
 
 func (e *Page) SetPageSql(session *xorm.Session) {
-	if e.IsUse() && !reflect.ValueOf(e).IsNil() {
+	if e.IsUse() {
 		session.Limit(e.PageSize, (e.CurrentPage-1)*e.PageSize)
 	}
 }

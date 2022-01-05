@@ -186,3 +186,9 @@ func ArrayParams(s []string) (sql string, params []interface{}) {
 	}
 	return sql, params
 }
+
+func SetArrayParams(session *xorm.Session, field string, params []string) {
+	sql, arrParams := ArrayParams(params)
+	session.Where(field+" in ("+sql+")", arrParams...)
+	return
+}

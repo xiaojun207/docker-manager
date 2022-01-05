@@ -48,12 +48,10 @@ func GetContainers(state string, serverNames, containerNames []string, page *mod
 		session.Where("state=?", state)
 	}
 	if len(serverNames) > 0 {
-		sql, params := base.ArrayParams(serverNames)
-		session.Where("server_name in ("+sql+")", params...)
+		base.SetArrayParams(session, "server_name", serverNames)
 	}
 	if len(containerNames) > 0 {
-		sql, params := base.ArrayParams(containerNames)
-		session.Where("name in ("+sql+")", params...)
+		base.SetArrayParams(session, "name", containerNames)
 	}
 
 	err = page.FindPage(session, &record)

@@ -3,6 +3,7 @@ package service
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/utils"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 )
@@ -39,7 +40,7 @@ func UpdateStats(AppId string, json map[string]interface{}) {
 		statsMap[stats.ContainerId] = stats
 	}
 
-	dbArr, _ := data.GetContainerStatsList([]string{Name})
+	dbArr, _ := data.GetContainerStatsList("", []string{Name}, []string{}, &model.Page{})
 	for _, stats := range dbArr {
 		_, ok := statsMap[stats.ContainerId]
 		if !ok {
