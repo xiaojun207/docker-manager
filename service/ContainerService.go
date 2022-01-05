@@ -14,7 +14,7 @@ var ContainerMap model.SyncMap
 var ContainerShortIdServerNameMap model.SyncMap
 
 func LoadContainerMap() {
-	records, err := data.GetContainers()
+	records, err := data.GetContainers("", nil, nil, &model.Page{})
 	if err != nil {
 		log.Println("LoadContainerIdMap.err:", err)
 	}

@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
 )
 
@@ -46,7 +47,12 @@ func GetTaskSize() int64 {
 	return count
 }
 
-func GetTasks() (record []table.Task, err error) {
-	err = base.DBEngine.Table("task").OrderBy("id desc").Find(&record)
+func GetTasks(page *model.Page) (record []table.Task, err error) {
+	session := base.DBEngine.Table("task").OrderBy("id desc")
+	page.SetPageSql(session)
+	page.Total, err = session.FindAndCount(&record)
+	if err != nil {
+		log.Println("GetTasks.FindAndCount:", err)
+	}
 	return
 }

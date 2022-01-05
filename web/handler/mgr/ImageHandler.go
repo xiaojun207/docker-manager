@@ -3,7 +3,6 @@ package mgr
 import (
 	"docker-manager/data"
 	"docker-manager/model"
-	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -23,11 +22,6 @@ func ImageList(c *gin.Context) {
 	}
 	var list []map[string]interface{}
 	for _, image := range imageList {
-
-		if len(serverNames) > 0 && !utils.StrInArr(serverNames, image.ServerName) {
-			continue
-		}
-
 		list = append(list, map[string]interface{}{
 			"ServerName":  image.ServerName,
 			"ImageId":     image.ImageId,
