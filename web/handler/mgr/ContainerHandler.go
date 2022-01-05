@@ -2,8 +2,8 @@ package mgr
 
 import (
 	"docker-manager/data"
+	"docker-manager/model"
 	"docker-manager/service"
-	"docker-manager/utils"
 	"docker-manager/web/resp"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
@@ -19,27 +19,20 @@ func UpdateContainerList(c *gin.Context) {
 }
 
 func GetContainers(c *gin.Context) {
-	serverNames := strings.Join(c.QueryArray("ServerNames[]"), ",")
+	serverNames := c.QueryArray("ServerNames[]")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	state := c.Query("state")
-	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
-	res := []map[string]interface{}{}
+	page := model.GetPage(c)
 
-	containers, err := data.GetContainers()
+	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
+
+	containers, err := data.GetContainers(state, serverNames, ContainerNames, &page)
 	if err != nil {
 		log.Println("GetContainers.err:", err)
 	}
 
+	var res []map[string]interface{}
 	for _, container := range containers {
-		if state != "" && container.State != state {
-			continue
-		}
-		if len(serverNames) > 0 && !strings.Contains(serverNames, container.ServerName) {
-			continue
-		}
-		if len(ContainerNames) > 0 && !utils.StrInArr(ContainerNames, container.Name) {
-			continue
-		}
 		res = append(res, map[string]interface{}{
 			"ServerName":  container.ServerName,
 			"ContainerId": container.ContainerId,
@@ -51,7 +44,10 @@ func GetContainers(c *gin.Context) {
 			"Created":     container.Created,
 		})
 	}
-	resp.Resp(c, "100200", "成功", res)
+	resp.Resp(c, "100200", "成功", gin.H{
+		"list": res,
+		"page": page,
+	})
 }
 
 func GetContainer(c *gin.Context) {
@@ -67,7 +63,7 @@ func GetContainerInfos(c *gin.Context) {
 	state := c.Query("state")
 	log.Println("serverName:", serverNames, ",state:", state)
 
-	containers, err := data.GetContainers()
+	containers, err := data.GetContainers("", nil, nil, &model.Page{})
 	if err != nil {
 		log.Println("GetContainerInfos.err:", err)
 	} else {

@@ -4,6 +4,7 @@ import (
 	"docker-manager/data"
 	"docker-manager/data/table"
 	"docker-manager/dto"
+	"docker-manager/model"
 	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/handler/mgr/reqDto"
@@ -107,6 +108,10 @@ func PublishHandler(c *gin.Context) {
 }
 
 func GetTasks(c *gin.Context) {
-	tmps, _ := data.GetTasks()
-	resp.Resp(c, "100200", "成功", tmps)
+	page := model.GetPage(c)
+	list, _ := data.GetTasks(&page)
+	resp.Resp(c, "100200", "成功", gin.H{
+		"list": list,
+		"page": page,
+	})
 }

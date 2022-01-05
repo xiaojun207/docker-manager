@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
@@ -41,8 +42,24 @@ func GetContainer(ContainerId string) (record table.Container, err error) {
 	return
 }
 
-func GetContainers() (record []table.Container, err error) {
-	err = base.DBEngine.Table("container").OrderBy("server_name asc,name asc").Find(&record)
+func GetContainers(state string, serverNames, containerNames []string, page *model.Page) (record []table.Container, err error) {
+	session := base.DBEngine.Table("container").OrderBy("server_name asc,name asc")
+	if state != "" {
+		session.Where("state=?", state)
+	}
+	if len(serverNames) > 0 {
+		sql, params := base.ArrayParams(serverNames)
+		session.Where("server_name in ("+sql+")", params...)
+	}
+	if len(containerNames) > 0 {
+		sql, params := base.ArrayParams(containerNames)
+		session.Where("name in ("+sql+")", params...)
+	}
+
+	err = page.FindPage(session, &record)
+	if err != nil {
+		log.Println("GetTasks.FindAndCount:", err)
+	}
 	return
 }
 
