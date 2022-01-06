@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
 )
 
@@ -27,8 +28,9 @@ func DeleteService(serviceName string) (err error) {
 	return
 }
 
-func GetServices() (record []table.Service, err error) {
-	err = base.DBEngine.Table("service").Find(&record)
+func GetServices(page *model.Page) (record []table.Service, err error) {
+	session := base.DBEngine.Table("service")
+	page.FindPage(session, &record)
 	return
 }
 
