@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
 )
 
@@ -41,7 +42,8 @@ func GetServiceReplicasSize() int64 {
 	return count
 }
 
-func GetServiceReplicas() (record []table.ServiceReplicas, err error) {
-	err = base.DBEngine.Table("service_replicas").Find(&record)
+func GetServiceReplicas(page *model.Page) (record []table.ServiceReplicas, err error) {
+	session := base.DBEngine.Table("service_replicas")
+	page.FindPage(session, &record)
 	return
 }

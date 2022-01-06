@@ -3,6 +3,7 @@ package mgr
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/service"
 	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
@@ -11,21 +12,29 @@ import (
 )
 
 func ServiceList(c *gin.Context) {
-	res, err := data.GetServices()
+	page := model.GetPage(c)
+	res, err := data.GetServices(&page)
 	if err != nil {
 		resp.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	resp.Resp(c, "100200", "成功", res)
+	resp.Resp(c, "100200", "成功", gin.H{
+		"list": res,
+		"page": page,
+	})
 }
 
 func AppGroupList(c *gin.Context) {
-	res, err := data.GetServiceReplicas()
+	page := model.GetPage(c)
+	res, err := data.GetServiceReplicas(&page)
 	if err != nil {
 		resp.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	resp.Resp(c, "100200", "成功", res)
+	resp.Resp(c, "100200", "成功", gin.H{
+		"list": res,
+		"page": page,
+	})
 }
 
 func DeleteGroup(c *gin.Context) {
