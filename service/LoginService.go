@@ -128,3 +128,7 @@ func LoginAgent(username, agentPassword string) (string, error) {
 	}
 	return "", errors.New("用户密码错误")
 }
+
+func Logout(token string) {
+
+}

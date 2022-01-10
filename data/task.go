@@ -56,3 +56,9 @@ func GetTasks(page *model.Page) (record []table.Task, err error) {
 	}
 	return
 }
+
+func DelTask(id int) (err error) {
+	_, err = base.DBEngine.Exec("delete from task where id=?", id)
+	base.DBEngine.ClearCache(new(table.Task))
+	return
+}

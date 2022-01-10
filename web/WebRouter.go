@@ -6,32 +6,48 @@ import (
 	"docker-manager/web/handler/mgr"
 	"docker-manager/web/handler/user"
 	"docker-manager/web/ws"
-	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
+	"net/http"
 )
 
-// WsRouter 路由，把URL和执行方法连接起来
-var WsRouter = func(router *gin.RouterGroup) {
-	router.GET("/agent/ws", AgentTokenInterceptor, ws.WSAgentHandler)
-	router.GET("/ws/log", AuthInterceptor, ws.WSManagerHandler)
-	router.GET("/ws/exec", AuthInterceptor, ws.WSManagerExecHandler)
+var ApiRouter = func(router *boot.WebRouter) {
+	router.Use(WhiteIpInterceptor)
+
+	// base
+	baseRouter(router)
+	wsRouter(router)
+	agentRouter(router.Group("/agent"))
+	mgrRouter(router.Group("/mgr"))
+	userRouter(router.Group("/user"))
 }
 
-// BaseRoute 基础路由
-var BaseRouter = func(router *gin.RouterGroup) {
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+var StaticRouter = func(router *boot.WebRouter) {
+	router.StaticFile("/", "./views/index.html")
+	router.StaticFile("/favicon.ico", "./views/favicon.ico")
+	router.StaticFS("/static/", http.Dir("./views/static/"))
+}
+
+/////////////
+
+var baseRouter = func(router *boot.WebRouter) {
 	router.GET("/base/version", base.VersionHandler)
 	router.GET("/base/Textversion", base.VersionTextHandler)
 	router.POST("/base/sendCode", base.SendCodeHandler)
 	router.GET("/base/dbtrace", AuthInterceptor, base.DBTraceHandler)
 	router.GET("/base/forbidden/log", AuthInterceptor, base.ForbiddenLogHandler)
-
-	router.Use(WhiteIpInterceptor)
-
-	AgentRouter(router.Group("/agent"))
-	MgrRouter(router.Group("/mgr"))
-	UserRouter(router.Group("/user"))
+	router.GET("/test", base.TestHandler)
 }
 
-var UserRouter = func(router *gin.RouterGroup) {
+// WsRouter 路由，把URL和执行方法连接起来
+var wsRouter = func(router *boot.WebRouter) {
+	router.GET("/agent/ws", AgentTokenInterceptor, ws.WSAgentHandler)
+	router.GET("/ws/log", AuthInterceptor, ws.WSManagerHandler)
+	router.GET("/ws/exec", AuthInterceptor, ws.WSManagerExecHandler)
+}
+
+var userRouter = func(router *boot.WebRouter) {
 	router.POST("/login", user.LoginHandler)
 	router.POST("/logout", user.LogoutHandler)
 	router.POST("/forgetPassword", user.ForgetPasswordHandler)
@@ -45,7 +61,7 @@ var UserRouter = func(router *gin.RouterGroup) {
 	router.POST("/deleteUser", AuthInterceptor, user.DeleteUserHandler)
 }
 
-var AgentRouter = func(router *gin.RouterGroup) {
+var agentRouter = func(router *boot.WebRouter) {
 	//router.Use(AuthInterceptor)
 	router.POST("/reg", AgentTokenInterceptor, agent.RegDockerHandler)
 	router.POST("/containers", AgentTokenInterceptor, agent.ContainersHandler)
@@ -57,7 +73,7 @@ var AgentRouter = func(router *gin.RouterGroup) {
 	router.POST("/login", agent.LoginHandler)
 }
 
-var MgrRouter = func(router *gin.RouterGroup) {
+var mgrRouter = func(router *boot.WebRouter) {
 
 	router.GET("/server/list", AuthInterceptor, mgr.GetServers)
 	router.GET("/server/detail", AuthInterceptor, mgr.GetServer)
@@ -98,6 +114,7 @@ var MgrRouter = func(router *gin.RouterGroup) {
 	router.POST("/publish", AuthInterceptor, mgr.PublishHandler)
 	router.POST("/publish/yaml", AuthInterceptor, mgr.PublishYamlHandler)
 	router.GET("/tasks", AuthInterceptor, mgr.GetTasks)
+	router.POST("/task/del", AuthInterceptor, mgr.DelTask)
 	router.GET("/cmd", AuthInterceptor, mgr.ContainerCmd)
 
 	router.GET("/config", AuthInterceptor, mgr.GetConfig)

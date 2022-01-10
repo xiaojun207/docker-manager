@@ -25,5 +25,6 @@ func LoginHandler(c *gin.Context) {
 }
 
 func LogoutHandler(c *gin.Context) {
+	service.Logout("")
 	resp.Resp(c, "100200", "成功", "")
 }
