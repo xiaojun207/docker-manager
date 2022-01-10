@@ -115,3 +115,11 @@ func GetTasks(c *gin.Context) {
 		"page": page,
 	})
 }
+
+func DelTask(c *gin.Context, req struct {
+	Id int `json:"id"`
+}) {
+	log.Println("DelTask.req.id:", req.Id)
+	data.DelTask(req.Id)
+	resp.Resp(c, "100200", "成功", "")
+}

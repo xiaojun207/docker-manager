@@ -4,7 +4,9 @@ import (
 	"docker-manager/service"
 	"docker-manager/web/resp"
 	_ "embed"
+	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"net/http"
 	"strings"
@@ -29,4 +31,17 @@ func VersionHandler(c *gin.Context) {
 
 func VersionTextHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, []string{"1.2.3", "1.1.1"})
+}
+
+func TestHandler(c *gin.Context) interface{} {
+	key := c.Query("key")
+	if key == "1" {
+		return boot.NewWebError("100103", "错误1")
+	} else if key == "2" {
+		return errors.New("错误2")
+	} else if key == "3" {
+		return boot.ApiResp{"100103", "字段校验错误", "错误3"}
+	}
+
+	return "this is a test!"
 }

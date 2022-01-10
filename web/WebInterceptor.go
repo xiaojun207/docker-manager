@@ -54,19 +54,22 @@ func ApiTokenInterceptor(c *gin.Context) {
 	}
 }
 
-func AuthInterceptor(c *gin.Context) {
+func getToken(c *gin.Context) string {
 	token := c.GetHeader("authorization")
 	if token == "" {
-		_token, err := c.Request.Cookie("c-token")
+		cookie, err := c.Request.Cookie("c-token")
 		if err != nil {
-			reqIP := utils.GetRemoteIP(c)
-			log.Println("AuthInterceptor.err", err, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
-			resp.Resp(c, "105101", "账户未登录", "")
-			c.Abort()
-			return
+			log.Println("getToken.err:", err)
 		}
-		token = _token.Value
+		if cookie != nil {
+			token = cookie.Value
+		}
 	}
+	return token
+}
+
+func AuthInterceptor(c *gin.Context) {
+	token := getToken(c)
 
 	if token == "" {
 		resp.Resp(c, "105101", "账户未登录", "")

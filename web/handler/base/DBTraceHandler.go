@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// GET /dbtrace
 func DBTraceHandler(c *gin.Context) {
 	log.Println("DBTraceHandler")
 	timeLen := time.Now().Unix() - base.DBTracingHook.StartTime.Unix()
