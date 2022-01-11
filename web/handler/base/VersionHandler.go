@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xiaojun207/gin-boot/boot"
 	"log"
-	"net/http"
 	"strings"
 )
 
@@ -19,17 +18,17 @@ func init() {
 	log.Println("Version:", Version)
 }
 
-func VersionHandler(c *gin.Context) {
+func VersionHandler(c *gin.Context) interface{} {
 	latest := service.GetLatestTag()
 	log.Println("Version Handler, current:", Version, ",latest:", latest)
-	boot.Resp(c, "100200", "成功", gin.H{
+	return gin.H{
 		"current": Version,
 		"latest":  latest,
-	})
+	}
 }
 
-func VersionTextHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, []string{"1.2.3", "1.1.1"})
+func VersionTextHandler(c *gin.Context) interface{} {
+	return []string{"1.2.3", "1.1.1"}
 }
 
 func TestHandler(c *gin.Context) interface{} {

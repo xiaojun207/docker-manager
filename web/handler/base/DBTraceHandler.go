@@ -5,13 +5,12 @@ import (
 	"docker-manager/service"
 	_ "embed"
 	"github.com/gin-gonic/gin"
-	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"time"
 )
 
 // GET /dbtrace
-func DBTraceHandler(c *gin.Context) {
+func DBTraceHandler(c *gin.Context) interface{} {
 	log.Println("DBTraceHandler")
 	timeLen := time.Now().Unix() - base.DBTracingHook.StartTime.Unix()
 
@@ -22,9 +21,9 @@ func DBTraceHandler(c *gin.Context) {
 		"per":       base.DBTracingHook.BeforeNum / timeLen,
 		"SqlMap":    base.DBTracingHook.SqlMap.ToStrMap(),
 	}
-	boot.Resp(c, "100200", "成功", data)
+	return data
 }
 
-func ForbiddenLogHandler(c *gin.Context) {
-	boot.Resp(c, "100200", "成功", service.ForbiddenLogMap())
+func ForbiddenLogHandler(c *gin.Context) interface{} {
+	return service.ForbiddenLogMap()
 }

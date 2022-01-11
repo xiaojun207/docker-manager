@@ -10,7 +10,7 @@ import (
 	"log"
 )
 
-func SendCodeHandler(c *gin.Context) {
+func SendCodeHandler(c *gin.Context) interface{} {
 	json := make(map[string]interface{})
 	c.BindJSON(&json)
 	log.Println("SendCodeHandler:", json)
@@ -20,8 +20,7 @@ func SendCodeHandler(c *gin.Context) {
 
 	user, err := service.FindUserByUsername(username)
 	if err != nil {
-		boot.Resp(c, "100100", "用户名错误", "")
-		return
+		return boot.NewWebError("100100", "用户名错误")
 	}
 	code := service.SendCode(user.Id, codeType, key)
 	if utils.StrToBool(conf.ConsoleCode) {
@@ -29,5 +28,5 @@ func SendCodeHandler(c *gin.Context) {
 	} else {
 		log.Println("SendCode, username:", username, ",code:", "-there is no code-")
 	}
-	boot.Resp(c, "100200", "成功", "")
+	return nil
 }
