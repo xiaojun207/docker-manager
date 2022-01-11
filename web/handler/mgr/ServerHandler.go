@@ -3,16 +3,16 @@ package mgr
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
-	"docker-manager/web/resp"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 )
 
 func GetServers(c *gin.Context) {
 	servers, err := data.GetServers()
 
 	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
+		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
 	for i, server := range servers {
@@ -29,7 +29,7 @@ func GetServers(c *gin.Context) {
 		servers = []table.Server{}
 	}
 
-	resp.Resp(c, "100200", "成功", servers)
+	boot.Resp(c, "100200", "成功", servers)
 }
 
 func GetServer(c *gin.Context) {
@@ -37,10 +37,10 @@ func GetServer(c *gin.Context) {
 
 	server, err := data.GetServer(ServerName)
 	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
+		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	resp.Resp(c, "100200", "成功", server)
+	boot.Resp(c, "100200", "成功", server)
 }
 
 func DeleteServer(c *gin.Context) {
@@ -51,18 +51,18 @@ func DeleteServer(c *gin.Context) {
 
 	err := data.DeleteServer(ServerName)
 	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
+		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func GetServerNames(c *gin.Context) {
 	res, err := data.GetServersName()
 
 	if err != nil {
-		resp.Resp(c, "100100", "请求异常", err.Error())
+		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	resp.Resp(c, "100200", "成功", res)
+	boot.Resp(c, "100200", "成功", res)
 }

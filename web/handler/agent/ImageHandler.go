@@ -3,8 +3,8 @@ package agent
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 )
 
@@ -25,7 +25,7 @@ func ImagesHandler(c *gin.Context) {
 		data.AddImage(i)
 	}
 
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"id": id,
 	})
 }

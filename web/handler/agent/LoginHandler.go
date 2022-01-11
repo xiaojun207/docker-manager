@@ -2,8 +2,8 @@ package agent
 
 import (
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
@@ -20,8 +20,8 @@ func LoginHandler(c *gin.Context) {
 	token, err := service.LoginAgent(username, password)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", token)
+	boot.Resp(c, "100200", "成功", token)
 }

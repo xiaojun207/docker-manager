@@ -4,10 +4,10 @@ import (
 	"docker-manager/data"
 	"docker-manager/model"
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"strings"
 )
@@ -15,7 +15,7 @@ import (
 func UpdateContainerList(c *gin.Context) {
 	ch := "docker.container.list"
 	service.SendToAllServer(ch, map[string]interface{}{})
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func GetContainers(c *gin.Context) {
@@ -44,7 +44,7 @@ func GetContainers(c *gin.Context) {
 			"Created":     container.Created,
 		})
 	}
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"list": res,
 		"page": page,
 	})
@@ -54,7 +54,7 @@ func GetContainer(c *gin.Context) {
 	ContainerId := c.Query("ContainerId")
 	container, err := data.GetContainer(ContainerId)
 	log.Println("GetContainers.err:", err)
-	resp.Resp(c, "100200", "成功", container)
+	boot.Resp(c, "100200", "成功", container)
 }
 
 // info,服务和容器基本信息
@@ -105,7 +105,7 @@ func GetContainerInfos(c *gin.Context) {
 		res = append(res, server)
 	}
 
-	resp.Resp(c, "100200", "成功", res)
+	boot.Resp(c, "100200", "成功", res)
 }
 
 func ContainerCmd(c *gin.Context) {
@@ -120,8 +120,8 @@ func ContainerCmd(c *gin.Context) {
 	err := ws.AgentWsConnectGroup.Push(serverName, "base.cmd", param)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", "成功", err)
+		boot.Resp(c, "100100", "成功", err)
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }

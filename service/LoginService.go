@@ -6,6 +6,7 @@ import (
 	"docker-manager/model"
 	"docker-manager/utils"
 	"errors"
+	"github.com/gin-gonic/gin"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"strconv"
@@ -49,6 +50,20 @@ const RSAPrivateKey = "-----BEGIN RSA Private Key-----\n" +
 	"HfR5qh2zSzOI3Lam+jxxb950CfNQP5NfMAaUjDMJZ37gVtd3oLIJbVXqhYXIzl6J\n" +
 	"/ieVtMY+jZ4liFSesJItdBBidEW/Dv46kFPtjAqP/Hd3TtKMuT4S\n" +
 	"-----END RSA Private Key-----"
+
+func GetAuthorization(c *gin.Context) string {
+	token := c.GetHeader("authorization")
+	if token == "" {
+		cookie, err := c.Request.Cookie("c-token")
+		if err != nil {
+			log.Println("getToken.err:", err)
+		}
+		if cookie != nil {
+			token = cookie.Value
+		}
+	}
+	return token
+}
 
 /**
 this is a sample login
@@ -129,6 +144,7 @@ func LoginAgent(username, agentPassword string) (string, error) {
 	return "", errors.New("用户密码错误")
 }
 
-func Logout(token string) {
-
+func Logout(c *gin.Context) {
+	token := GetAuthorization(c)
+	utils.RemoveToken(token)
 }

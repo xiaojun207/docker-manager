@@ -3,14 +3,14 @@ package user
 import (
 	"docker-manager/data"
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
 func UserListHandler(c *gin.Context) {
 	users, _ := service.FindUsers()
-	resp.Resp(c, "100200", "成功", users)
+	boot.Resp(c, "100200", "成功", users)
 }
 
 func UserInfoHandler(c *gin.Context) {
@@ -18,7 +18,7 @@ func UserInfoHandler(c *gin.Context) {
 	user, err := service.FindUser(uid)
 	if err != nil {
 		log.Println("UserInfoHandler.err:", err)
-		resp.Resp(c, "103100", "获取用户信息错误", "")
+		boot.Resp(c, "103100", "获取用户信息错误", "")
 		return
 	}
 	info := map[string]interface{}{
@@ -27,7 +27,7 @@ func UserInfoHandler(c *gin.Context) {
 		"avatar":       "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 		"name":         user.Username,
 	}
-	resp.Resp(c, "100200", "成功", info)
+	boot.Resp(c, "100200", "成功", info)
 }
 
 func AddUserHandler(c *gin.Context) {
@@ -45,10 +45,10 @@ func AddUserHandler(c *gin.Context) {
 	err := service.AddUser(nickname, username, mobile, email, password, role)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func DeleteUserHandler(c *gin.Context) {
@@ -60,10 +60,10 @@ func DeleteUserHandler(c *gin.Context) {
 	err := data.DeleteUser(uid)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func ChangeStatusHandler(c *gin.Context) {
@@ -76,8 +76,8 @@ func ChangeStatusHandler(c *gin.Context) {
 	err := service.ChangeStatus(username, int(status))
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }

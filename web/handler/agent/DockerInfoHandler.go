@@ -3,8 +3,8 @@ package agent
 import (
 	"docker-manager/service"
 	"docker-manager/utils"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
@@ -25,7 +25,7 @@ func RegDockerHandler(c *gin.Context) {
 		log.Println("add server.err:", err, " Name:", Name)
 	}
 
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"name": Name,
 		"id":   id,
 	})

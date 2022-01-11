@@ -2,8 +2,8 @@ package user
 
 import (
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
@@ -18,10 +18,10 @@ func AlterPasswordHandler(c *gin.Context) {
 	err := service.AlterPassword(uid, oldPassword, newPassword)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func ForgetPasswordHandler(c *gin.Context) {
@@ -31,22 +31,22 @@ func ForgetPasswordHandler(c *gin.Context) {
 	code := json["code"].(string)
 	user, err := service.FindUserByUsername(username)
 	if err != nil {
-		resp.Resp(c, "100100", "验证码错误", "")
+		boot.Resp(c, "100100", "验证码错误", "")
 		return
 	}
 	uid := user.Id
 	if !service.CheckCode(uid, code) {
-		resp.Resp(c, "100100", "验证码错误", "")
+		boot.Resp(c, "100100", "验证码错误", "")
 		return
 	}
 
 	newPassword, err := service.ResetPassword(username)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", newPassword)
+	boot.Resp(c, "100200", "成功", newPassword)
 }
 
 func ResetPasswordHandler(c *gin.Context) {
@@ -58,8 +58,8 @@ func ResetPasswordHandler(c *gin.Context) {
 	newPassword, err := service.ResetPassword(username)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", newPassword)
+	boot.Resp(c, "100200", "成功", newPassword)
 }

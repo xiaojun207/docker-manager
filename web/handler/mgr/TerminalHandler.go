@@ -3,9 +3,9 @@ package mgr
 import (
 	"docker-manager/data"
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
@@ -22,5 +22,5 @@ func ExecClose(c *gin.Context) {
 	ch := "docker.container.log.follow.close"
 	err := service.SaveAndSendTask(serverName, ch, param)
 	log.Println("err:", err)
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }

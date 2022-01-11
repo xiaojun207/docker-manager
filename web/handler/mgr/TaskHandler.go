@@ -8,9 +8,9 @@ import (
 	"docker-manager/service"
 	"docker-manager/utils"
 	"docker-manager/web/handler/mgr/reqDto"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
+	"github.com/xiaojun207/gin-boot/boot"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
@@ -36,11 +36,11 @@ func ContainerOperatorHandler(c *gin.Context) {
 		err := service.SaveAndSendTask(serverName, ch, param)
 		if err != nil {
 			log.Println(err)
-			resp.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
+			boot.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
 			return
 		}
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func ImageCmd(c *gin.Context) {
@@ -60,10 +60,10 @@ func ImageCmd(c *gin.Context) {
 	err := service.SaveAndSendTask(serverName, ch, param)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
+		boot.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func RePublishHandler(c *gin.Context) {
@@ -79,7 +79,7 @@ func PublishYamlHandler(c *gin.Context) {
 	c.BindJSON(&req)
 	//log.Println(req.ServerNames, req.Yaml)
 	service.PublishYaml(req.ServerNames, req.Yaml)
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func PublishHandler(c *gin.Context) {
@@ -101,16 +101,16 @@ func PublishHandler(c *gin.Context) {
 	err := service.PublishAppTask(serviceInfo.ServerNames, s)
 	if err != nil {
 		log.Println(err)
-		resp.Resp(c, "100100", err.Error(), "")
+		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func GetTasks(c *gin.Context) {
 	page := model.GetPage(c)
 	list, _ := data.GetTasks(&page)
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"list": list,
 		"page": page,
 	})
@@ -121,5 +121,5 @@ func DelTask(c *gin.Context, req struct {
 }) {
 	log.Println("DelTask.req.id:", req.Id)
 	data.DelTask(req.Id)
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }

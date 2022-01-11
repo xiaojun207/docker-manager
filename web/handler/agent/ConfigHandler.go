@@ -2,10 +2,10 @@ package agent
 
 import (
 	"docker-manager/data"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 )
 
 func GetConfig(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.GetAgentConfig())
+	boot.Resp(c, "100200", "成功", data.GetAgentConfig())
 }

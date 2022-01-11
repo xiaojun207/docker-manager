@@ -2,7 +2,6 @@ package base
 
 import (
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	_ "embed"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -23,7 +22,7 @@ func init() {
 func VersionHandler(c *gin.Context) {
 	latest := service.GetLatestTag()
 	log.Println("Version Handler, current:", Version, ",latest:", latest)
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"current": Version,
 		"latest":  latest,
 	})

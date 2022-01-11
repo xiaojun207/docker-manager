@@ -4,8 +4,8 @@ import (
 	"docker-manager/data"
 	"docker-manager/data/table"
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
@@ -17,7 +17,7 @@ func GetConfig(c *gin.Context) {
 			res = append(res, c)
 		}
 	}
-	resp.Resp(c, "100200", "成功", res)
+	boot.Resp(c, "100200", "成功", res)
 }
 
 func UpdateConfig(c *gin.Context) {
@@ -29,7 +29,7 @@ func UpdateConfig(c *gin.Context) {
 	memo := json["Memo"].(string)
 
 	if name != "agent.TaskFrequency" {
-		resp.Resp(c, "100100", "配置参数错误", "")
+		boot.Resp(c, "100100", "配置参数错误", "")
 		return
 	}
 
@@ -39,7 +39,7 @@ func UpdateConfig(c *gin.Context) {
 		service.SendToAllServer(ch, map[string]interface{}{})
 	}
 
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func GetWhiteList(c *gin.Context) {
@@ -47,7 +47,7 @@ func GetWhiteList(c *gin.Context) {
 	if err != nil {
 		log.Println("GetWhiteList.err:", err)
 	}
-	resp.Resp(c, "100200", "成功", ipList)
+	boot.Resp(c, "100200", "成功", ipList)
 }
 
 func AddWhiteIp(c *gin.Context) {
@@ -56,7 +56,7 @@ func AddWhiteIp(c *gin.Context) {
 	IP := json["IP"].(string)
 	data.AddWhiteIp(IP)
 	service.LoadWhiteList()
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
 
 func DeleteWhiteIp(c *gin.Context) {
@@ -65,5 +65,5 @@ func DeleteWhiteIp(c *gin.Context) {
 	IP := json["IP"].(string)
 	data.DelWhiteIp(IP)
 	service.LoadWhiteList()
-	resp.Resp(c, "100200", "成功", "")
+	boot.Resp(c, "100200", "成功", "")
 }
