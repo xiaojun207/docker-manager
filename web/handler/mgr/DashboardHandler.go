@@ -2,9 +2,9 @@ package mgr
 
 import (
 	"docker-manager/data"
-	"docker-manager/web/resp"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 )
 
 func GetDashboardSize(c *gin.Context) {
@@ -20,26 +20,26 @@ func GetDashboardSize(c *gin.Context) {
 		"app":             data.GetServiceSize(),
 		"follow":          containerSizeMap["followSize"],
 	}
-	resp.Resp(c, "100200", "成功", d)
+	boot.Resp(c, "100200", "成功", d)
 }
 
 func GetTaskSize(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.GetTaskSize())
+	boot.Resp(c, "100200", "成功", data.GetTaskSize())
 }
 
 func GetAppSize(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.GetServiceSize())
+	boot.Resp(c, "100200", "成功", data.GetServiceSize())
 }
 
 func GetImageSize(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.GetImageSize())
+	boot.Resp(c, "100200", "成功", data.GetImageSize())
 }
 
 func GetServerSize(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", data.GetServersSize())
+	boot.Resp(c, "100200", "成功", data.GetServersSize())
 }
 
 func GetContainerSize(c *gin.Context) {
 	containerSizeMap := data.GetContainerSize()
-	resp.Resp(c, "100200", "成功", containerSizeMap["totalSize"])
+	boot.Resp(c, "100200", "成功", containerSizeMap["totalSize"])
 }

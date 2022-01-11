@@ -3,8 +3,8 @@ package web
 import (
 	"docker-manager/service"
 	"docker-manager/utils"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"strconv"
 )
@@ -13,7 +13,7 @@ func WhiteIpInterceptor(c *gin.Context) {
 	reqIP := utils.GetRemoteIP(c)
 	if !service.IsWhiteIp(reqIP) {
 		service.AddForbiddenLog(reqIP)
-		resp.Resp(c, "403", "禁止访问", "")
+		boot.Resp(c, "403", "禁止访问", "")
 		c.Status(403)
 		c.Abort()
 		return
@@ -21,11 +21,11 @@ func WhiteIpInterceptor(c *gin.Context) {
 }
 
 func AgentTokenInterceptor(c *gin.Context) {
-	token := c.GetHeader("authorization")
+	token := service.GetAuthorization(c)
 	if token == "" {
 		reqIP := utils.GetRemoteIP(c)
 		log.Println("URI:", c.Request.RequestURI+", AgentTokenInterceptor token is empty:", ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
-		resp.Resp(c, "105101", "账户未登录", "")
+		boot.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}
@@ -33,7 +33,7 @@ func AgentTokenInterceptor(c *gin.Context) {
 	if err != nil || !isValid {
 		reqIP := utils.GetRemoteIP(c)
 		log.Println("AgentToken.err:", err, ", isValid:", isValid, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
-		resp.Resp(c, "105101", "账户未登录", "")
+		boot.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}
@@ -48,31 +48,17 @@ func ApiTokenInterceptor(c *gin.Context) {
 	if apiKey == "" || !service.LoginApi(apiKey, apiSecret) {
 		reqIP := utils.GetRemoteIP(c)
 		log.Println("ApiTokenInterceptor:", apiKey, apiSecret, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
-		resp.Resp(c, "105101", "账户未登录", "")
+		boot.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}
 }
 
-func getToken(c *gin.Context) string {
-	token := c.GetHeader("authorization")
-	if token == "" {
-		cookie, err := c.Request.Cookie("c-token")
-		if err != nil {
-			log.Println("getToken.err:", err)
-		}
-		if cookie != nil {
-			token = cookie.Value
-		}
-	}
-	return token
-}
-
 func AuthInterceptor(c *gin.Context) {
-	token := getToken(c)
+	token := service.GetAuthorization(c)
 
 	if token == "" {
-		resp.Resp(c, "105101", "账户未登录", "")
+		boot.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}
@@ -81,7 +67,7 @@ func AuthInterceptor(c *gin.Context) {
 	if err != nil || !isValid {
 		reqIP := utils.GetRemoteIP(c)
 		log.Println("AuthInterceptor.err:", err, ", isValid:", isValid, ",URI:", c.Request.RequestURI, ",fromIp:", reqIP)
-		resp.Resp(c, "105101", "账户未登录", "")
+		boot.Resp(c, "105101", "账户未登录", "")
 		c.Abort()
 		return
 	}

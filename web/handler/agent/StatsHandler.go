@@ -5,8 +5,8 @@ import (
 	"docker-manager/data/table"
 	"docker-manager/service"
 	"docker-manager/utils"
-	"docker-manager/web/resp"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	utils2 "github.com/xiaojun207/go-base-utils/utils"
 	"log"
 )
@@ -18,7 +18,7 @@ func ContainerStatsHandler(c *gin.Context) {
 	log.Printf("%v", &json)
 	ContainerId := json["ContainerId"].(string)
 	service.UpdateStats(AppId, json)
-	resp.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, "100200", "成功", gin.H{
 		"id": ContainerId,
 	})
 }
@@ -48,5 +48,5 @@ func ContainersStatsHandler(c *gin.Context) {
 		e.MemoryStats = v["memory_stats"].(map[string]interface{})
 		data.AddContainerStats(e)
 	}
-	resp.Resp(c, "100200", "成功", gin.H{})
+	boot.Resp(c, "100200", "成功", gin.H{})
 }

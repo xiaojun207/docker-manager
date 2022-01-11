@@ -40,6 +40,10 @@ func CreateToken(data string) string {
 	return token
 }
 
+func RemoveToken(token string) {
+	TokenHelper.cacheMap.Delete(token)
+}
+
 func ValidToken(token string) (isValid bool, data string, err error) {
 	_, ok := TokenHelper.cacheMap.Load(token)
 	if !ok {

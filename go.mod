@@ -11,8 +11,8 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/mattn/go-sqlite3 v1.14.10
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/xiaojun207/gin-boot v1.0.1
-	github.com/xiaojun207/go-base-utils v0.1.6
+	github.com/xiaojun207/gin-boot v1.0.5
+	github.com/xiaojun207/go-base-utils v0.1.7
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	xorm.io/xorm v1.2.5
 )

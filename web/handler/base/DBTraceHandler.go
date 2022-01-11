@@ -3,9 +3,9 @@ package base
 import (
 	"docker-manager/data/base"
 	"docker-manager/service"
-	"docker-manager/web/resp"
 	_ "embed"
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"time"
 )
@@ -22,9 +22,9 @@ func DBTraceHandler(c *gin.Context) {
 		"per":       base.DBTracingHook.BeforeNum / timeLen,
 		"SqlMap":    base.DBTracingHook.SqlMap.ToStrMap(),
 	}
-	resp.Resp(c, "100200", "成功", data)
+	boot.Resp(c, "100200", "成功", data)
 }
 
 func ForbiddenLogHandler(c *gin.Context) {
-	resp.Resp(c, "100200", "成功", service.ForbiddenLogMap())
+	boot.Resp(c, "100200", "成功", service.ForbiddenLogMap())
 }
