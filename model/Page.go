@@ -2,14 +2,16 @@ package model
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/xiaojun207/gin-boot/boot"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"xorm.io/xorm"
 )
 
 type Page struct {
-	CurrentPage int   `json:"currentPage"`
-	PageSize    int   `json:"pageSize"`
-	Total       int64 `json:"total"`
+	boot.BindQuery
+	CurrentPage int   `json:"currentPage" form:"currentPage"`
+	PageSize    int   `json:"pageSize" form:"pageSize"`
+	Total       int64 `json:"total" form:"total"`
 }
 
 func (e *Page) IsUse() bool {
