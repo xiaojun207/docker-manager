@@ -107,8 +107,8 @@ func PublishHandler(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func GetTasks(c *gin.Context) {
-	page := model.GetPage(c)
+func GetTasks(c *gin.Context, page model.Page) {
+	log.Println("GetTasks.page:", page.CurrentPage, page.PageSize, page.Total)
 	list, _ := data.GetTasks(&page)
 	boot.Resp(c, "100200", "成功", gin.H{
 		"list": list,

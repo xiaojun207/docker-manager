@@ -26,7 +26,7 @@ func SendCodeHandler(c *gin.Context) interface{} {
 	if utils.StrToBool(conf.ConsoleCode) {
 		log.Println("SendCode, username:", username, ",code:", code)
 	} else {
-		log.Println("SendCode, username:", username, ",code:", "-there is no code-")
+		log.Println("SendCode, username:", username, ",code:", "ConsoleCode is off，you can set env \"-e consoleCode=true\", or set in file of config.yml")
 	}
 	return nil
 }
