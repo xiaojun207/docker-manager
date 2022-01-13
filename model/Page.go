@@ -9,9 +9,9 @@ import (
 
 type Page struct {
 	boot.BindQuery
-	CurrentPage int   `json:"currentPage" form:"currentPage"`
-	PageSize    int   `json:"pageSize" form:"pageSize"`
-	Total       int64 `json:"total" form:"total"`
+	CurrentPage int   `json:"currentPage" form:"currentPage"` // 绑定 query 需要"form" tag
+	PageSize    int   `json:"pageSize" form:"pageSize"`       // 绑定 query 需要"form" tag
+	Total       int64 `json:"total" form:"total"`             // 绑定 query 需要"form" tag
 }
 
 func (e *Page) IsUse() bool {

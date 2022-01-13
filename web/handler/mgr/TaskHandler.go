@@ -108,7 +108,6 @@ func PublishHandler(c *gin.Context) {
 }
 
 func GetTasks(c *gin.Context, page model.Page) {
-	log.Println("GetTasks.page:", page.CurrentPage, page.PageSize, page.Total)
 	list, _ := data.GetTasks(&page)
 	boot.Resp(c, "100200", "成功", gin.H{
 		"list": list,
@@ -119,7 +118,5 @@ func GetTasks(c *gin.Context, page model.Page) {
 func DelTask(c *gin.Context, req struct {
 	Id int `json:"id"`
 }) {
-	log.Println("DelTask.req.id:", req.Id)
 	data.DelTask(req.Id)
-	boot.Resp(c, "100200", "成功", "")
 }
