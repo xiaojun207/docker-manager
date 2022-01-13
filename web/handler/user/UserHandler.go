@@ -30,19 +30,18 @@ func UserInfoHandler(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", info)
 }
 
-func AddUserHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
+type ReqUser struct {
+	Nickname string `json:"nickname"`
+	Username string `json:"username"`
+	Mobile   string `json:"mobile"`
+	Email    string `json:"email"`
+	Role     string `json:"role"`
+	Password string `json:"password"`
+}
 
-	nickname := json["nickname"].(string)
-	username := json["username"].(string)
-	mobile := json["mobile"].(string)
-	email := json["email"].(string)
-	role := json["role"].(string)
-	password := json["password"].(string)
-
-	log.Println("AddUserHandler:", json)
-	err := service.AddUser(nickname, username, mobile, email, password, role)
+func AddUserHandler(c *gin.Context, req ReqUser) {
+	log.Println("AddUserHandler:", req)
+	err := service.AddUser(req.Nickname, req.Username, req.Mobile, req.Email, req.Password, req.Role)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", err.Error(), "")
@@ -51,12 +50,10 @@ func AddUserHandler(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func DeleteUserHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	uid := int(json["id"].(float64))
-
+func DeleteUserHandler(c *gin.Context, req struct {
+	Id int `json:"id,string"`
+}) {
+	uid := req.Id
 	err := data.DeleteUser(uid)
 	if err != nil {
 		log.Println(err)
@@ -66,14 +63,11 @@ func DeleteUserHandler(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func ChangeStatusHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	username := json["username"].(string)
-	status := json["status"].(float64)
-
-	err := service.ChangeStatus(username, int(status))
+func ChangeStatusHandler(c *gin.Context, req struct {
+	Username string `json:"username"`
+	Status   int    `json:"status,string"`
+}) {
+	err := service.ChangeStatus(req.Username, req.Status)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", err.Error(), "")
