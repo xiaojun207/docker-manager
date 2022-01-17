@@ -1,17 +1,19 @@
 package service
 
 import (
-	"docker-manager/model"
+	"docker-manager/data"
+	"docker-manager/data/table"
 	"log"
 )
 
-var Log model.SyncMap
-
 func AddForbiddenLog(reqIp string) {
 	log.Println("禁止访问,IP:", reqIp)
-	Log.IncInt(reqIp, 1)
+	data.AddForbidden(table.Forbidden{
+		Ip:  reqIp,
+		Num: 1,
+	})
 }
 
-func ForbiddenLogMap() map[string]interface{} {
-	return Log.ToStrMap()
+func ForbiddenLogRecord() []table.Forbidden {
+	return data.ForbiddenList()
 }
