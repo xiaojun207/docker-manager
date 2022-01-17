@@ -31,7 +31,8 @@ func TableInit() {
 		new(table.Image),
 		new(table.Task),
 		new(table.Config),
-		new(table.WhiteIp))
+		new(table.WhiteIp),
+		new(table.Forbidden))
 	if err != nil {
 		log.Println("TableInit.err:", err)
 	}

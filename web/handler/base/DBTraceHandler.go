@@ -25,5 +25,5 @@ func DBTraceHandler(c *gin.Context) interface{} {
 }
 
 func ForbiddenLogHandler(c *gin.Context) interface{} {
-	return service.ForbiddenLogMap()
+	return service.ForbiddenLogRecord()
 }
