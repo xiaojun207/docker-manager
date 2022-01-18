@@ -3,7 +3,7 @@
 
 ## Architecture diagram
 
-![结构图](diagram.png "结构图")
+![结构图](docs/img/diagram.png "结构图")
 
 
 ## docker-manager
@@ -121,7 +121,7 @@ email: xiaojun207@126.com
 
 ## 结构图
 
-![结构图](diagram.png "结构图")
+![结构图](docs/img/diagram.png "结构图")
 
 
 ## docker-manager
