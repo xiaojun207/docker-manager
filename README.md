@@ -1,6 +1,11 @@
 [中文说明](#zh) | 
 <a name="en">English</a>
 
+## Architecture diagram
+
+![结构图](diagram.png "结构图")
+
+
 ## docker-manager
 Docker based multi host container web management, data is stored as sqlit3 by default
 It can also be mysql. You only need to configure the database connection parameters, and the database tables will be created and updated automatically.
@@ -114,6 +119,11 @@ email: xiaojun207@126.com
 
 <a name="zh">中文说明</a> | [English](#en)
 
+## 结构图
+
+![结构图](diagram.png "结构图")
+
+
 ## docker-manager
 基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
 也可以是mysql，你只需配置好数据库连接参数，数据库表会自动创建和更新。
@@ -220,3 +230,5 @@ docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -
 如果，你有什么想法或建议，请你发送邮件到下面的邮箱：
 
 email: xiaojun207@126.com
+
+
