@@ -3,6 +3,7 @@ package service
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/web/ws"
 	"docker-manager/web/ws/baseWs"
 	"github.com/go-basic/uuid"
@@ -181,7 +182,7 @@ func SaveAndSendTask(serverName, ch string, param map[string]interface{}) error 
 }
 
 func SendToAllServer(ch string, param map[string]interface{}) {
-	reslist, err := data.GetServers()
+	reslist, err := data.GetServers(&model.Page{})
 	if err != nil {
 		log.Println("SendToAllServer.err:", err)
 	}

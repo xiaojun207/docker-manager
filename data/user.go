@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"errors"
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/go-base-utils/utils"
@@ -10,10 +11,12 @@ import (
 	"strconv"
 )
 
-func FindUsers() (users []table.User, err error) {
-	err = base.DBEngine.Table("user").Find(&users)
+func FindUsers(page *model.Page) (records []table.User, err error) {
+	session := base.DBEngine.Table("user")
+	page.SetPageSql(session)
+	page.Total, err = session.FindAndCount(&records)
 	if err != nil {
-		log.Println("FindUsers.err:", err)
+		log.Println("FindUsers.FindAndCount:", err)
 	}
 	return
 }
