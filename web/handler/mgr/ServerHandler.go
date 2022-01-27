@@ -3,13 +3,14 @@ package mgr
 import (
 	"docker-manager/data"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"docker-manager/web/ws"
 	"github.com/gin-gonic/gin"
 	"github.com/xiaojun207/gin-boot/boot"
 )
 
-func GetServers(c *gin.Context) {
-	servers, err := data.GetServers()
+func GetServers(c *gin.Context, page model.Page) {
+	servers, err := data.GetServers(&page)
 
 	if err != nil {
 		boot.Resp(c, "100100", "请求异常", err.Error())
@@ -29,7 +30,10 @@ func GetServers(c *gin.Context) {
 		servers = []table.Server{}
 	}
 
-	boot.Resp(c, "100200", "成功", servers)
+	boot.Resp(c, "100200", "成功", gin.H{
+		"list": servers,
+		"page": page,
+	})
 }
 
 func GetServer(c *gin.Context) {

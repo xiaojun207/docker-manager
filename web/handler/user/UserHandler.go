@@ -2,15 +2,20 @@ package user
 
 import (
 	"docker-manager/data"
+	"docker-manager/model"
 	"docker-manager/service"
 	"github.com/gin-gonic/gin"
 	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 )
 
-func UserListHandler(c *gin.Context) {
-	users, _ := service.FindUsers()
-	boot.Resp(c, "100200", "成功", users)
+func UserListHandler(c *gin.Context, page *model.Page) {
+	users, _ := service.FindUsers(page)
+
+	boot.Resp(c, "100200", "成功", gin.H{
+		"list": users,
+		"page": page,
+	})
 }
 
 func UserInfoHandler(c *gin.Context) {

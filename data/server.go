@@ -3,6 +3,7 @@ package data
 import (
 	"docker-manager/data/base"
 	"docker-manager/data/table"
+	"docker-manager/model"
 	"log"
 )
 
@@ -53,13 +54,18 @@ func GetServer(ServerName string) (record table.Server, err error) {
 	return
 }
 
-func GetServers() (record []table.Server, err error) {
-	err = base.DBEngine.Table("server").OrderBy("name asc").Find(&record)
+func GetServers(page *model.Page) (record []table.Server, err error) {
+	session := base.DBEngine.Table("server").OrderBy("name asc")
+	page.SetPageSql(session)
+	page.Total, err = session.FindAndCount(&record)
+	if err != nil {
+		log.Println("GetServers.FindAndCount:", err)
+	}
 	return
 }
 
 func GetServersName() (record []string, err error) {
-	servers, err := GetServers()
+	servers, err := GetServers(&model.Page{})
 	for _, server := range servers {
 		record = append(record, server.Name)
 	}
