@@ -5,6 +5,7 @@ import (
 	"docker-manager/data/table"
 )
 
+// docker server注册记录
 func DockerReg(json map[string]interface{}) error {
 	//log.Println("DockerReg:", json)
 	server := table.Server{
