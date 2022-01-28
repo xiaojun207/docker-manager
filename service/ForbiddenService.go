@@ -14,6 +14,7 @@ func AddForbiddenLog(reqIp string) {
 	})
 }
 
+// 禁用记录
 func ForbiddenLogRecord() []table.Forbidden {
 	return data.ForbiddenList()
 }

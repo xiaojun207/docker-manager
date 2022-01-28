@@ -9,6 +9,7 @@ import (
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
+	"regexp"
 )
 
 func InitTokenHelper() {
@@ -28,13 +29,33 @@ func FindUser(uid int) (user table.User, err error) {
 	return data.FindUserByUid(uid)
 }
 
+func VerifyEmailFormat(email string) bool {
+	pattern := `\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*` //匹配电子邮箱
+	reg := regexp.MustCompile(pattern)
+	return reg.MatchString(email)
+}
+
 func AddUser(nickname, username, mobile, email, password, role string) error {
 	if username == "" && mobile == "" && email == "" {
 		return errors.New("username, mobile, email 不能同时为空")
 	}
 
-	if email != "" {
+	if username != "" {
+		if len(username) < 3 || len(username) > 20 {
+			return errors.New("username长度4-20")
+		}
+	}
 
+	if email != "" {
+		if !VerifyEmailFormat(email) {
+			errors.New("email格式不正确")
+		}
+	}
+
+	if mobile != "" {
+		if len(mobile) < 6 || len(mobile) < 18 {
+			return errors.New("mobile长度不正确")
+		}
 	}
 
 	if len(password) < 6 {
