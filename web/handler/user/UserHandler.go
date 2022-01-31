@@ -9,6 +9,7 @@ import (
 	"log"
 )
 
+// 用户列表
 func UserListHandler(c *gin.Context, page *model.Page) {
 	users, _ := service.FindUsers(page)
 
@@ -18,6 +19,7 @@ func UserListHandler(c *gin.Context, page *model.Page) {
 	})
 }
 
+// 用户信息
 func UserInfoHandler(c *gin.Context) {
 	uid := c.GetInt("uid")
 	user, err := service.FindUser(uid)
