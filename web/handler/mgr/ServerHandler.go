@@ -9,6 +9,7 @@ import (
 	"github.com/xiaojun207/gin-boot/boot"
 )
 
+// 获取宿主机列表
 func GetServers(c *gin.Context, page model.Page) {
 	servers, err := data.GetServers(&page)
 

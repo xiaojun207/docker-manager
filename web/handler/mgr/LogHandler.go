@@ -48,6 +48,7 @@ func LogFollowStart(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
+// 关闭日志流
 func LogFollowClose(c *gin.Context) {
 	json := make(map[string]interface{}) //注意该结构接受的内容
 	c.BindJSON(&json)
