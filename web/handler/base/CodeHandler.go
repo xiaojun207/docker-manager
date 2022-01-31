@@ -10,6 +10,7 @@ import (
 	"log"
 )
 
+// 验证码发送
 func SendCodeHandler(c *gin.Context) interface{} {
 	json := make(map[string]interface{})
 	c.BindJSON(&json)
