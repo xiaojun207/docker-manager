@@ -1,19 +1,21 @@
 package utils
 
 import (
-	"errors"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/xiaojun207/gin-boot/boot"
 	"log"
 	"sync"
 	"time"
 )
 
 var (
+	UseCacheMap = true
 	// 一些常量
-	TokenExpired     error = errors.New("Token is expired")
-	TokenNotValidYet error = errors.New("Token not active yet")
-	TokenMalformed   error = errors.New("That's not even a token")
-	TokenInvalid     error = errors.New("Couldn't handle this token:")
+	ErrorTokenExpired     error = boot.NewWebError("105101", "Token is expired")
+	ErrorTokenNotValidYet error = boot.NewWebError("105101", "Token not active yet")
+	ErrorTokenMalformed   error = boot.NewWebError("105101", "That's not even a token")
+	ErrorTokenInvalid     error = boot.NewWebError("105101", "Couldn't handle this token:")
+	ErrorTokenNotExists   error = boot.NewWebError("105101", "Token not exists")
 )
 
 type TokenFactory struct {
@@ -45,9 +47,11 @@ func RemoveToken(token string) {
 }
 
 func ValidToken(token string) (isValid bool, data string, err error) {
-	_, ok := TokenHelper.cacheMap.Load(token)
-	if !ok {
-		return false, "", errors.New("Token not exists")
+	if UseCacheMap {
+		_, ok := TokenHelper.cacheMap.Load(token)
+		if !ok {
+			return false, "", ErrorTokenNotExists
+		}
 	}
 	return TokenHelper.ValidToken(token)
 }
@@ -93,14 +97,14 @@ func (e *TokenFactory) ValidToken(tokenString string) (isValid bool, data string
 
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				err = TokenMalformed
+				err = ErrorTokenMalformed
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				// Token is expired
-				err = TokenExpired
+				err = ErrorTokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				err = TokenNotValidYet
+				err = ErrorTokenNotValidYet
 			} else {
-				err = TokenInvalid
+				err = ErrorTokenInvalid
 			}
 		}
 		return false, "", err

@@ -8,11 +8,12 @@ import (
 	"log"
 )
 
-func ImageList(c *gin.Context, page model.Page) {
-	serverNames := c.QueryArray("serverNames[]")
-	tagName := c.Query("tagName")
-	//log.Println("page:", page)
-	imageList, total, err := data.GetImages(serverNames, tagName, page)
+func ImageList(c *gin.Context, req struct {
+	ServerNames []string `json:"serverNames" form:"serverNames[]"`
+	TagName     string   `json:"tagName" form:"tagName"`
+}, page model.Page) {
+	log.Println("req.ServerNames:", req.ServerNames)
+	imageList, total, err := data.GetImages(req.ServerNames, req.TagName, page)
 	page.Total = total
 	if err != nil {
 		log.Println(err)
@@ -36,13 +37,14 @@ func ImageList(c *gin.Context, page model.Page) {
 	})
 }
 
-func ImageDetail(c *gin.Context) {
-	imageId := c.Query("ImageId")
-	if imageId == "" {
+func ImageDetail(c *gin.Context, req struct {
+	ImageId string `json:"ImageId" form:"ImageId"`
+}) {
+	if req.ImageId == "" {
 		boot.Resp(c, "100100", "字段校验错误", "")
 		return
 	}
-	res, err := data.GetImage(imageId)
+	res, err := data.GetImage(req.ImageId)
 	if err != nil {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return

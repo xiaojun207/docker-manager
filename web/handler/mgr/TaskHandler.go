@@ -6,7 +6,6 @@ import (
 	"docker-manager/dto"
 	"docker-manager/model"
 	"docker-manager/service"
-	"docker-manager/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/gin-boot/boot"
@@ -15,12 +14,11 @@ import (
 )
 
 func ContainerOperatorHandler(c *gin.Context, req struct {
-	ServerNames []interface{} `json:"ServerNames"`
-	ContainerId string        `json:"ContainerId"`
+	ServerNames []string `json:"ServerNames"`
+	ContainerId string   `json:"ContainerId"`
 }) {
 	operator := c.Param("operator") // stop, remove, restart
-	serverNames := utils.ArrInterfaceToStr(req.ServerNames)
-	for _, serverName := range serverNames {
+	for _, serverName := range req.ServerNames {
 		param := map[string]interface{}{
 			"taskId":      uuid.New(),
 			"containerId": req.ContainerId,
