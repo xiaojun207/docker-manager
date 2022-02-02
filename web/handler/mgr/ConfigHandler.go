@@ -20,21 +20,18 @@ func GetConfig(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", res)
 }
 
-func UpdateConfig(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	name := json["Name"].(string)
-	value := json["Value"].(string)
-	memo := json["Memo"].(string)
-
-	if name != "agent.TaskFrequency" {
+func UpdateConfig(c *gin.Context, req struct {
+	Name  string `json:"Name"`
+	Value string `json:"Value"`
+	Memo  string `json:"Memo"`
+}) {
+	if req.Name != "agent.TaskFrequency" {
 		boot.Resp(c, "100100", "配置参数错误", "")
 		return
 	}
 
-	data.UpdateConfig(name, value, memo, false)
-	if name == "agent.TaskFrequency" {
+	data.UpdateConfig(req.Name, req.Value, req.Memo, false)
+	if req.Name == "agent.TaskFrequency" {
 		ch := "base.config.update"
 		service.SendToAllServer(ch, map[string]interface{}{})
 	}
@@ -50,20 +47,18 @@ func GetWhiteList(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", ipList)
 }
 
-func AddWhiteIp(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	IP := json["IP"].(string)
-	data.AddWhiteIp(IP)
+func AddWhiteIp(c *gin.Context, req struct {
+	IP string `json:"IP"`
+}) {
+	data.AddWhiteIp(req.IP)
 	service.LoadWhiteList()
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func DeleteWhiteIp(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	IP := json["IP"].(string)
-	data.DelWhiteIp(IP)
+func DeleteWhiteIp(c *gin.Context, req struct {
+	IP string `json:"IP"`
+}) {
+	data.DelWhiteIp(req.IP)
 	service.LoadWhiteList()
 	boot.Resp(c, "100200", "成功", "")
 }

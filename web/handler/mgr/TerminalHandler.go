@@ -9,15 +9,14 @@ import (
 	"log"
 )
 
-func ExecClose(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	containerId := json["containerId"].(string)
+func ExecClose(c *gin.Context, req struct {
+	ContainerId string `json:"containerId"`
+}) {
 	param := map[string]interface{}{
 		"taskId":      uuid.New(),
-		"containerId": containerId,
+		"containerId": req.ContainerId,
 	}
-	serverName := data.GetServerNameByContainerId(containerId)
+	serverName := data.GetServerNameByContainerId(req.ContainerId)
 
 	ch := "docker.container.log.follow.close"
 	err := service.SaveAndSendTask(serverName, ch, param)

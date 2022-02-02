@@ -7,7 +7,6 @@ import (
 	"docker-manager/model"
 	"docker-manager/service"
 	"docker-manager/utils"
-	"docker-manager/web/handler/mgr/reqDto"
 	"github.com/gin-gonic/gin"
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/gin-boot/boot"
@@ -15,22 +14,20 @@ import (
 	"log"
 )
 
-func ContainerOperatorHandler(c *gin.Context) {
-	operator := c.Param("operator")      // stop, remove, restart
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	log.Println("ContainerOperatorHandler.json:", json)
-	serverNames := utils.ArrInterfaceToStr(json["ServerNames"].([]interface{}))
-	containerId := json["ContainerId"].(string)
-
+func ContainerOperatorHandler(c *gin.Context, req struct {
+	ServerNames []interface{} `json:"ServerNames"`
+	ContainerId string        `json:"ContainerId"`
+}) {
+	operator := c.Param("operator") // stop, remove, restart
+	serverNames := utils.ArrInterfaceToStr(req.ServerNames)
 	for _, serverName := range serverNames {
 		param := map[string]interface{}{
 			"taskId":      uuid.New(),
-			"containerId": containerId,
+			"containerId": req.ContainerId,
 		}
 		ch := "docker.container." + operator
 		if operator == "remove" {
-			service.DeleteContainer(containerId)
+			service.DeleteContainer(req.ContainerId)
 		}
 
 		err := service.SaveAndSendTask(serverName, ch, param)
@@ -43,21 +40,18 @@ func ContainerOperatorHandler(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func ImageCmd(c *gin.Context) {
-	operator := c.Param("operator")      // stop, remove, restart
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	log.Println("ImageCmd.json:", json)
-	serverName := json["serverName"].(string)
-	ImageId := json["ImageId"].(string)
-
+func ImageCmd(c *gin.Context, req struct {
+	ServerName string `json:"serverName"`
+	ImageId    string `json:"ImageId"`
+}) {
+	operator := c.Param("operator") // stop, remove, restart
 	param := map[string]interface{}{
 		"taskId":  uuid.New(),
-		"imageId": ImageId,
+		"imageId": req.ImageId,
 	}
 	ch := "docker.image." + operator
 
-	err := service.SaveAndSendTask(serverName, ch, param)
+	err := service.SaveAndSendTask(req.ServerName, ch, param)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
@@ -66,26 +60,22 @@ func ImageCmd(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func RePublishHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	ServiceName := json["ServiceName"].(string)
-	appInfo, err := data.GetService(ServiceName)
+func RePublishHandler(c *gin.Context, req struct {
+	ServiceName string `json:"ServiceName"`
+}) {
+	appInfo, err := data.GetService(req.ServiceName)
 	log.Println(appInfo, err)
 }
 
-func PublishYamlHandler(c *gin.Context) {
-	req := reqDto.ReqPublishYaml{} //注意该结构接受的内容
-	c.BindJSON(&req)
-	//log.Println(req.ServerNames, req.Yaml)
+func PublishYamlHandler(c *gin.Context, req struct {
+	ServerNames []string `json:"serverNames"`
+	Yaml        string   `json:"yaml"`
+}) {
 	service.PublishYaml(req.ServerNames, req.Yaml)
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func PublishHandler(c *gin.Context) {
-	serviceInfo := dto.ServiceInfo{} //注意该结构接受的内容
-	c.BindJSON(&serviceInfo)
-	log.Println("serviceInfo:", serviceInfo)
+func PublishHandler(c *gin.Context, serviceInfo dto.ServiceInfo) {
 	s := table.Service{
 		Name:     serviceInfo.Name,
 		Image:    serviceInfo.Image,

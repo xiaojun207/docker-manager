@@ -7,15 +7,12 @@ import (
 	"log"
 )
 
-func AlterPasswordHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
+func AlterPasswordHandler(c *gin.Context, req struct {
+	OldPassword string `json:"OldPassword"`
+	NewPassword string `json:"NewPassword"`
+}) {
 	uid := c.GetInt("uid")
-	oldPassword := json["OldPassword"].(string)
-	newPassword := json["NewPassword"].(string)
-
-	err := service.AlterPassword(uid, oldPassword, newPassword)
+	err := service.AlterPassword(uid, req.OldPassword, req.NewPassword)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", err.Error(), "")
@@ -49,13 +46,10 @@ func ForgetPasswordHandler(c *gin.Context, req struct {
 	boot.Resp(c, "100200", "成功", newPassword)
 }
 
-func ResetPasswordHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	username := json["username"].(string)
-
-	newPassword, err := service.ResetPassword(username)
+func ResetPasswordHandler(c *gin.Context, req struct {
+	Username string `json:"username"`
+}) {
+	newPassword, err := service.ResetPassword(req.Username)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", err.Error(), "")

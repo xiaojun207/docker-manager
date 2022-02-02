@@ -7,15 +7,11 @@ import (
 	"log"
 )
 
-func LoginHandler(c *gin.Context) string {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	username := json["username"].(string)
-	password := json["password"].(string)
-
-	//log.Println("json:", json)
-	token, err := service.Login(username, password)
+func LoginHandler(c *gin.Context, req struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}) string {
+	token, err := service.Login(req.Username, req.Password)
 	if err != nil {
 		log.Println(err)
 		panic(boot.NewWebError("100100", err.Error()))
@@ -25,5 +21,4 @@ func LoginHandler(c *gin.Context) string {
 
 func LogoutHandler(c *gin.Context) {
 	service.Logout(c)
-	log.Println("LogoutHandler.Success")
 }

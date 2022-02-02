@@ -48,13 +48,10 @@ func GetServer(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", server)
 }
 
-func DeleteServer(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	ServerName := json["ServerName"].(string)
-
-	err := data.DeleteServer(ServerName)
+func DeleteServer(c *gin.Context, req struct {
+	ServerName string `json:"ServerName"`
+}) {
+	err := data.DeleteServer(req.ServerName)
 	if err != nil {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return

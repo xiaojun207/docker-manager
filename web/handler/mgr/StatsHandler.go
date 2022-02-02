@@ -10,11 +10,10 @@ import (
 	"log"
 )
 
-func GetStatsList(c *gin.Context) {
+func GetStatsList(c *gin.Context, page model.Page) {
 	serverNames := c.QueryArray("serverNames[]")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	Follow := c.Query("Follow")
-	page := model.GetPage(c)
 	log.Println("serverNames:", serverNames, ",ContainerNames:", ContainerNames, ",Follow:", Follow)
 
 	var res []map[string]interface{}

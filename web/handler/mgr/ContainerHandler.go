@@ -18,11 +18,10 @@ func UpdateContainerList(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func GetContainers(c *gin.Context) {
+func GetContainers(c *gin.Context, page model.Page) {
 	serverNames := c.QueryArray("ServerNames[]")
 	ContainerNames := c.QueryArray("ContainerNames[]")
 	state := c.Query("state")
-	page := model.GetPage(c)
 
 	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
 

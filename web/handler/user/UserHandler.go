@@ -72,7 +72,7 @@ func DeleteUserHandler(c *gin.Context, req struct {
 
 func ChangeStatusHandler(c *gin.Context, req struct {
 	Username string `json:"username"`
-	Status   int    `json:"status,string"`
+	Status   int    `json:"status"`
 }) {
 	err := service.ChangeStatus(req.Username, req.Status)
 	if err != nil {

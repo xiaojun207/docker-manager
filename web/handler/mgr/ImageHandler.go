@@ -8,10 +8,9 @@ import (
 	"log"
 )
 
-func ImageList(c *gin.Context) {
+func ImageList(c *gin.Context, page model.Page) {
 	serverNames := c.QueryArray("serverNames[]")
 	tagName := c.Query("tagName")
-	page := model.GetPage(c)
 	//log.Println("page:", page)
 	imageList, total, err := data.GetImages(serverNames, tagName, page)
 	page.Total = total

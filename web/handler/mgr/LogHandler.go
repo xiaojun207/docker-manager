@@ -25,17 +25,16 @@ func GetFollowLogList(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", res)
 }
 
-func LogFollowStart(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	containerId := json["containerId"].(string)
+func LogFollowStart(c *gin.Context, req struct {
+	ContainerId string `json:"containerId"`
+}) {
 	param := map[string]interface{}{
 		"taskId":      uuid.New(),
-		"containerId": containerId,
+		"containerId": req.ContainerId,
 	}
-	serverName := data.GetServerNameByContainerId(containerId)
+	serverName := data.GetServerNameByContainerId(req.ContainerId)
 	if serverName == "" {
-		log.Println(containerId + " server is not exists")
+		log.Println(req.ContainerId + " server is not exists")
 	}
 	ch := "docker.container.log.follow"
 	if !ws.AgentConnected(serverName) {
@@ -49,15 +48,14 @@ func LogFollowStart(c *gin.Context) {
 }
 
 // 关闭日志流
-func LogFollowClose(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-	containerId := json["containerId"].(string)
+func LogFollowClose(c *gin.Context, req struct {
+	ContainerId string `json:"containerId"`
+}) {
 	param := map[string]interface{}{
 		"taskId":      uuid.New(),
-		"containerId": containerId,
+		"containerId": req.ContainerId,
 	}
-	serverName := data.GetServerNameByContainerId(containerId)
+	serverName := data.GetServerNameByContainerId(req.ContainerId)
 
 	ch := "docker.container.log.follow.close"
 	err := service.SaveAndSendTask(serverName, ch, param)

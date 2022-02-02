@@ -53,7 +53,7 @@ func AddUser(nickname, username, mobile, email, password, role string) error {
 	}
 
 	if mobile != "" {
-		if len(mobile) < 6 || len(mobile) < 18 {
+		if len(mobile) < 6 || len(mobile) > 18 {
 			return errors.New("mobile长度不正确")
 		}
 	}

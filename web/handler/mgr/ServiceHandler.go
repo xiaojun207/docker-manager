@@ -11,9 +11,8 @@ import (
 	"log"
 )
 
-func ServiceList(c *gin.Context) {
-	page := model.GetPage(c)
-	res, err := data.GetServices(&page)
+func ServiceList(c *gin.Context, page *model.Page) {
+	res, err := data.GetServices(page)
 	if err != nil {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
@@ -24,9 +23,8 @@ func ServiceList(c *gin.Context) {
 	})
 }
 
-func AppGroupList(c *gin.Context) {
-	page := model.GetPage(c)
-	res, err := data.GetServiceReplicas(&page)
+func AppGroupList(c *gin.Context, page *model.Page) {
+	res, err := data.GetServiceReplicas(page)
 	if err != nil {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
@@ -37,26 +35,24 @@ func AppGroupList(c *gin.Context) {
 	})
 }
 
-func DeleteGroup(c *gin.Context) {
-	replicas := table.ServiceReplicas{} //注意该结构接受的内容
-	c.BindJSON(&replicas)
-	data.DeleteReplicas(replicas.Id)
+func DeleteGroup(c *gin.Context, req struct {
+	Id int `json:"Id"`
+}) {
+	data.DeleteReplicas(req.Id)
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func DeleteService(c *gin.Context) {
-	service := table.Service{} //注意该结构接受的内容
-	c.BindJSON(&service)
-	data.DeleteService(service.Name)
+func DeleteService(c *gin.Context, req struct {
+	Name string `json:"Name"`
+}) {
+	data.DeleteService(req.Name)
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func UpdateService(c *gin.Context) {
-	serviceInfo := table.Service{} //注意该结构接受的内容
-	c.BindJSON(&serviceInfo)
-	data.AddService(serviceInfo)
-	log.Println("UpdateService.serviceInfo:", utils.StructToJson(serviceInfo))
+func UpdateService(c *gin.Context, req table.Service) {
+	data.AddService(req)
+	log.Println("UpdateService.serviceInfo:", utils.StructToJson(req))
 	serverNames := []string{""}
-	service.PublishAppTask(serverNames, serviceInfo)
+	service.PublishAppTask(serverNames, req)
 	boot.Resp(c, "100200", "成功", "")
 }
