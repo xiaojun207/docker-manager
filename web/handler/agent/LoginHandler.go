@@ -10,14 +10,11 @@ import (
 /**
 eg.2
 */
-func LoginHandler(c *gin.Context) {
-	json := make(map[string]interface{}) //注意该结构接受的内容
-	c.BindJSON(&json)
-
-	username := json["username"].(string)
-	password := json["password"].(string)
-
-	token, err := service.LoginAgent(username, password)
+func LoginHandler(c *gin.Context, req struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}) {
+	token, err := service.LoginAgent(req.Username, req.Password)
 	if err != nil {
 		log.Println(err)
 		boot.Resp(c, "100100", err.Error(), "")

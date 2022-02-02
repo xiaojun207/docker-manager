@@ -10,14 +10,15 @@ import (
 	"log"
 )
 
-func GetStatsList(c *gin.Context, page model.Page) {
-	serverNames := c.QueryArray("serverNames[]")
-	ContainerNames := c.QueryArray("ContainerNames[]")
-	Follow := c.Query("Follow")
-	log.Println("serverNames:", serverNames, ",ContainerNames:", ContainerNames, ",Follow:", Follow)
+func GetStatsList(c *gin.Context, req struct {
+	ServerNames    []string `json:"serverNames" form:"serverNames[]"`
+	ContainerNames []string `json:"ContainerNames" form:"ContainerNames[]"`
+	Follow         string   `json:"Follow" form:"Follow"`
+}, page model.Page) {
+	log.Println("GetStatsList:", req)
 
 	var res []map[string]interface{}
-	statss, _ := data.GetContainerStatsList(Follow, serverNames, ContainerNames, &page)
+	statss, _ := data.GetContainerStatsList(req.Follow, req.ServerNames, req.ContainerNames, &page)
 	for _, stats := range statss {
 		res = append(res, map[string]interface{}{
 			"Name":               stats.Name,
@@ -35,9 +36,10 @@ func GetStatsList(c *gin.Context, page model.Page) {
 	})
 }
 
-func GetStats(c *gin.Context) {
-	ContainerId := c.Query("ContainerId")
-	res, _ := data.GetContainerStatss(ContainerId)
+func GetStats(c *gin.Context, req struct {
+	ContainerId string `json:"ContainerId" form:"ContainerId"`
+}) {
+	res, _ := data.GetContainerStatss(req.ContainerId)
 	boot.Resp(c, "100200", "成功", res)
 }
 

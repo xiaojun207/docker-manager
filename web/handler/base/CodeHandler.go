@@ -11,23 +11,22 @@ import (
 )
 
 // 验证码发送
-func SendCodeHandler(c *gin.Context) interface{} {
-	json := make(map[string]interface{})
-	c.BindJSON(&json)
-	log.Println("SendCodeHandler:", json)
-	username := json["username"].(string)
-	codeType := json["codeType"].(string)
-	key := json["key"].(string)
+func SendCodeHandler(c *gin.Context, req struct {
+	Username string `json:"username"`
+	CodeType string `json:"codeType"`
+	Key      string `json:"key"`
+}) interface{} {
+	log.Println("SendCodeHandler:", req)
 
-	user, err := service.FindUserByUsername(username)
+	user, err := service.FindUserByUsername(req.Username)
 	if err != nil {
 		return boot.NewWebError("100100", "用户名错误")
 	}
-	code := service.SendCode(user.Id, codeType, key)
+	code := service.SendCode(user.Id, req.CodeType, req.Key)
 	if utils.StrToBool(conf.ConsoleCode) {
-		log.Println("SendCode, username:", username, ",code:", code)
+		log.Println("SendCode, username:", req.Username, ",code:", code)
 	} else {
-		log.Println("SendCode, username:", username, ",code:", "ConsoleCode is off，you can set env \"-e consoleCode=true\", or set in file of config.yml")
+		log.Println("SendCode, username:", req.Username, ",code:", "ConsoleCode is off，you can set env \"-e consoleCode=true\", or set in file of config.yml")
 	}
 	return nil
 }
