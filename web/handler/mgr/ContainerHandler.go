@@ -9,7 +9,6 @@ import (
 	"github.com/go-basic/uuid"
 	"github.com/xiaojun207/gin-boot/boot"
 	"log"
-	"strings"
 )
 
 func UpdateContainerList(c *gin.Context) {
@@ -18,14 +17,13 @@ func UpdateContainerList(c *gin.Context) {
 	boot.Resp(c, "100200", "成功", "")
 }
 
-func GetContainers(c *gin.Context, page model.Page) {
-	serverNames := c.QueryArray("ServerNames[]")
-	ContainerNames := c.QueryArray("ContainerNames[]")
-	state := c.Query("state")
-
-	log.Println("serverNames:", serverNames, "ContainerNames:", ContainerNames, ",state:", state)
-
-	containers, err := data.GetContainers(state, serverNames, ContainerNames, &page)
+func GetContainers(c *gin.Context, page model.Page, req struct {
+	ServerNames    []string `json:"serverNames" form:"ServerNames[]"`
+	ContainerNames []string `json:"serverNames" form:"ContainerNames[]"`
+	State          string   `json:"state" form:"state"`
+}) {
+	log.Println("GetContainers.req:", req)
+	containers, err := data.GetContainers(req.State, req.ServerNames, req.ContainerNames, &page)
 	if err != nil {
 		log.Println("GetContainers.err:", err)
 	}
@@ -57,27 +55,19 @@ func GetContainer(c *gin.Context) {
 }
 
 // info,服务和容器基本信息
-func GetContainerInfos(c *gin.Context) {
-	serverNames := strings.Join(c.QueryArray("serverNames[]"), ",")
-	state := c.Query("state")
-	log.Println("serverName:", serverNames, ",state:", state)
-
-	containers, err := data.GetContainers("", nil, nil, &model.Page{})
+func GetContainerInfos(c *gin.Context, req struct {
+	ServerNames []string `json:"serverNames" form:"serverNames[]"`
+	State       string   `json:"state" form:"state"`
+}) {
+	log.Println("GetContainerInfos.req:", req)
+	containers, err := data.GetContainers(req.State, req.ServerNames, nil, &model.Page{})
 	if err != nil {
 		log.Println("GetContainerInfos.err:", err)
-	} else {
-		log.Println("GetContainerInfos.len:", len(containers))
+		return
 	}
 
 	serverMap := map[string]map[string]interface{}{}
 	for _, container := range containers {
-		if state != "" && container.State != state {
-			continue
-		}
-		if len(serverNames) > 0 && !strings.Contains(serverNames, container.ServerName) {
-			continue
-		}
-
 		server, ok := serverMap[container.ServerName]
 		var clist []map[string]string
 		if ok {
@@ -99,7 +89,7 @@ func GetContainerInfos(c *gin.Context) {
 		serverMap[container.ServerName] = server
 	}
 
-	res := []interface{}{}
+	var res []interface{}
 	for _, server := range serverMap {
 		res = append(res, server)
 	}
