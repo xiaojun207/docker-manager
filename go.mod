@@ -3,7 +3,7 @@ module docker-manager
 go 1.17
 
 require (
-	github.com/compose-spec/compose-go v1.2.8
+	github.com/compose-spec/compose-go v1.2.9
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-basic/uuid v1.0.0
 	github.com/go-sql-driver/mysql v1.6.0
@@ -13,7 +13,7 @@ require (
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/xiaojun207/gin-boot v1.1.2
 	github.com/xiaojun207/go-base-utils v0.1.7
-	gopkg.in/yaml.v3 v3.0.0
+	gopkg.in/yaml.v3 v3.0.1
 	xorm.io/xorm v1.3.1
 )
 
