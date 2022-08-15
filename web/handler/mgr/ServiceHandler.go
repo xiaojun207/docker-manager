@@ -35,6 +35,19 @@ func AppGroupList(c *gin.Context, page *model.Page) {
 	})
 }
 
+func SaveApp(c *gin.Context, req struct {
+	SourceUrl  string `json:"sourceUrl"`
+	Branch     string `json:"branch"`
+	Dockerfile string `json:"dockerfile"`
+	ImageUrl   string `json:"imageUrl"`
+	Port       int    `json:"port"`
+	WebHook    string `json:"webHook"`
+}) {
+
+	log.Println("SaveApp.req:", req)
+	boot.Resp(c, "100200", "成功", "")
+}
+
 func DeleteGroup(c *gin.Context, req struct {
 	Id int `json:"Id"`
 }) {

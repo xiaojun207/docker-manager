@@ -98,6 +98,8 @@ var mgrRouter = func(router *boot.WebRouter) {
 	router.POST("/app/del", AuthInterceptor, mgr.DeleteService)
 	router.POST("/app/update", AuthInterceptor, mgr.UpdateService)
 	router.GET("/app/group", AuthInterceptor, mgr.AppGroupList)
+
+	router.POST("/app/group/saveApp", AuthInterceptor, mgr.SaveApp)
 	router.POST("/app/group/del", AuthInterceptor, mgr.DeleteGroup)
 
 	router.GET("/dashboardSize", AuthInterceptor, mgr.GetDashboardSize)

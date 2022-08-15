@@ -99,7 +99,7 @@ func ToServiceTable(serer types.ServiceConfig) table.Service {
 			"IP":          "0.0.0.0",
 			"Type":        port.Protocol,
 			"PrivatePort": utils.Uint64ToStr(uint64(port.Target)),
-			"PublicPort":  utils.Uint64ToStr(uint64(port.Published)),
+			"PublicPort":  utils.Uint64ToStr(utils.StrToUint64(port.Published)),
 		})
 		// {"IP":"0.0.0.0","PrivatePort":"80","PublicPort":"80","Type":"tcp"}
 	}
