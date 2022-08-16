@@ -7,22 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xiaojun207/gin-boot/boot"
 	"log"
-	"strings"
 )
-
-//go:embed version
-var Version string
-
-func init() {
-	Version = strings.TrimSpace(Version)
-	log.Println("Version:", Version)
-}
 
 func VersionHandler(c *gin.Context) interface{} {
 	latest := service.GetLatestTag()
-	log.Println("Version Handler, current:", Version, ",latest:", latest)
+	log.Println("Version Handler, current:", service.Version, ",latest:", latest)
 	return gin.H{
-		"current": Version,
+		"current": service.Version,
 		"latest":  latest,
 	}
 }

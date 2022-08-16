@@ -4,8 +4,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/xiaojun207/go-base-utils/utils"
+	"log"
 	"strings"
 )
+
+// export VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+// export DATE=`date -u '+%Y-%m-%d_%I:%M:%S%p-GMT'`
+// export COMMIT_HASH=`git rev-parse HEAD`
+
+// go build -a -ldflags "-X docker-manager/service.Version=$VERSION" -o docker-manager
+var (
+	Version    = "1.4.7"
+	Date       = "20220815"
+	CommitHash = ""
+)
+
+func init() {
+	log.Println("BuildInfo, Version:", Version, ", Date:", Date, ", CommitHash:", CommitHash)
+}
 
 func GetLatestTag() string {
 	image := "xiaojun207/docker-manager"

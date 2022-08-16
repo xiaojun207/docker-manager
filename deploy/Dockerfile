@@ -5,7 +5,10 @@ MAINTAINER xiaojun "xiaojun207@126.com"
 
 #ENV GOPROXY https://goproxy.io
 ENV GO111MODULE on
-ARG version
+ARG VERSION
+ARG COMMIT_HASH
+ARG BUILD_DATE
+
 WORKDIR /go/release
 
 ADD go.mod .
@@ -17,10 +20,8 @@ WORKDIR /go/release
 
 ADD . .
 
-RUN echo "$version">/go/release/web/handler/base/version
-
 #RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -ldflags '-w -s' -o App App.go
-RUN go build -a -ldflags "-linkmode external -extldflags '-static' -s -w" -o App App.go
+RUN go build -a -ldflags "-linkmode external -extldflags '-static' -s -w  -X docker-manager/service.Version=$VERSION -X docker-manager/service.Date=$BUILD_DATE -X docker-manager/service.CommitHash=$COMMIT_HASH" -o App App.go
 
 #运行镜像
 FROM alpine:latest AS production

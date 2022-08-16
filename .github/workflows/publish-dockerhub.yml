@@ -57,7 +57,8 @@ jobs:
           context: .
           file: deploy/Dockerfile
           build-args: |
-            version=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+            BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] 'YYYYMMDD'}}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
