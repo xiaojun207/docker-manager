@@ -1,6 +1,6 @@
 module docker-manager
 
-go 1.17
+go 1.18
 
 require (
 	github.com/compose-spec/compose-go v1.4.0

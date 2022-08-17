@@ -1,10 +1,10 @@
 package main
 
 import (
-	"docker-manager/conf"
-	"docker-manager/data"
-	"docker-manager/service"
-	"docker-manager/web"
+	"docker-manager/pkg/conf"
+	"docker-manager/pkg/data"
+	"docker-manager/pkg/routers"
+	"docker-manager/pkg/service"
 	"github.com/xiaojun207/gin-boot/boot"
 	"github.com/xiaojun207/go-base-utils/utils"
 )
@@ -18,8 +18,8 @@ func main() {
 	service.LoadContainerMap()
 
 	boot.Start(conf.Port, "/", func(webRouter *boot.WebRouter) {
-		web.StaticRouter(webRouter)
-		web.ApiRouter(webRouter.Group(conf.ContextPath))
+		routers.StaticRouter(webRouter)
+		routers.ApiRouter(webRouter.Group(conf.ContextPath))
 	})
 
 	defer data.Close()
