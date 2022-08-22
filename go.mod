@@ -3,7 +3,7 @@ module docker-manager
 go 1.18
 
 require (
-	github.com/compose-spec/compose-go v1.4.0
+	github.com/compose-spec/compose-go v1.5.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-basic/uuid v1.0.0
 	github.com/go-sql-driver/mysql v1.6.0
