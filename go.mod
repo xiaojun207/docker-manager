@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/xiaojun207/gin-boot v1.1.2
-	github.com/xiaojun207/go-base-utils v0.1.7
+	github.com/xiaojun207/go-base-utils v0.1.9
 	gopkg.in/yaml.v3 v3.0.1
 	xorm.io/xorm v1.3.1
 )
