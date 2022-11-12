@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/xiaojun207/gin-boot v1.1.2
-	github.com/xiaojun207/go-base-utils v0.1.7
+	github.com/xiaojun207/go-base-utils v0.2.6
 	gopkg.in/yaml.v3 v3.0.1
 	xorm.io/xorm v1.3.1
 )
@@ -26,7 +26,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
