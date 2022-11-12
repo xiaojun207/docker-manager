@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/xiaojun207/go-base-utils/utils"
+	"github.com/xiaojun207/go-base-utils/math"
 	"log"
 )
 
@@ -202,7 +202,7 @@ func (e *LevelDB) LoadInt(key string) int {
 		log.Println("LoadInt.err:", err)
 		return 0
 	}
-	return utils.Byte2Int(res)
+	return math.Byte2Int(res)
 }
 
 func (e *LevelDB) StoreInt64(key string, value int64) {
@@ -215,7 +215,7 @@ func (e *LevelDB) LoadInt64(key string) int64 {
 		log.Println("LoadInt.err:", err)
 		return 0
 	}
-	return int64(utils.ByteToUint64(res))
+	return int64(math.ByteToUint64(res))
 }
 
 func (e *LevelDB) Size() int {
