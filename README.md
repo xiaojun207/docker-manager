@@ -3,17 +3,17 @@
 
 ## Architecture diagram
 
-![结构图](./docs/img/diagram.png "结构图")
+<img alt="结构图" src="./docs/img/diagram.png" title="结构图" width="600px"/>
 
 ## UI
 
-![仪表盘](./docs/img/dashboard.png "仪表盘")
-![主机管理](./docs/img/host_mgr.png "主机管理")
-![容器管理](./docs/img/container_mgr.png "容器管理")
-![容器状态](./docs/img/container_stats.png "容器状态")
-![连接容器](./docs/img/container_exec.png "连接容器")
-![镜像管理](./docs/img/image.png "镜像管理")
-![用户管理](./docs/img/user.png "用户管理")
+<img alt="仪表盘" src="./docs/img/dashboard.png" title="仪表盘" width="800px"/>
+<img alt="主机管理" src="./docs/img/host_mgr.png" title="主机管理" width="800px"/>
+<img alt="容器管理" src="./docs/img/container_mgr.png" title="容器管理" width="800px"/>
+<img alt="容器状态" src="./docs/img/container_stats.png" title="容器状态" width="800px"/>
+<img alt="连接容器" src="./docs/img/container_exec.png" title="连接容器" width="800px"/>
+<img alt="镜像管理" src="./docs/img/image.png" title="镜像管理" width="800px"/>
+<img alt="用户管理" src="./docs/img/user.png" title="用户管理" width="800px"/>
 
 ## docker-manager
 Docker based multi host container web management, data is stored as sqlit3 by default
