@@ -14,7 +14,7 @@ require (
 	github.com/xiaojun207/gin-boot v1.1.2
 	github.com/xiaojun207/go-base-utils v0.2.6
 	gopkg.in/yaml.v3 v3.0.1
-	xorm.io/xorm v1.3.1
+	xorm.io/xorm v1.3.2
 )
 
 require (
