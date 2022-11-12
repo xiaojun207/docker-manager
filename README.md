@@ -5,6 +5,15 @@
 
 ![结构图](./docs/img/diagram.png "结构图")
 
+## UI
+
+![仪表盘](./docs/img/dashboard.png "仪表盘")
+![主机管理](./docs/img/host_mgr.png "主机管理")
+![容器管理](./docs/img/container_mgr.png "容器管理")
+![容器状态](./docs/img/container_stats.png "容器状态")
+![连接容器](./docs/img/container_exec.png "连接容器")
+![镜像管理](./docs/img/image.png "镜像管理")
+![用户管理](./docs/img/user.png "用户管理")
 
 ## docker-manager
 Docker based multi host container web management, data is stored as sqlit3 by default
@@ -118,11 +127,6 @@ email: xiaojun207@126.com
 ## 中文说明
 
 <a name="zh">中文说明</a> | [English](#en)
-
-## 结构图
-
-![结构图](./docs/img/diagram.png "结构图")
-
 
 ## docker-manager
 基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
