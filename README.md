@@ -236,5 +236,5 @@ docker run -d --name docker-agent -v /var/run/docker.sock:/var/run/docker.sock -
 email: xiaojun207@126.com
 
 ## [感谢JetBrains的支持](https://jb.gg/OpenSourceSupport)
-[![avatar](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)](https://jb.gg/OpenSourceSupport)
+[<img alt="avatar" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200px"/>](https://jb.gg/OpenSourceSupport)
 
