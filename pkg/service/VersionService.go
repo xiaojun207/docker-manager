@@ -2,10 +2,10 @@ package service
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/xiaojun207/go-base-utils/utils"
 	"log"
 	"strings"
+	"time"
 )
 
 // export VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
@@ -19,22 +19,58 @@ var (
 	CommitHash = ""
 )
 
+type HubTag struct {
+	Count    int         `json:"count"`
+	Next     interface{} `json:"next"`
+	Previous interface{} `json:"previous"`
+	Results  []struct {
+		Creator int `json:"creator"`
+		Id      int `json:"id"`
+		Images  []struct {
+			Architecture string      `json:"architecture"`
+			Features     string      `json:"features"`
+			Variant      interface{} `json:"variant"`
+			Digest       string      `json:"digest"`
+			Os           string      `json:"os"`
+			OsFeatures   string      `json:"os_features"`
+			OsVersion    interface{} `json:"os_version"`
+			Size         int         `json:"size"`
+			Status       string      `json:"status"`
+			LastPulled   time.Time   `json:"last_pulled"`
+			LastPushed   time.Time   `json:"last_pushed"`
+		} `json:"images"`
+		LastUpdated         time.Time `json:"last_updated"`
+		LastUpdater         int       `json:"last_updater"`
+		LastUpdaterUsername string    `json:"last_updater_username"`
+		Name                string    `json:"name"`
+		Repository          int       `json:"repository"`
+		FullSize            int       `json:"full_size"`
+		V2                  bool      `json:"v2"`
+		TagStatus           string    `json:"tag_status"`
+		TagLastPulled       time.Time `json:"tag_last_pulled"`
+		TagLastPushed       time.Time `json:"tag_last_pushed"`
+		MediaType           string    `json:"media_type"`
+	} `json:"results"`
+}
+
 func init() {
 	log.Println("BuildInfo, Version:", Version, ", Date:", Date, ", CommitHash:", CommitHash)
 }
 
 func GetLatestTag() string {
 	image := "xiaojun207/docker-manager"
-	url := "https://registry.hub.docker.com/v1/repositories/" + image + "/tags"
-	rssp := utils.Get(url)
-	var d []map[string]interface{}
-	err := json.Unmarshal([]byte(rssp), &d)
+	// https://hub.docker.com/v2/repositories/xiaojun207/docker-manager/tags/?page_size=5&page=1&ordering=last_updated
+	url := "https://hub.docker.com/v2/repositories/" + image + "/tags/?page_size=5&page=1&ordering=last_updated"
+	resp := utils.Get(url)
+	var d map[string]interface{}
+	err := json.Unmarshal([]byte(resp), &d)
 	if err != nil {
-		fmt.Println("JsonToMap err: ", err)
+		log.Println("JsonToMap err: ", err, url)
 	}
 	lastVersion := "0.0.0"
-	for _, m := range d {
-		v := m["name"].(string)
+	results := (d["results"]).([]interface{})
+	for _, m := range results {
+		v := m.(map[string]interface{})["name"].(string)
 		if v == "latest" {
 			continue
 		}
