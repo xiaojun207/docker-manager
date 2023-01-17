@@ -26,7 +26,7 @@ var ApiRouter = func(router *boot.WebRouter) {
 var StaticRouter = func(router *boot.WebRouter) {
 	router.StaticFile("/", "./views/index.html")
 	router.StaticFile("/favicon.ico", "./views/favicon.ico")
-	router.StaticFS("/static/", http.Dir("./views/static/"))
+	router.StaticFS("/assets/", http.Dir("./views/assets/"))
 }
 
 /////////////
