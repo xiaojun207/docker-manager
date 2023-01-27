@@ -5,7 +5,7 @@ WORKDIR /app
 
 ENV driverName="mysql"\
     useCache="false"\
-    dataSourceUrl="root:Abc123@(dbhost:3306)/docker-manager?charset=utf8"
+    dataSourceUrl="root:password@(dbhost:3306)/docker-manager?charset=utf8"
 
 COPY App /app/App
 COPY views /app/views

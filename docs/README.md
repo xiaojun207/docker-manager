@@ -3,18 +3,18 @@
 
 ## Architecture diagram
 
-<img alt="结构图" src="./docs/img/diagram.png" title="结构图" width="600px"/>
+<img alt="结构图" src="./img/diagram.png" title="结构图" width="600px"/>
 
 ## UI
 
-<img alt="dashboard" src="./docs/img/en-dashboard.png" title="dashboard" width="800px"/>
-<img alt="host manage" src="./docs/img/en-host-mgr.png" title="host manage" width="800px"/>
-<img alt="container manage" src="./docs/img/en-container.png.png" title="container manage" width="800px"/>
-<img alt="container stats" src="./docs/img/en-container-stats.png.png" title="container stats" width="800px"/>
-<img alt="container exec" src="./docs/img/en-container-exec.png.png" title="container exec" width="800px"/>
-<img alt="container exec in" src="./docs/img/en-container-exec-in.png" title="container exec in" width="800px"/>
-<img alt="image manage" src="./docs/img/en-image.png" title="image manage" width="800px"/>
-<img alt="user manage" src="./docs/img/en-user.png" title="user manage" width="800px"/>
+<img alt="dashboard" src="./img/en-dashboard.png" title="dashboard" width="800px"/>
+<img alt="host manage" src="./img/en-host-mgr.png" title="host manage" width="800px"/>
+<img alt="container manage" src="./img/en-container.png.png" title="container manage" width="800px"/>
+<img alt="container stats" src="./img/en-container-stats.png.png" title="container stats" width="800px"/>
+<img alt="container exec" src="./img/en-container-exec.png.png" title="container exec" width="800px"/>
+<img alt="container exec in" src="./img/en-container-exec-in.png" title="container exec in" width="800px"/>
+<img alt="image manage" src="./img/en-image.png" title="image manage" width="800px"/>
+<img alt="user manage" src="./img/en-user.png" title="user manage" width="800px"/>
 
 ## docker-manager
 Docker based multi host container web management, data is stored as sqlit3 by default
@@ -131,13 +131,13 @@ email: xiaojun207@126.com
 
 ## 部分界面
 
-<img alt="仪表盘" src="./docs/img/dashboard.png" title="仪表盘" width="800px"/>
-<img alt="主机管理" src="./docs/img/host_mgr.png" title="主机管理" width="800px"/>
-<img alt="容器管理" src="./docs/img/container_mgr.png" title="容器管理" width="800px"/>
-<img alt="容器状态" src="./docs/img/container_stats.png" title="容器状态" width="800px"/>
-<img alt="连接容器" src="./docs/img/container_exec.png" title="连接容器" width="800px"/>
-<img alt="镜像管理" src="./docs/img/image.png" title="镜像管理" width="800px"/>
-<img alt="用户管理" src="./docs/img/user.png" title="用户管理" width="800px"/>
+<img alt="仪表盘" src="./img/dashboard.png" title="仪表盘" width="800px"/>
+<img alt="主机管理" src="./img/host_mgr.png" title="主机管理" width="800px"/>
+<img alt="容器管理" src="./img/container_mgr.png" title="容器管理" width="800px"/>
+<img alt="容器状态" src="./img/container_stats.png" title="容器状态" width="800px"/>
+<img alt="连接容器" src="./img/container_exec.png" title="连接容器" width="800px"/>
+<img alt="镜像管理" src="./img/image.png" title="镜像管理" width="800px"/>
+<img alt="用户管理" src="./img/user.png" title="用户管理" width="800px"/>
 
 ## docker-manager
 基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
