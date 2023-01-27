@@ -4,7 +4,7 @@
 也考虑过rancher这样的工具，但对于我们来说还是太重了。我需要一个更轻量的管理工具。因此docker-manager和docker-agent就诞生了。
 
 ## 结构图
-<img alt="结构图" src="./img/diagram.png" title="结构图" width="600px"/>
+<img alt="结构图" src="./zh-cn/img/diagram.png" title="结构图" width="600px"/>
 
 ## 功能简述
 >基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
@@ -21,13 +21,13 @@
 
 ## 部分界面
 
-<img alt="仪表盘" src="./img/dashboard.png" title="仪表盘" width="800px"/>
-<img alt="主机管理" src="./img/host_mgr.png" title="主机管理" width="800px"/>
-<img alt="容器管理" src="./img/container_mgr.png" title="容器管理" width="800px"/>
-<img alt="容器状态" src="./img/container_stats.png" title="容器状态" width="800px"/>
-<img alt="连接容器" src="./img/container_exec.png" title="连接容器" width="800px"/>
-<img alt="镜像管理" src="./img/image.png" title="镜像管理" width="800px"/>
-<img alt="用户管理" src="./img/user.png" title="用户管理" width="800px"/>
+<img alt="仪表盘" src="./zh-cn/img/dashboard.png" title="仪表盘" width="800px"/>
+<img alt="主机管理" src="./zh-cn/img/host_mgr.png" title="主机管理" width="800px"/>
+<img alt="容器管理" src="./zh-cn/img/container_mgr.png" title="容器管理" width="800px"/>
+<img alt="容器状态" src="./zh-cn/img/container_stats.png" title="容器状态" width="800px"/>
+<img alt="连接容器" src="./zh-cn/img/container_exec.png" title="连接容器" width="800px"/>
+<img alt="镜像管理" src="./zh-cn/img/image.png" title="镜像管理" width="800px"/>
+<img alt="用户管理" src="./zh-cn/img/user.png" title="用户管理" width="800px"/>
 
 ## 快速启动
 
