@@ -1,1 +1,0 @@
-import{q as n}from"./index-6ab0eec4.js";function o(t){return n({url:"/mgr/container/list",method:"get",params:t})}function a(t){return n({url:"/mgr/container/detail",method:"get",params:t})}function i(t){return n({url:"/mgr/containerInfos",method:"get",params:t})}function u(t,r){return n({url:"/mgr/container/"+t,method:"post",data:r})}export{u as C,o as a,a as b,i as g};
