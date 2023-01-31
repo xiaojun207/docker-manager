@@ -14,8 +14,8 @@ import (
 
 // go build -a -ldflags "-X docker-manager/service.Version=$VERSION" -o docker-manager
 var (
-	Version    = "1.5.2"
-	Date       = "20230128"
+	Version    = "1.5.4"
+	Date       = "20230131"
 	CommitHash = ""
 )
 

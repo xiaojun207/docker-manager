@@ -1,0 +1,1 @@
+const o=new WeakMap;function f(e){let t=o.get(e);return t||o.set(e,t=Object.create(null)),t}function l(e,t,...r){e&&e.$emit&&e.$emit(t,...r);const p=f(e)[t];return p&&p.map(u=>u.apply(e,r)),e}export{l as $};
