@@ -1,0 +1,1 @@
+import{q as r}from"./index-b9d46688.js";function s(e){return r({url:"/mgr/server/list",method:"get",params:e})}function n(e){return r({url:"/mgr/server/names",method:"get",params:e})}function m(e){return r({url:"/mgr/server/detail",method:"get",params:e})}function o(e){return r({url:"/mgr/server/delete",method:"post",data:e})}export{s as a,m as b,o as d,n as g};

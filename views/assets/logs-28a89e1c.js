@@ -1,0 +1,1 @@
+import{q as t}from"./index-b9d46688.js";function e(o){return console.log("getLogStart:",o),t({url:"/mgr/log/start",method:"post",data:o})}function g(o){return t({url:"/mgr/log/close",method:"post",data:o})}export{g as a,e as g};
