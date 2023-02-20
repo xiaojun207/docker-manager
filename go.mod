@@ -3,7 +3,7 @@ module docker-manager
 go 1.19
 
 require (
-	github.com/compose-spec/compose-go v1.9.0
+	github.com/compose-spec/compose-go v1.11.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-basic/uuid v1.0.0
 	github.com/go-sql-driver/mysql v1.7.0
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/distribution/distribution/v3 v3.0.0-20221103125252-ebfa2a0ac0a9 // indirect
+	github.com/distribution/distribution/v3 v3.0.0-20230214150026-36d8c594d7aa // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
