@@ -6,7 +6,7 @@
 <img alt="结构图" src="docs/en/img/diagram.png" title="结构图" width="600px"/>
 
 ## Related projects
-Front end page: https://github.com/xiaojun207/docker-manager-page
+Front end page: https://github.com/xiaojun207/docker-manager-page  
 Docker-agent: https://github.com/xiaojun207/docker-agent
 
 
