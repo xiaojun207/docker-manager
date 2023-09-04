@@ -6,6 +6,12 @@
 ## 结构图
 <img alt="结构图" src="./zh-cn/img/diagram.png" title="结构图" width="600px"/>
 
+
+## 相关项目
+前端项目: https://github.com/xiaojun207/docker-manager-page  
+Docker-agent: https://github.com/xiaojun207/docker-agent
+
+
 ## 功能简述
 >基于docker的多主机容器web管理，数据默认存储为sqlit3，也就是说，docker-manger启动可以不依赖其他组件。
 
