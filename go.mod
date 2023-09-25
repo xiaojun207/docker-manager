@@ -3,7 +3,7 @@ module docker-manager
 go 1.20
 
 require (
-	github.com/compose-spec/compose-go v1.18.3
+	github.com/compose-spec/compose-go v1.19.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-basic/uuid v1.0.0
 	github.com/go-sql-driver/mysql v1.7.1
@@ -21,7 +21,6 @@ require (
 	github.com/bytedance/sonic v1.10.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.0 // indirect
-	github.com/distribution/distribution/v3 v3.0.0-20230902073024-a2e65220ae49 // indirect
 	github.com/distribution/reference v0.5.0 // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
@@ -35,6 +34,7 @@ require (
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
@@ -58,5 +58,7 @@ require (
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	xorm.io/builder v0.3.13 // indirect
 )
