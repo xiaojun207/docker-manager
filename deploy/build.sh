@@ -5,7 +5,7 @@ DOCKER_BASE_REPO="xiaojun207"
 APP_NAME="docker-manager"
 
 VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
-VERSION=${VERSION/v/} # eg.: 0.2.5
+VERSION=${VERSION/v/} # eg.: 1.5.6
 DOCKER_BUILD_TAG="${VERSION}"
 BUILD_DATE=`date +%Y%m%d` # eg.: 20220701
 COMMIT_HASH=`git rev-parse HEAD` #

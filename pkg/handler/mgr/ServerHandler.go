@@ -31,7 +31,7 @@ func GetServers(c *gin.Context, page model.Page) {
 		servers = []table.Server{}
 	}
 
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": servers,
 		"page": page,
 	})
@@ -45,7 +45,7 @@ func GetServer(c *gin.Context) {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	boot.Resp(c, "100200", "成功", server)
+	boot.Resp(c, boot.CodeSuccess, "成功", server)
 }
 
 func DeleteServer(c *gin.Context, req struct {
@@ -56,7 +56,7 @@ func DeleteServer(c *gin.Context, req struct {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func GetServerNames(c *gin.Context) {
@@ -66,5 +66,5 @@ func GetServerNames(c *gin.Context) {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	boot.Resp(c, "100200", "成功", res)
+	boot.Resp(c, boot.CodeSuccess, "成功", res)
 }

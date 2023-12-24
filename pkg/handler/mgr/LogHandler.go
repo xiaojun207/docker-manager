@@ -22,7 +22,7 @@ func GetFollowLogList(c *gin.Context) {
 			"ServerName": stats.ServerName,
 		})
 	}
-	boot.Resp(c, "100200", "成功", res)
+	boot.Resp(c, boot.CodeSuccess, "成功", res)
 }
 
 func LogFollowStart(c *gin.Context, req struct {
@@ -44,7 +44,7 @@ func LogFollowStart(c *gin.Context, req struct {
 
 	err := service.SaveAndSendTask(serverName, ch, param)
 	log.Println("err:", err)
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 // 关闭日志流
@@ -60,5 +60,5 @@ func LogFollowClose(c *gin.Context, req struct {
 	ch := "docker.container.log.follow.close"
 	err := service.SaveAndSendTask(serverName, ch, param)
 	log.Println("err:", err)
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }

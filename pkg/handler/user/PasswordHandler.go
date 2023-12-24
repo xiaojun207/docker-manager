@@ -18,7 +18,7 @@ func AlterPasswordHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func ForgetPasswordHandler(c *gin.Context, req struct {
@@ -43,7 +43,7 @@ func ForgetPasswordHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", newPassword)
+	boot.Resp(c, boot.CodeSuccess, "成功", newPassword)
 }
 
 func ResetPasswordHandler(c *gin.Context, req struct {
@@ -55,5 +55,5 @@ func ResetPasswordHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", newPassword)
+	boot.Resp(c, boot.CodeSuccess, "成功", newPassword)
 }

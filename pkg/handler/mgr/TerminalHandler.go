@@ -21,5 +21,5 @@ func ExecClose(c *gin.Context, req struct {
 	ch := "docker.container.log.follow.close"
 	err := service.SaveAndSendTask(serverName, ch, param)
 	log.Println("err:", err)
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }

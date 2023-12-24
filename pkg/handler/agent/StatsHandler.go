@@ -18,7 +18,7 @@ func ContainerStatsHandler(c *gin.Context) {
 	log.Printf("%v", &json)
 	ContainerId := json["ContainerId"].(string)
 	service.UpdateStats(AppId, json)
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"id": ContainerId,
 	})
 }
@@ -48,5 +48,5 @@ func ContainersStatsHandler(c *gin.Context) {
 		e.MemoryStats = v["memory_stats"].(map[string]interface{})
 		data.AddContainerStats(e)
 	}
-	boot.Resp(c, "100200", "成功", gin.H{})
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{})
 }

@@ -25,7 +25,7 @@ func RegDockerHandler(c *gin.Context) {
 		log.Println("add server.err:", err, " Name:", Name)
 	}
 
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"name": Name,
 		"id":   id,
 	})

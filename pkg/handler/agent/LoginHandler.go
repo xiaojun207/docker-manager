@@ -7,7 +7,8 @@ import (
 	"log"
 )
 
-/**
+/*
+*
 eg.2
 */
 func LoginHandler(c *gin.Context, req struct {
@@ -20,5 +21,5 @@ func LoginHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", token)
+	boot.Resp(c, boot.CodeSuccess, "成功", token)
 }

@@ -20,26 +20,26 @@ func GetDashboardSize(c *gin.Context) {
 		"app":             data.GetServiceSize(),
 		"follow":          containerSizeMap["followSize"],
 	}
-	boot.Resp(c, "100200", "成功", d)
+	boot.Resp(c, boot.CodeSuccess, "成功", d)
 }
 
 func GetTaskSize(c *gin.Context) {
-	boot.Resp(c, "100200", "成功", data.GetTaskSize())
+	boot.Resp(c, boot.CodeSuccess, "成功", data.GetTaskSize())
 }
 
 func GetAppSize(c *gin.Context) {
-	boot.Resp(c, "100200", "成功", data.GetServiceSize())
+	boot.Resp(c, boot.CodeSuccess, "成功", data.GetServiceSize())
 }
 
 func GetImageSize(c *gin.Context) {
-	boot.Resp(c, "100200", "成功", data.GetImageSize())
+	boot.Resp(c, boot.CodeSuccess, "成功", data.GetImageSize())
 }
 
 func GetServerSize(c *gin.Context) {
-	boot.Resp(c, "100200", "成功", data.GetServersSize())
+	boot.Resp(c, boot.CodeSuccess, "成功", data.GetServersSize())
 }
 
 func GetContainerSize(c *gin.Context) {
 	containerSizeMap := data.GetContainerSize()
-	boot.Resp(c, "100200", "成功", containerSizeMap["totalSize"])
+	boot.Resp(c, boot.CodeSuccess, "成功", containerSizeMap["totalSize"])
 }

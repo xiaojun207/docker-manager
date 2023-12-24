@@ -14,8 +14,8 @@ import (
 
 // go build -a -ldflags "-X docker-manager/service.Version=$VERSION" -o docker-manager
 var (
-	Version    = "1.5.4"
-	Date       = "20230131"
+	Version    = "1.5.5"
+	Date       = "20231222"
 	CommitHash = ""
 )
 
@@ -70,6 +70,7 @@ func GetLatestTag() string {
 	err := json.Unmarshal([]byte(resp), &d)
 	if err != nil {
 		log.Println("JsonToMap err: ", err, url)
+		return Version
 	}
 	lastVersion := "0.0.0"
 	results := (d["results"]).([]interface{})

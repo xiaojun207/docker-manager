@@ -35,7 +35,7 @@ func ContainerOperatorHandler(c *gin.Context, req struct {
 			return
 		}
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func ImageCmd(c *gin.Context, req struct {
@@ -55,7 +55,7 @@ func ImageCmd(c *gin.Context, req struct {
 		boot.Resp(c, "100100", "命令下发错误: "+err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func RePublishHandler(c *gin.Context, req struct {
@@ -70,7 +70,7 @@ func PublishYamlHandler(c *gin.Context, req struct {
 	Yaml        string   `json:"yaml"`
 }) {
 	service.PublishYaml(req.ServerNames, req.Yaml)
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func PublishHandler(c *gin.Context, serviceInfo dto.ServiceInfo) {
@@ -92,12 +92,12 @@ func PublishHandler(c *gin.Context, serviceInfo dto.ServiceInfo) {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func GetTasks(c *gin.Context, page model.Page) {
 	list, _ := data.GetTasks(&page)
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": list,
 		"page": page,
 	})

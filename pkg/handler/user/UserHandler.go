@@ -13,7 +13,7 @@ import (
 func UserListHandler(c *gin.Context, page *model.Page) {
 	users, _ := service.FindUsers(page)
 
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": users,
 		"page": page,
 	})
@@ -34,7 +34,7 @@ func UserInfoHandler(c *gin.Context) {
 		"avatar":       "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
 		"name":         user.Username,
 	}
-	boot.Resp(c, "100200", "成功", info)
+	boot.Resp(c, boot.CodeSuccess, "成功", info)
 }
 
 type ReqUser struct {
@@ -54,7 +54,7 @@ func AddUserHandler(c *gin.Context, req ReqUser) {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func DeleteUserHandler(c *gin.Context, req struct {
@@ -67,7 +67,7 @@ func DeleteUserHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func ChangeStatusHandler(c *gin.Context, req struct {
@@ -80,5 +80,5 @@ func ChangeStatusHandler(c *gin.Context, req struct {
 		boot.Resp(c, "100100", err.Error(), "")
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }

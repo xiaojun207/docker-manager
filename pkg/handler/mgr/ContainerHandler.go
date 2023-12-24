@@ -14,7 +14,7 @@ import (
 func UpdateContainerList(c *gin.Context) {
 	ch := "docker.container.list"
 	service.SendToAllServer(ch, map[string]interface{}{})
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func GetContainers(c *gin.Context, page model.Page, req struct {
@@ -41,7 +41,7 @@ func GetContainers(c *gin.Context, page model.Page, req struct {
 			"Created":     container.Created,
 		})
 	}
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": res,
 		"page": page,
 	})
@@ -51,7 +51,7 @@ func GetContainer(c *gin.Context) {
 	ContainerId := c.Query("ContainerId")
 	container, err := data.GetContainer(ContainerId)
 	log.Println("GetContainers.err:", err)
-	boot.Resp(c, "100200", "成功", container)
+	boot.Resp(c, boot.CodeSuccess, "成功", container)
 }
 
 // info,服务和容器基本信息
@@ -94,7 +94,7 @@ func GetContainerInfos(c *gin.Context, req struct {
 		res = append(res, server)
 	}
 
-	boot.Resp(c, "100200", "成功", res)
+	boot.Resp(c, boot.CodeSuccess, "成功", res)
 }
 
 func ContainerCmd(c *gin.Context) {
@@ -112,5 +112,5 @@ func ContainerCmd(c *gin.Context) {
 		boot.Resp(c, "100100", "成功", err)
 		return
 	}
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }

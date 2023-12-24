@@ -30,7 +30,7 @@ func GetStatsList(c *gin.Context, req struct {
 			"ContainerId":        stats.ContainerId,
 		})
 	}
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": res,
 		"page": page,
 	})
@@ -40,11 +40,11 @@ func GetStats(c *gin.Context, req struct {
 	ContainerId string `json:"ContainerId" form:"ContainerId"`
 }) {
 	res, _ := data.GetContainerStatss(req.ContainerId)
-	boot.Resp(c, "100200", "成功", res)
+	boot.Resp(c, boot.CodeSuccess, "成功", res)
 }
 
 func UpdateStats(c *gin.Context) {
 	ch := "docker.containers.stats"
 	service.SendToAllServer(ch, map[string]interface{}{})
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }

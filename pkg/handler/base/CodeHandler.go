@@ -25,8 +25,9 @@ func SendCodeHandler(c *gin.Context, req struct {
 	code := service.SendCode(user.Id, req.CodeType, req.Key)
 	if utils.StrToBool(conf.ConsoleCode) {
 		log.Println("SendCode, username:", req.Username, ",code:", code)
+		return nil
 	} else {
 		log.Println("SendCode, username:", req.Username, ",code:", "ConsoleCode is off，you can set env \"-e consoleCode=true\", or set in file of config.yml")
+		return boot.NewWebError("100100", "控制台验证码未开启，请配置参数consoleCode为true后重新启动")
 	}
-	return nil
 }

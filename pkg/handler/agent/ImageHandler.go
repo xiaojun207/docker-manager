@@ -25,7 +25,7 @@ func ImagesHandler(c *gin.Context) {
 		data.AddImage(i)
 	}
 
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"id": id,
 	})
 }

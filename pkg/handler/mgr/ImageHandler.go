@@ -31,7 +31,7 @@ func ImageList(c *gin.Context, req struct {
 			"Created":     image.Created,
 		})
 	}
-	boot.Resp(c, "100200", "成功", gin.H{
+	boot.Resp(c, boot.CodeSuccess, "成功", gin.H{
 		"list": list,
 		"page": page,
 	})
@@ -49,5 +49,5 @@ func ImageDetail(c *gin.Context, req struct {
 		boot.Resp(c, "100100", "请求异常", err.Error())
 		return
 	}
-	boot.Resp(c, "100200", "成功", res)
+	boot.Resp(c, boot.CodeSuccess, "成功", res)
 }

@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-func GetConfig(c *gin.Context) {
+func GetConfig(c *gin.Context) interface{} {
 	conflist := data.GetConfigList()
 	res := []table.Config{}
 	for _, c := range conflist {
@@ -17,7 +17,8 @@ func GetConfig(c *gin.Context) {
 			res = append(res, c)
 		}
 	}
-	boot.Resp(c, "100200", "成功", res)
+	//boot.Resp(c, boot.CodeSuccess, "成功", res)
+	return res
 }
 
 func UpdateConfig(c *gin.Context, req struct {
@@ -36,7 +37,7 @@ func UpdateConfig(c *gin.Context, req struct {
 		service.SendToAllServer(ch, map[string]interface{}{})
 	}
 
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func GetWhiteList(c *gin.Context) {
@@ -44,7 +45,7 @@ func GetWhiteList(c *gin.Context) {
 	if err != nil {
 		log.Println("GetWhiteList.err:", err)
 	}
-	boot.Resp(c, "100200", "成功", ipList)
+	boot.Resp(c, boot.CodeSuccess, "成功", ipList)
 }
 
 func AddWhiteIp(c *gin.Context, req struct {
@@ -52,7 +53,7 @@ func AddWhiteIp(c *gin.Context, req struct {
 }) {
 	data.AddWhiteIp(req.IP)
 	service.LoadWhiteList()
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
 
 func DeleteWhiteIp(c *gin.Context, req struct {
@@ -60,5 +61,5 @@ func DeleteWhiteIp(c *gin.Context, req struct {
 }) {
 	data.DelWhiteIp(req.IP)
 	service.LoadWhiteList()
-	boot.Resp(c, "100200", "成功", "")
+	boot.Resp(c, boot.CodeSuccess, "成功", "")
 }
