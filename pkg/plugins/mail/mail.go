@@ -1,9 +1,9 @@
-package main
+package mail
 
 import (
-	"gopkg.in/gomail.v2"
-	"log"
 	"strings"
+
+	"gopkg.in/gomail.v2"
 )
 
 type Options struct {
@@ -16,7 +16,7 @@ type Options struct {
 	Body     string // 邮件内容
 }
 
-func sendMail(o *Options) {
+func sendMail(o *Options) error {
 
 	m := gomail.NewMessage()
 	//设置发件人
@@ -32,8 +32,5 @@ func sendMail(o *Options) {
 	d := gomail.NewDialer(o.MailHost, o.MailPort, o.MailUser, o.MailPass)
 
 	err := d.DialAndSend(m)
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(mailArrTo, "邮件发送完成")
+	return err
 }
