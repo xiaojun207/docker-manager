@@ -76,3 +76,5 @@ fabric.properties
 .data
 .data/.secret.json
 /.data/
+.DS_Store
+data/database.db
