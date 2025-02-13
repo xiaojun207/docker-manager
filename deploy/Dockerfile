@@ -1,5 +1,5 @@
 #build源镜像
-FROM golang:1.20 as build
+FROM golang:1.23 as build
 #作者
 MAINTAINER xiaojun "xiaojun207@126.com"
 
