@@ -6,4 +6,4 @@ server:
 db:
   driverName: mysql
   dataSourceUrl: root:123456@(127.0.0.1:3306)/docker-manager?charset=utf8
-  useCache: false # 是否启用缓存，sqlite下，缓存会容易导致数据库文件锁定
+  useCache: false # 是否启用缓存，sqlite下，缓存可能会容易导致数据库文件锁定
