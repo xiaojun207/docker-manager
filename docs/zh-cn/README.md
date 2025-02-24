@@ -127,6 +127,7 @@ server {
    }
 }
 ```
+docker-manager 使用了websocket协议, 所以配置nginx代理时，需要支持websocket协议。
 
 ## 客户端(docker-agent)
 ```shell

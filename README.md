@@ -126,6 +126,7 @@ server {
    }
 }
 ```
+docker-manager use websocket protocol, so it is necessary to configure nginx to support websocket protocol.
 
 ## Client Agent (docker-agent)
 ```shell
