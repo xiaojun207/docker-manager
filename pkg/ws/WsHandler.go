@@ -11,6 +11,7 @@ var AgentWsConnectGroup = baseWs.NewWsConnectionGroup()
 var ManagerWsConnectGroup = baseWs.NewWsConnectionGroup()
 var ManagerExecWsConnectGroup = baseWs.NewWsConnectionGroup()
 
+// WSAgentHandler 客户端websocket核心处理方法
 func WSAgentHandler(c *gin.Context) {
 	serverName := c.GetHeader("ServerName")
 	AppId := c.GetHeader("AppId")
